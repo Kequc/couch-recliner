@@ -8,7 +8,7 @@
     "test": "mocha --recursive ./test/spec"
   },
   "files": [
-    "dist/"
+    "lib/"
   ],
   "main": "./dist/nano-records.js",
   "typings": "./dist/nano-records.d.ts",
