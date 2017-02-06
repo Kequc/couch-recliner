@@ -27,10 +27,6 @@ var NanoRecords = require('nano-records');
 var dbName = "my-database";
 var db = new NanoRecords(nano, dbName);
 ```
-```typescript
-// typescript
-import NanoRecords = require('nano-records');
-```
 
 Each NanoRecords instance represents one database.
 
