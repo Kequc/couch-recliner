@@ -3,7 +3,7 @@
 var dbName = 'nano-records-db-show-test';
 
 var Helper = require('../helper');
-var NanoRecords = require('../../dist/nano-records');
+var NanoRecords = require('../../lib/nano-records');
 var nano = require('nano')("http://127.0.0.1:5984/");
 var db = new NanoRecords(nano, dbName, Helper.designs);
 

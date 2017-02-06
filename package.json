@@ -5,8 +5,6 @@
   "author": "mr.kequc@gmail.com",
   "license": "ISC",
   "scripts": {
-    "build": "tsc -p ./src",
-    "watch": "tsc -w -p ./src",
     "test": "mocha --recursive ./test/spec"
   },
   "files": [
@@ -31,8 +29,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
-    "nano": "^6.2.0",
-    "typescript": "^2.1.5"
+    "nano": "^6.2.0"
   },
   "dependencies": {
     "deep-extend": "^0.4.1",

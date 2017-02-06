@@ -2,7 +2,7 @@
 var mocha = require('mocha');
 var expect = require('chai').expect;
 
-var DbViewBuilder = require('../../dist/nano-records/db-view-builder').DbViewBuilder;
+var DbViewBuilder = require('../../lib/nano-records/db-view-builder').DbViewBuilder;
 
 describe('util view', () => {
     
