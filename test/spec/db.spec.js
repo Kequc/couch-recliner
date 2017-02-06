@@ -1,13 +1,13 @@
 "use strict";
-var mocha = require('mocha');
-var expect = require('chai').expect;
+const mocha = require('mocha');
+const expect = require('chai').expect;
 
-var dbName = 'nano-records-db-test';
+const dbName = 'nano-records-db-test';
 
-var Helper = require('../helper');
-var NanoRecords = require('../../lib/nano-records');
-var nano = require('nano')("http://127.0.0.1:5984/");
-var db;
+const Helper = require('../helper');
+const NanoRecords = require('../../lib/nano-records');
+const nano = require('nano')("http://127.0.0.1:5984/");
+let db;
 
 describe('db', () => {
     after((done) => {

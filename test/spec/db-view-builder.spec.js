@@ -1,8 +1,8 @@
 "use strict";
-var mocha = require('mocha');
-var expect = require('chai').expect;
+const mocha = require('mocha');
+const expect = require('chai').expect;
 
-var DbViewBuilder = require('../../lib/nano-records/db-view-builder');
+const DbViewBuilder = require('../../lib/nano-records/db-view-builder');
 
 describe('util view', () => {
     

@@ -1,11 +1,11 @@
 "use strict";
-var mocha = require('mocha');
-var expect = require('chai').expect;
-var deepExtend = require('deep-extend');
+const mocha = require('mocha');
+const expect = require('chai').expect;
+const deepExtend = require('deep-extend');
 
-var Helper = require('../helper');
+const Helper = require('../helper');
 
-var DbShowAssert = {};
+const DbShowAssert = {};
 
 DbShowAssert.catalog_Fail = (db, design, name, errorName, done) => {
     db.show.catalog(Helper.id, design, name, (err, result) => {

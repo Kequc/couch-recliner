@@ -1,11 +1,11 @@
 "use strict";
-var mocha = require('mocha');
-var expect = require('chai').expect;
-var deepExtend = require('deep-extend');
+const mocha = require('mocha');
+const expect = require('chai').expect;
+const deepExtend = require('deep-extend');
 
-var Helper = require('../helper');
+const Helper = require('../helper');
 
-var DocAssert = {};
+const DocAssert = {};
 
 DocAssert.getId_Fail = (doc) => {
     expect(doc.body['_id']).to.be.undefined;

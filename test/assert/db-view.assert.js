@@ -1,11 +1,11 @@
 "use strict";
-var mocha = require('mocha');
-var expect = require('chai').expect;
-var deepExtend = require('deep-extend');
+const mocha = require('mocha');
+const expect = require('chai').expect;
+const deepExtend = require('deep-extend');
 
-var Helper = require('../helper');
+const Helper = require('../helper');
 
-var DbViewAssert = {};
+const DbViewAssert = {};
 
 DbViewAssert.all_Fail = (db, keys, params, errorName, done) => {
     db.view.all(keys, params, (err, list) => {

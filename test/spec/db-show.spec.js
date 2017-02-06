@@ -1,13 +1,13 @@
 "use strict";
 
-var dbName = 'nano-records-db-show-test';
+const dbName = 'nano-records-db-show-test';
 
-var Helper = require('../helper');
-var NanoRecords = require('../../lib/nano-records');
-var nano = require('nano')("http://127.0.0.1:5984/");
-var db = new NanoRecords(nano, dbName, Helper.designs);
+const Helper = require('../helper');
+const NanoRecords = require('../../lib/nano-records');
+const nano = require('nano')("http://127.0.0.1:5984/");
+const db = new NanoRecords(nano, dbName, Helper.designs);
 
-var assert = require('../assert/db-show.assert');
+const assert = require('../assert/db-show.assert');
 
 describe('db-show', () => {
     after((done) => {

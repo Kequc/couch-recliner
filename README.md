@@ -22,10 +22,10 @@ npm install nano --save
 npm install nano-records --save
 ```
 ```javascript
-var nano = require('nano')("localhost");
-var NanoRecords = require('nano-records');
-var dbName = "my-database";
-var db = new NanoRecords(nano, dbName);
+const nano = require('nano')("localhost");
+const NanoRecords = require('nano-records');
+const dbName = "my-database";
+const db = new NanoRecords(nano, dbName);
 ```
 
 Each NanoRecords instance represents one database.
@@ -238,7 +238,7 @@ db.doc.attachment.createReadStream(id, name, (err) => {
 Write an attachment using a stream. It's important to note that streams cannot be retried, if there is an error you will have to pipe a new stream manually.
 
 ```javascript
-var reader = fs.createReadStream('./my-file.txt');
+const reader = fs.createReadStream('./my-file.txt');
 reader.pipe(doc.attachment.createWriteStream(name, mimeType, (err) => {
   if (!err)
     console.log('success!');
@@ -270,8 +270,8 @@ When creating your NanoRecords instance optionally provide it a catalog of desig
 }
 ```
 ```javascript
-var designs = require('./designs.json');
-var db = new NanoRecords(nano, dbName, designs);
+const designs = require('./designs.json');
+const db = new NanoRecords(nano, dbName, designs);
 ```
 
 #### .catalog

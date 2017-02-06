@@ -1,12 +1,12 @@
 "use strict";
-var mocha = require('mocha');
-var expect = require('chai').expect;
-var deepExtend = require('deep-extend');
-var fs = require('fs');
+const mocha = require('mocha');
+const expect = require('chai').expect;
+const deepExtend = require('deep-extend');
+const fs = require('fs');
 
-var Helper = require('../helper');
+const Helper = require('../helper');
 
-var DocAttachmentAssert = {};
+const DocAttachmentAssert = {};
 
 DocAttachmentAssert.list = (doc, arr) => {
     expect(doc.attachment.list()).to.eql(arr);
