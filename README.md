@@ -18,7 +18,7 @@ Conflicts are avoided with automated retries, errors are sanitised, designs are 
 ### Upgrading from 1.1.1 to 1.2.0
 
 * `db.view.all` is now `db.view.find`
-* `db.view.only` is now `db.view.findOnly`
+* `db.view.only` is now `db.view.findStrict`
 
 ### Install
 
@@ -304,13 +304,15 @@ db.view.catalog(design, name, params, (err, list) => {
 
 ### View helpers
 
-#### .find
+#### .find .findOne
 
 Will generate a view for you using the provided keys, which returns a list of documents.
 
 Useful for simple search functions, for example `keys` may be `"user_id"` then you can provide `{ key: "myuserid" }` to `params` and find relevant results. The `keys` parameter may also be an array of values, or nested values. It's best not to provide parameters to this function which are dynamic in nature, as a new view is persisted to the database for each set of keys provided.
 
 Complex views are still best constructed manually. Read more about view helpers on: [CouchDB design documents using view helpers in nano-records](http://www.kequc.com/2016/05/24/couchdb-design-documents-using-view-helpers-in-nano-records).
+
+The second version `findOne` helpfully only returns the first result or a `not_found` error.
 
 ```javascript
 db.view.find(keys, params, (err, list) => {
@@ -319,28 +321,38 @@ db.view.find(keys, params, (err, list) => {
   // list is a NanoRecords list
   console.log(list.values());
 });
+db.view.findOne(keys, params, (err, doc) => {
+  if (err)
+    return;
+  // doc is a NanoRecords document
+  console.log(doc.body);
+});
 ```
 
-#### .findOnly
+#### .findStrict .findOneStrict
 
 Will generate a view similar to `view.find` which only returns a specific set of values from each document. For example `["created_at", "title", "author.name"]` would return `{ created_at: "mydate", title: "mytitle", author: { name: "myauthorname" } }` as each result.
 
 This is more efficient than performing a full document lookup.
 
 ```javascript
-db.view.findOnly(keys, values, params, (err, list) => {
+db.view.findStrict(keys, values, params, (err, list) => {
   if (err)
     return;
   // list is a NanoRecords list
   console.log(list.values());
+});
+db.view.findOneStrict(keys, values, params, (err, doc) => {
+  if (err)
+    return;
+  // doc is a NanoRecords document
+  console.log(doc.body);
 });
 ```
 
 ### Lists
 
 The `list.docs` method may not give you complete document objects depending on the values that were returned by the view. However running `doc.read` will fetch the full document from the database, similarly all normal NanoRecords document functions should work as you expect.
-
-A common way to get just the first document is `list.doc(0)`.
 
 ```javascript
 list.total; // 11

@@ -22,9 +22,11 @@ describe('db-view', () => {
         it('find', (done) => {
             assert.find(db, "key", {}, [], done);
         });
-        it('findOnly', (done) => {
-            assert.findOnly(db, "key", "value", {}, [], done);
+        it('findOne');
+        it('findStrict', (done) => {
+            assert.findStrict(db, "key", "value", {}, [], done);
         });
+        it('findOneStrict');
         it('catalog', (done) => {
             assert.catalog(db, "foo", "comments", done);
         });
@@ -46,9 +48,11 @@ describe('db-view', () => {
             it('find', (done) => {
                 assert.find(db, "num", {}, [], done);
             });
-            it('findOnly', (done) => {
-                assert.findOnly(db, "num", "deep", {}, [], done);
+            it('findOne');
+            it('findStrict', (done) => {
+                assert.findStrict(db, "num", "deep", {}, [], done);
             });
+            it('findOneStrict');
             
         });
         
@@ -72,6 +76,7 @@ describe('db-view', () => {
                 let expected = [Helper.simpleBody, Helper.complexBody];
                 assert.find(db, "num", {}, expected, done);
             });
+            it('findOne');
             it('find with lookup', (done) => {
                 let expected = [Helper.complexBody];
                 assert.find(db, "num", { key: Helper.complexBody.num }, expected, done);
@@ -88,29 +93,30 @@ describe('db-view', () => {
                 let expected = [Helper.complexBody];
                 assert.find(db, ["num", "deep.hi"], {}, expected, done);
             });
-            it('findOnly', (done) => {
+            it('findStrict', (done) => {
                 let expected = [{ deep: Helper.simpleBody.deep }, { deep: Helper.complexBody.deep }];
-                assert.findOnly(db, "num", "deep", {}, expected, done);
+                assert.findStrict(db, "num", "deep", {}, expected, done);
             });
-            it('findOnly with lookup', (done) => {
+            it('findOneStrict');
+            it('findStrict with lookup', (done) => {
                 let expected = [{}];
-                assert.findOnly(db, "num", "deep", { key: Helper.simpleBody.num }, expected, done);
+                assert.findStrict(db, "num", "deep", { key: Helper.simpleBody.num }, expected, done);
             });
-            it('findOnly with multiple values', (done) => {
+            it('findStrict with multiple values', (done) => {
                 let expected = [{ num: Helper.simpleBody.num, deep: Helper.simpleBody.deep }, { num: Helper.complexBody.num, deep: Helper.complexBody.deep }];
-                assert.findOnly(db, "num", ["num", "deep"], {}, expected, done);
+                assert.findStrict(db, "num", ["num", "deep"], {}, expected, done);
             });
-            it('findOnly with nested values', (done) => {
+            it('findStrict with nested values', (done) => {
                 let expected = [{ num: Helper.complexBody.num, deep: { hi: Helper.complexBody.deep.hi } }];
-                assert.findOnly(db, "num", ["num", "deep.hi"], {}, expected, done);
+                assert.findStrict(db, "num", ["num", "deep.hi"], {}, expected, done);
             });
-            it('findOnly with multiple keys and values', (done) => {
+            it('findStrict with multiple keys and values', (done) => {
                 let expected = [{ num: Helper.simpleBody.num, deep: Helper.simpleBody.deep }, { num: Helper.complexBody.num, deep: Helper.complexBody.deep }];
-                assert.findOnly(db, ["num", "complex"], ["num", "deep"], {}, expected, done);
+                assert.findStrict(db, ["num", "complex"], ["num", "deep"], {}, expected, done);
             });
-            it('findOnly with multiple keys and values and lookup', (done) => {
+            it('findStrict with multiple keys and values and lookup', (done) => {
                 let expected = [{ num: Helper.simpleBody.num }];
-                assert.findOnly(db, ["num", "complex"], ["num", "deep"], { key: [Helper.simpleBody.num, Helper.simpleBody.complex] }, expected, done);
+                assert.findStrict(db, ["num", "complex"], ["num", "deep"], { key: [Helper.simpleBody.num, Helper.simpleBody.complex] }, expected, done);
             });
             
         });

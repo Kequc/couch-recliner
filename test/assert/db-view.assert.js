@@ -27,8 +27,8 @@ DbViewAssert.find = (db, keys, params, expected, done) => {
     });
 };
 
-DbViewAssert.findOnly_Fail = (db, keys, values, params, errorName, done) => {
-    db.view.findOnly(keys, values, params, (err, list) => {
+DbViewAssert.findStrict_Fail = (db, keys, values, params, errorName, done) => {
+    db.view.findStrict(keys, values, params, (err, list) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         expect(list).to.be.ok;
@@ -37,8 +37,8 @@ DbViewAssert.findOnly_Fail = (db, keys, values, params, errorName, done) => {
     });
 };
 
-DbViewAssert.findOnly = (db, keys, values, params, expected, done) => {
-    db.view.findOnly(keys, values, params, (err, list) => {
+DbViewAssert.findStrict = (db, keys, values, params, expected, done) => {
+    db.view.findStrict(keys, values, params, (err, list) => {
         expect(err).to.be.undefined;
         expect(list).to.be.ok;
         expect(list.rows.length).to.equal(expected.length);
