@@ -12,10 +12,13 @@ import {default as Err, ErrCallback} from './err';
 import {default as DbDoc} from './db-doc';
 import {default as DbView} from './db-view';
 import {default as DbShow} from './db-show';
+import {default as Model} from './model';
 import deepExtend = require('deep-extend');
 
 export default class Db
 {
+    static Model = Model;
+
     maxTries: number = 5;
     nano: any;
     dbName: string;

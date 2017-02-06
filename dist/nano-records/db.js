@@ -12,6 +12,7 @@ const err_1 = require("./err");
 const db_doc_1 = require("./db-doc");
 const db_view_1 = require("./db-view");
 const db_show_1 = require("./db-show");
+const model_1 = require("./model");
 const deepExtend = require("deep-extend");
 class Db {
     constructor(nano, dbName, designs) {
@@ -60,5 +61,6 @@ class Db {
         }
     }
 }
+Db.Model = model_1.default;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Db;

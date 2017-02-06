@@ -114,4 +114,8 @@ export default class Err
     static verifyFailed (scope: string): Err {
         return new Err(scope, "verify_failed", "Verify code mismatch.");
     }
+
+    static missingDecorator (): Err {
+        return new Err("model", "missing_decorator", "Model has no db attached.");
+    }
 }

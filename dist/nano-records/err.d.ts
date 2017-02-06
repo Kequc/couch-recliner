@@ -23,4 +23,5 @@ export default class Err {
     static missingParam(scope: string, name: string): Err;
     static conflict(scope: string, err?: NanoError): Err;
     static verifyFailed(scope: string): Err;
+    static missingDecorator(): Err;
 }

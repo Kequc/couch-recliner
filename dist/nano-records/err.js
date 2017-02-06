@@ -85,6 +85,9 @@ class Err {
     static verifyFailed(scope) {
         return new Err(scope, "verify_failed", "Verify code mismatch.");
     }
+    static missingDecorator() {
+        return new Err("model", "missing_decorator", "Model has no db attached.");
+    }
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Err;

@@ -2,7 +2,9 @@ import { ErrCallback } from './err';
 import { default as DbDoc } from './db-doc';
 import { default as DbView } from './db-view';
 import { default as DbShow } from './db-show';
+import { default as Model } from './model';
 export default class Db {
+    static Model: typeof Model;
     maxTries: number;
     nano: any;
     dbName: string;
