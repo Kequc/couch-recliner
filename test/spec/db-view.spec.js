@@ -19,11 +19,11 @@ describe('db-view', () => {
             db.destroy('_DESTROY_', () => { done(); });
         });
         
-        it('all', (done) => {
-            assert.all(db, "key", {}, [], done);
+        it('find', (done) => {
+            assert.find(db, "key", {}, [], done);
         });
-        it('only', (done) => {
-            assert.only(db, "key", "value", {}, [], done);
+        it('findOnly', (done) => {
+            assert.findOnly(db, "key", "value", {}, [], done);
         });
         it('catalog', (done) => {
             assert.catalog(db, "foo", "comments", done);
@@ -43,11 +43,11 @@ describe('db-view', () => {
                 db.doc.destroy("_design/_nano_records", () => { done(); });
             });
                 
-            it('all', (done) => {
-                assert.all(db, "num", {}, [], done);
+            it('find', (done) => {
+                assert.find(db, "num", {}, [], done);
             });
-            it('only', (done) => {
-                assert.only(db, "num", "deep", {}, [], done);
+            it('findOnly', (done) => {
+                assert.findOnly(db, "num", "deep", {}, [], done);
             });
             
         });
@@ -68,49 +68,49 @@ describe('db-view', () => {
                 db.doc.destroy("_design/_nano_records", () => { done(); });
             });
             
-            it('all', (done) => {
+            it('find', (done) => {
                 let expected = [Helper.simpleBody, Helper.complexBody];
-                assert.all(db, "num", {}, expected, done);
+                assert.find(db, "num", {}, expected, done);
             });
-            it('all with lookup', (done) => {
+            it('find with lookup', (done) => {
                 let expected = [Helper.complexBody];
-                assert.all(db, "num", { key: Helper.complexBody.num }, expected, done);
+                assert.find(db, "num", { key: Helper.complexBody.num }, expected, done);
             });
-            it('all with multiple keys', (done) => {
+            it('find with multiple keys', (done) => {
                 let expected = [Helper.simpleBody, Helper.complexBody];
-                assert.all(db, ["num", "complex"], {}, expected, done);
+                assert.find(db, ["num", "complex"], {}, expected, done);
             });
-            it('all with multiple keys with lookup', (done) => {
+            it('find with multiple keys with lookup', (done) => {
                 let expected = [Helper.complexBody];
-                assert.all(db, ["num", "complex"], { key: [Helper.complexBody.num, Helper.complexBody.complex] }, expected, done);
+                assert.find(db, ["num", "complex"], { key: [Helper.complexBody.num, Helper.complexBody.complex] }, expected, done);
             });
-            it('all with nested keys', (done) => {
+            it('find with nested keys', (done) => {
                 let expected = [Helper.complexBody];
-                assert.all(db, ["num", "deep.hi"], {}, expected, done);
+                assert.find(db, ["num", "deep.hi"], {}, expected, done);
             });
-            it('only', (done) => {
+            it('findOnly', (done) => {
                 let expected = [{ deep: Helper.simpleBody.deep }, { deep: Helper.complexBody.deep }];
-                assert.only(db, "num", "deep", {}, expected, done);
+                assert.findOnly(db, "num", "deep", {}, expected, done);
             });
-            it('only with lookup', (done) => {
+            it('findOnly with lookup', (done) => {
                 let expected = [{}];
-                assert.only(db, "num", "deep", { key: Helper.simpleBody.num }, expected, done);
+                assert.findOnly(db, "num", "deep", { key: Helper.simpleBody.num }, expected, done);
             });
-            it('only with multiple values', (done) => {
+            it('findOnly with multiple values', (done) => {
                 let expected = [{ num: Helper.simpleBody.num, deep: Helper.simpleBody.deep }, { num: Helper.complexBody.num, deep: Helper.complexBody.deep }];
-                assert.only(db, "num", ["num", "deep"], {}, expected, done);
+                assert.findOnly(db, "num", ["num", "deep"], {}, expected, done);
             });
-            it('only with nested values', (done) => {
+            it('findOnly with nested values', (done) => {
                 let expected = [{ num: Helper.complexBody.num, deep: { hi: Helper.complexBody.deep.hi } }];
-                assert.only(db, "num", ["num", "deep.hi"], {}, expected, done);
+                assert.findOnly(db, "num", ["num", "deep.hi"], {}, expected, done);
             });
-            it('only with multiple keys and values', (done) => {
+            it('findOnly with multiple keys and values', (done) => {
                 let expected = [{ num: Helper.simpleBody.num, deep: Helper.simpleBody.deep }, { num: Helper.complexBody.num, deep: Helper.complexBody.deep }];
-                assert.only(db, ["num", "complex"], ["num", "deep"], {}, expected, done);
+                assert.findOnly(db, ["num", "complex"], ["num", "deep"], {}, expected, done);
             });
-            it('only with multiple keys and values and lookup', (done) => {
+            it('findOnly with multiple keys and values and lookup', (done) => {
                 let expected = [{ num: Helper.simpleBody.num }];
-                assert.only(db, ["num", "complex"], ["num", "deep"], { key: [Helper.simpleBody.num, Helper.simpleBody.complex] }, expected, done);
+                assert.findOnly(db, ["num", "complex"], ["num", "deep"], { key: [Helper.simpleBody.num, Helper.simpleBody.complex] }, expected, done);
             });
             
         });

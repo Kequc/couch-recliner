@@ -1,6 +1,6 @@
 {
   "name": "nano-records",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Utility returns objects for interacting with CouchDB.",
   "author": "mr.kequc@gmail.com",
   "license": "ISC",
@@ -10,8 +10,8 @@
   "files": [
     "lib/"
   ],
-  "main": "./dist/nano-records.js",
-  "typings": "./dist/nano-records.d.ts",
+  "main": "./lib/nano-records.js",
+  "typings": "./lib/nano-records.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kequc/nano-records.git"

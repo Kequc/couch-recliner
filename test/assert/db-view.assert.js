@@ -7,8 +7,8 @@ const Helper = require('../helper');
 
 const DbViewAssert = {};
 
-DbViewAssert.all_Fail = (db, keys, params, errorName, done) => {
-    db.view.all(keys, params, (err, list) => {
+DbViewAssert.find_Fail = (db, keys, params, errorName, done) => {
+    db.view.find(keys, params, (err, list) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         expect(list).to.be.ok;
@@ -17,8 +17,8 @@ DbViewAssert.all_Fail = (db, keys, params, errorName, done) => {
     });
 };
 
-DbViewAssert.all = (db, keys, params, expected, done) => {
-    db.view.all(keys, params, (err, list) => {
+DbViewAssert.find = (db, keys, params, expected, done) => {
+    db.view.find(keys, params, (err, list) => {
         expect(err).to.be.undefined;
         expect(list).to.be.ok;
         expect(list.rows.length).to.equal(expected.length);
@@ -27,8 +27,8 @@ DbViewAssert.all = (db, keys, params, expected, done) => {
     });
 };
 
-DbViewAssert.only_Fail = (db, keys, values, params, errorName, done) => {
-    db.view.only(keys, values, params, (err, list) => {
+DbViewAssert.findOnly_Fail = (db, keys, values, params, errorName, done) => {
+    db.view.findOnly(keys, values, params, (err, list) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         expect(list).to.be.ok;
@@ -37,8 +37,8 @@ DbViewAssert.only_Fail = (db, keys, values, params, errorName, done) => {
     });
 };
 
-DbViewAssert.only = (db, keys, values, params, expected, done) => {
-    db.view.only(keys, values, params, (err, list) => {
+DbViewAssert.findOnly = (db, keys, values, params, expected, done) => {
+    db.view.findOnly(keys, values, params, (err, list) => {
         expect(err).to.be.undefined;
         expect(list).to.be.ok;
         expect(list.rows.length).to.equal(expected.length);

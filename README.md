@@ -15,6 +15,11 @@ Conflicts are avoided with automated retries, errors are sanitised, designs are 
 * `db.designs.show` is now `db.show.catalog`
 * `db.designs.view` is now `db.view.catalog`
 
+### Upgrading from 1.1.1 to 1.2.0
+
+* `db.view.all` is now `db.view.find`
+* `db.view.only` is now `db.view.findOnly`
+
 ### Install
 
 ```
@@ -299,7 +304,7 @@ db.view.catalog(design, name, params, (err, list) => {
 
 ### View helpers
 
-#### .all
+#### .find
 
 Will generate a view for you using the provided keys, which returns a list of documents.
 
@@ -308,7 +313,7 @@ Useful for simple search functions, for example `keys` may be `"user_id"` then y
 Complex views are still best constructed manually. Read more about view helpers on: [CouchDB design documents using view helpers in nano-records](http://www.kequc.com/2016/05/24/couchdb-design-documents-using-view-helpers-in-nano-records).
 
 ```javascript
-db.view.all(keys, params, (err, list) => {
+db.view.find(keys, params, (err, list) => {
   if (err)
     return;
   // list is a NanoRecords list
@@ -316,14 +321,14 @@ db.view.all(keys, params, (err, list) => {
 });
 ```
 
-#### .only
+#### .findOnly
 
-Will generate a view similar to `view.all` which only returns a specific set of values from each document. For example `["created_at", "title", "author.name"]` would return `{ created_at: "mydate", title: "mytitle", author: { name: "myauthorname" } }` as each result.
+Will generate a view similar to `view.find` which only returns a specific set of values from each document. For example `["created_at", "title", "author.name"]` would return `{ created_at: "mydate", title: "mytitle", author: { name: "myauthorname" } }` as each result.
 
 This is more efficient than performing a full document lookup.
 
 ```javascript
-db.view.only(keys, values, params, (err, list) => {
+db.view.findOnly(keys, values, params, (err, list) => {
   if (err)
     return;
   // list is a NanoRecords list
