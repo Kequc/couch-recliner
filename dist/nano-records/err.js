@@ -9,23 +9,23 @@
  *
  */
 "use strict";
-var Err = (function () {
-    function Err(scope, name, message, raw) {
+class Err {
+    constructor(scope, name, message, raw) {
         this.scope = scope;
         this.name = name || "unknown_error";
         this.message = message || "No additional information available.";
         this.raw = raw || {};
     }
-    Err.resultFunc = function (scope, callback) {
-        return function (raw, result) {
-            var err = Err.make(scope, raw);
+    static resultFunc(scope, callback) {
+        return (raw, result) => {
+            let err = Err.make(scope, raw);
             if (err)
                 callback(err);
             else
                 callback(undefined, result);
         };
-    };
-    Err.make = function (scope, err) {
+    }
+    static make(scope, err) {
         if (!err)
             return;
         else if (err.statusCode == 412) {
@@ -67,25 +67,24 @@ var Err = (function () {
             // best guess!
             return new Err(scope, err.reason, err.description, err);
         }
-    };
+    }
     // common ones
-    Err.missing = function (scope, err) {
+    static missing(scope, err) {
         return new Err(scope, "not_found", "Not found.", err);
-    };
-    Err.missingId = function (scope) {
+    }
+    static missingId(scope) {
         return new Err(scope, "missing_id", "Id parameter required.");
-    };
-    Err.missingParam = function (scope, name) {
-        var cName = name[0].toUpperCase() + name.slice(1);
+    }
+    static missingParam(scope, name) {
+        let cName = name[0].toUpperCase() + name.slice(1);
         return new Err(scope, "missing_param", cName + " parameter required.");
-    };
-    Err.conflict = function (scope, err) {
+    }
+    static conflict(scope, err) {
         return new Err(scope, "conflict", "There was a conflict.", err);
-    };
-    Err.verifyFailed = function (scope) {
+    }
+    static verifyFailed(scope) {
         return new Err(scope, "verify_failed", "Verify code mismatch.");
-    };
-    return Err;
-}());
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Err;

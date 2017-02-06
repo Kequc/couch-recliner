@@ -9,13 +9,11 @@
  *
  */
 "use strict";
-var err_1 = require('./err');
-var doc_attachment_1 = require('./doc-attachment');
-var deepExtend = require('deep-extend');
-var Doc = (function () {
-    function Doc(db, body, result) {
-        if (body === void 0) { body = {}; }
-        if (result === void 0) { result = {}; }
+const err_1 = require("./err");
+const doc_attachment_1 = require("./doc-attachment");
+const deepExtend = require("deep-extend");
+class Doc {
+    constructor(db, body = {}, result = {}) {
         this.body = {};
         this.db = db;
         this.attachment = new doc_attachment_1.default(this);
@@ -23,167 +21,153 @@ var Doc = (function () {
         this.body['_id'] = result['id'] || this.body['_id'];
         this.body['_rev'] = this._latestRev = result['rev'] || this.body['_rev'];
     }
-    Doc.prototype.read = function (callback) {
-        if (callback === void 0) { callback = function () { }; }
+    read(callback = () => { }) {
         if (!this.getId())
             callback(err_1.default.missingId('doc'));
         else
             this._read(callback);
-    };
-    Doc.prototype._read = function (callback) {
-        var _this = this;
-        this._performRead(function (err, result) {
+    }
+    _read(callback) {
+        this._performRead((err, result) => {
             if (err)
                 callback(err);
             else {
-                _this.body = result;
-                _this._latestRev = result['_rev'];
+                this.body = result;
+                this._latestRev = result['_rev'];
                 callback(); // up to date
             }
         });
-    };
-    Doc.prototype._performRead = function (callback) {
+    }
+    _performRead(callback) {
         this.db.raw.get(this.getId(), err_1.default.resultFunc('doc', callback));
-    };
-    Doc.prototype.write = function (body, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    write(body, callback = () => { }) {
         if (!this.getId())
             callback(err_1.default.missingId('doc'));
         else if (!body)
             callback(err_1.default.missingParam('doc', "body"));
         else
             this._write(body, callback);
-    };
-    Doc.prototype._write = function (body, callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _write(body, callback, tries = 0) {
         tries++;
-        var clone = deepExtend({}, body);
-        this._performWrite(clone, function (err, result) {
+        let clone = deepExtend({}, body);
+        this._performWrite(clone, (err, result) => {
             if (err) {
-                if (tries <= _this.db.maxTries && err.name == "conflict") {
-                    _this.head(function (err) {
+                if (tries <= this.db.maxTries && err.name == "conflict") {
+                    this.head((err) => {
                         if (err)
                             callback(err);
                         else
-                            _this._write(body, callback, tries);
+                            this._write(body, callback, tries);
                     });
                 }
                 else
                     callback(err);
             }
             else {
-                _this.body = clone;
-                _this.body['_id'] = result['id'];
-                _this.body['_rev'] = _this._latestRev = result['rev'];
+                this.body = clone;
+                this.body['_id'] = result['id'];
+                this.body['_rev'] = this._latestRev = result['rev'];
                 callback(); // success
             }
         });
-    };
-    Doc.prototype._performWrite = function (body, callback) {
+    }
+    _performWrite(body, callback) {
         body['_rev'] = this._latestRev;
         this.db.raw.insert(body, this.getId(), err_1.default.resultFunc('doc', callback));
-    };
-    Doc.prototype.update = function (body, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    update(body, callback = () => { }) {
         if (!this.getId())
             callback(err_1.default.missingId('doc'));
         else if (!body)
             callback(err_1.default.missingParam('doc', "body"));
         else
             this._update(body, callback);
-    };
-    Doc.prototype._update = function (body, callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _update(body, callback, tries = 0) {
         tries++;
-        var clone = deepExtend({}, this.body, body);
-        this._performUpdate(clone, function (err, result) {
+        let clone = deepExtend({}, this.body, body);
+        this._performUpdate(clone, (err, result) => {
             if (err) {
-                if (tries <= _this.db.maxTries && err.name == "conflict") {
-                    _this.read(function (err) {
+                if (tries <= this.db.maxTries && err.name == "conflict") {
+                    this.read((err) => {
                         if (err)
                             callback(err);
                         else
-                            _this._update(body, callback, tries);
+                            this._update(body, callback, tries);
                     });
                 }
                 else
                     callback(err);
             }
             else {
-                _this.body = clone;
-                _this.body['_id'] = result['id'];
-                _this.body['_rev'] = _this._latestRev = result['rev'];
+                this.body = clone;
+                this.body['_id'] = result['id'];
+                this.body['_rev'] = this._latestRev = result['rev'];
                 callback(); // success
             }
         });
-    };
-    Doc.prototype._performUpdate = function (body, callback) {
+    }
+    _performUpdate(body, callback) {
         if (this.getRev() !== this._latestRev)
             callback(err_1.default.conflict('doc')); // we know we are out of date
         else
             this.db.raw.insert(body, this.getId(), err_1.default.resultFunc('doc', callback));
-    };
-    Doc.prototype.destroy = function (callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    destroy(callback = () => { }) {
         if (!this.getId())
             callback(err_1.default.missingId('doc'));
         else
             this._destroy(callback);
-    };
-    Doc.prototype._destroy = function (callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _destroy(callback, tries = 0) {
         tries++;
-        this._performDestroy(function (err) {
+        this._performDestroy((err) => {
             if (err) {
-                if (tries <= _this.db.maxTries && err.name == "conflict") {
-                    _this.head(function (err) {
+                if (tries <= this.db.maxTries && err.name == "conflict") {
+                    this.head((err) => {
                         if (err)
                             callback(err);
                         else
-                            _this._destroy(callback, tries);
+                            this._destroy(callback, tries);
                     });
                 }
                 else
                     callback(err);
             }
             else {
-                _this.body = {};
+                this.body = {};
                 callback(); // success
             }
         });
-    };
-    Doc.prototype._performDestroy = function (callback) {
+    }
+    _performDestroy(callback) {
         this.db.raw.destroy(this.getId(), this._latestRev, err_1.default.resultFunc('doc', callback));
-    };
-    Doc.prototype.head = function (callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    head(callback = () => { }) {
         if (!this.getId())
             callback(err_1.default.missingId('doc'));
         else
             this._head(callback);
-    };
-    Doc.prototype._head = function (callback) {
-        var _this = this;
+    }
+    _head(callback) {
         // we have a method already available for this on the db object
-        this.db.doc.head(this.getId(), function (err, rev, result) {
+        this.db.doc.head(this.getId(), (err, rev, result) => {
             if (rev)
-                _this._latestRev = rev;
+                this._latestRev = rev;
             callback(err, rev, result);
         });
-    };
-    Doc.prototype.getId = function () {
+    }
+    getId() {
         return this.body['_id'];
-    };
-    Doc.prototype.getRev = function () {
+    }
+    getRev() {
         return this.body['_rev'];
-    };
-    Doc.prototype.getBody = function () {
+    }
+    getBody() {
         return deepExtend({}, this.body);
-    };
-    return Doc;
-}());
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Doc;

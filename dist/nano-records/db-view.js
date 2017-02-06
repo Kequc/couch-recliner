@@ -7,15 +7,15 @@
  *
  */
 "use strict";
-var err_1 = require('./err');
-var list_1 = require('./list');
-var db_view_builder_1 = require('./db-view-builder');
-var _ = require('underscore');
-var DbView = (function () {
-    function DbView(db) {
+const err_1 = require("./err");
+const list_1 = require("./list");
+const db_view_builder_1 = require("./db-view-builder");
+const _ = require("underscore");
+class DbView {
+    constructor(db) {
         this.db = db;
     }
-    DbView.prototype.only = function (keys, values, params, callback) {
+    only(keys, values, params, callback) {
         // generated views consisiting of provided keys and values
         if (!keys)
             callback(err_1.default.missingParam('view', "keys"));
@@ -25,53 +25,50 @@ var DbView = (function () {
             callback(err_1.default.missingParam('view', "params"));
         else
             this._only(keys, values, params, callback);
-    };
-    DbView.prototype.all = function (keys, params, callback) {
+    }
+    all(keys, params, callback) {
         // generated views consisiting of provided keys and full documents
         if (!keys)
             callback(err_1.default.missingParam('view', "keys"));
         else if (!params)
             callback(err_1.default.missingParam('view', "params"));
         else {
-            var extended = { include_docs: true };
+            let extended = { include_docs: true };
             this._only(keys, undefined, _.extend({}, params, extended), callback);
         }
-    };
-    DbView.prototype._only = function (keys, values, params, callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _only(keys, values, params, callback, tries = 0) {
         tries++;
-        var name = db_view_builder_1.DbViewBuilder.generateName(keys, values);
-        this._performCatalog("_nano_records", name, params, function (err, result) {
+        let name = db_view_builder_1.DbViewBuilder.generateName(keys, values);
+        this._performCatalog("_nano_records", name, params, (err, result) => {
             if (err) {
                 if (tries <= 1 && (err.name == "no_db_file" || err.name == "not_found")) {
-                    var view = {
+                    let view = {
                         map: db_view_builder_1.DbViewBuilder.mapFunction(keys, values)
                     };
-                    _this._updateNanoRecordsDesign(name, view, function (err) {
+                    this._updateNanoRecordsDesign(name, view, (err) => {
                         if (err)
-                            callback(err, new list_1.default(_this.db));
+                            callback(err, new list_1.default(this.db));
                         else
-                            _this._only(keys, values, params, callback, tries);
+                            this._only(keys, values, params, callback, tries);
                     });
                 }
                 else
-                    callback(err, new list_1.default(_this.db));
+                    callback(err, new list_1.default(this.db));
             }
             else
-                callback(undefined, new list_1.default(_this.db, result)); // executed successfully
+                callback(undefined, new list_1.default(this.db, result)); // executed successfully
         });
-    };
-    DbView.prototype._updateNanoRecordsDesign = function (name, view, callback) {
+    }
+    _updateNanoRecordsDesign(name, view, callback) {
         // generate design view
-        var body = { language: "javascript", views: {} };
+        let body = { language: "javascript", views: {} };
         body.views[name] = view;
         this.db.doc.updateOrWrite('_design/_nano_records', body, callback);
-    };
+    }
     // TODO: we need a way to force persist individual views in
     // cases where they have been changed
-    DbView.prototype.catalog = function (design, name, params, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    catalog(design, name, params, callback = () => { }) {
         if (!design)
             callback(err_1.default.missingParam('view', "design"));
         else if (!name)
@@ -80,52 +77,48 @@ var DbView = (function () {
             callback(err_1.default.missingParam('view', "params"));
         else
             this._catalog(design, name, params, callback);
-    };
-    DbView.prototype._catalog = function (design, name, params, callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _catalog(design, name, params, callback, tries = 0) {
         tries++;
-        this._performCatalog(design, name, params, function (err, result) {
+        this._performCatalog(design, name, params, (err, result) => {
             if (err) {
                 if (tries <= 1 && (err.name == "no_db_file" || err.name == "not_found")) {
-                    _this._updateDesign(design, [name], function (err) {
+                    this._updateDesign(design, [name], (err) => {
                         if (err)
-                            callback(err, new list_1.default(_this.db));
+                            callback(err, new list_1.default(this.db));
                         else
-                            _this._catalog(design, name, params, callback, tries);
+                            this._catalog(design, name, params, callback, tries);
                     });
                 }
                 else
-                    callback(err, new list_1.default(_this.db));
+                    callback(err, new list_1.default(this.db));
             }
             else
-                callback(undefined, new list_1.default(_this.db, result)); // executed successfully
+                callback(undefined, new list_1.default(this.db, result)); // executed successfully
         });
-    };
-    DbView.prototype._performCatalog = function (design, name, params, callback) {
+    }
+    _performCatalog(design, name, params, callback) {
         this.db.raw.view(design, name, params, err_1.default.resultFunc('view', callback));
-    };
-    DbView.prototype._updateDesign = function (designId, names, callback) {
-        var design = this.db.designs[designId];
+    }
+    _updateDesign(designId, names, callback) {
+        let design = this.db.designs[designId];
         if (!design) {
             callback(new err_1.default('view', "not_defined", "No design specified for: " + designId));
             return;
         }
         // generate design document
-        var body = { language: design.language, views: {} };
-        for (var _i = 0, names_1 = names; _i < names_1.length; _i++) {
-            var name_1 = names_1[_i];
-            if (design.views[name_1])
-                body.views[name_1] = design.views[name_1];
+        let body = { language: design.language, views: {} };
+        for (let name of names) {
+            if (design.views[name])
+                body.views[name] = design.views[name];
             else {
-                callback(new err_1.default('view', "missing_view", "Missing deinition for: " + name_1));
+                callback(new err_1.default('view', "missing_view", "Missing deinition for: " + name));
                 return;
             }
         }
         // update design
         this.db.doc.updateOrWrite('_design/' + designId, body, callback);
-    };
-    return DbView;
-}());
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = DbView;

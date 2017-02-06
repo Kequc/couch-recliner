@@ -8,19 +8,19 @@
  *
  */
 "use strict";
-var err_1 = require('./err');
-var db_doc_1 = require('./db-doc');
-var db_view_1 = require('./db-view');
-var db_show_1 = require('./db-show');
-var deepExtend = require('deep-extend');
-var Db = (function () {
-    function Db(nano, dbName, designs) {
+const err_1 = require("./err");
+const db_doc_1 = require("./db-doc");
+const db_view_1 = require("./db-view");
+const db_show_1 = require("./db-show");
+const deepExtend = require("deep-extend");
+class Db {
+    constructor(nano, dbName, designs) {
         this.maxTries = 5;
         this.designs = {};
         this.nano = nano;
         this.dbName = dbName;
         this.raw = this.nano.use(this.dbName);
-        for (var key in designs) {
+        for (let key in designs) {
             this.designs[key] = {
                 language: "javascript",
                 shows: {},
@@ -32,38 +32,33 @@ var Db = (function () {
         this.view = new db_view_1.default(this);
         this.show = new db_show_1.default(this);
     }
-    Db.prototype.create = function (callback) {
-        if (callback === void 0) { callback = function () { }; }
+    create(callback = () => { }) {
         this._performCreate(callback);
-    };
-    Db.prototype._performCreate = function (callback) {
+    }
+    _performCreate(callback) {
         this.nano.db.create(this.dbName, err_1.default.resultFunc('db', callback));
-    };
-    Db.prototype.destroy = function (verify, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    destroy(verify, callback = () => { }) {
         if (verify !== "_DESTROY_")
             callback(err_1.default.verifyFailed('db'));
         else
             this._performDestroy(callback);
-    };
-    Db.prototype._performDestroy = function (callback) {
+    }
+    _performDestroy(callback) {
         this.nano.db.destroy(this.dbName, err_1.default.resultFunc('db', callback));
-    };
-    Db.prototype.reset = function (verify, callback) {
-        var _this = this;
-        if (callback === void 0) { callback = function () { }; }
+    }
+    reset(verify, callback = () => { }) {
         if (verify !== "_RESET_")
             callback(err_1.default.verifyFailed('db'));
         else {
-            this.destroy("_DESTROY_", function (err) {
+            this.destroy("_DESTROY_", (err) => {
                 if (!err || err.name == "no_db_file")
-                    _this.create(callback);
+                    this.create(callback);
                 else
                     callback(err);
             });
         }
-    };
-    return Db;
-}());
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Db;

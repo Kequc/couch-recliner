@@ -8,10 +8,10 @@
  *
  */
 "use strict";
-var doc_1 = require('./doc');
-var _ = require('underscore');
-var List = (function () {
-    function List(db, body) {
+const doc_1 = require("./doc");
+const _ = require("underscore");
+class List {
+    constructor(db, body) {
         this.total = 0;
         this.offset = 0;
         this.rows = [];
@@ -22,27 +22,25 @@ var List = (function () {
             this.rows = body.rows;
         }
     }
-    List.prototype.ids = function () {
-        return _.map(this.rows, function (row) { return row.id; });
-    };
-    List.prototype.keys = function () {
-        return _.map(this.rows, function (row) { return row.key; });
-    };
-    List.prototype.values = function () {
-        return _.map(this.rows, function (row) { return row.doc || row.value; });
-    };
-    List.prototype.docs = function () {
-        var _this = this;
-        return _.map(this.rows, function (row) { return _this._docForRow(row); });
-    };
-    List.prototype.doc = function (index) {
-        var row = this.rows[index];
+    ids() {
+        return _.map(this.rows, (row) => { return row.id; });
+    }
+    keys() {
+        return _.map(this.rows, (row) => { return row.key; });
+    }
+    values() {
+        return _.map(this.rows, (row) => { return row.doc || row.value; });
+    }
+    docs() {
+        return _.map(this.rows, (row) => { return this._docForRow(row); });
+    }
+    doc(index) {
+        let row = this.rows[index];
         return (row ? this._docForRow(row) : undefined);
-    };
-    List.prototype._docForRow = function (row) {
+    }
+    _docForRow(row) {
         return new doc_1.default(this.db, (row.doc || row.value), { id: row.id });
-    };
-    return List;
-}());
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = List;

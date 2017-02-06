@@ -9,8 +9,8 @@ var DbViewBuilder;
 (function (DbViewBuilder) {
     function mapFunction(keys, values) {
         // view map function generation
-        var result = "emit(" + emitKey(keys) + "," + emitValue(values) + ");";
-        var pfi = _parametersForIf(keys, values);
+        let result = "emit(" + emitKey(keys) + "," + emitValue(values) + ");";
+        let pfi = _parametersForIf(keys, values);
         if (pfi.length > 0)
             result = "if (" + pfi.join('&&') + ") { " + result + " }";
         result = "function (doc) { " + result + " }";
@@ -19,10 +19,9 @@ var DbViewBuilder;
     DbViewBuilder.mapFunction = mapFunction;
     function _parametersForIf(keys, values) {
         // find nesting in keys to provision an if statement
-        var result = [];
+        let result = [];
         if (keys instanceof Array)
-            for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
-                var key = keys_1[_i];
+            for (let key of keys) {
                 _addParametersForIf(result, key);
             }
         else
@@ -30,8 +29,7 @@ var DbViewBuilder;
         // find nesting in values to provision an if statement
         if (values) {
             if (values instanceof Array)
-                for (var _a = 0, values_1 = values; _a < values_1.length; _a++) {
-                    var value = values_1[_a];
+                for (let value of values) {
                     _addParametersForIf(result, value);
                 }
             else
@@ -41,9 +39,9 @@ var DbViewBuilder;
     }
     function _addParametersForIf(result, name) {
         // find nesting in a single parameter
-        var parts = name.split('.');
+        let parts = name.split('.');
         if (parts.length > 1) {
-            for (var i = 0; i < parts.length - 1; i++) {
+            for (let i = 0; i < parts.length - 1; i++) {
                 result.push("doc." + parts.slice(0, i + 1).join('.'));
             }
         }
@@ -51,9 +49,8 @@ var DbViewBuilder;
     function emitKey(keys) {
         // view map function emit key rendering
         if (keys instanceof Array) {
-            var result = [];
-            for (var _i = 0, keys_2 = keys; _i < keys_2.length; _i++) {
-                var key = keys_2[_i];
+            let result = [];
+            for (let key of keys) {
                 result.push("doc." + key);
             }
             return "[" + result.join(',') + "]";
@@ -68,9 +65,8 @@ var DbViewBuilder;
             return "null";
         if (!(keys instanceof Array))
             keys = [keys];
-        var assembled = {};
-        for (var _i = 0, keys_3 = keys; _i < keys_3.length; _i++) {
-            var key = keys_3[_i];
+        let assembled = {};
+        for (let key of keys) {
             _addNestedEmitValue(assembled, key.split('.'), key);
         }
         return JSON.stringify(assembled).replace(/"/g, "");
@@ -78,7 +74,7 @@ var DbViewBuilder;
     DbViewBuilder.emitValue = emitValue;
     function _addNestedEmitValue(assembled, parts, orig) {
         if (parts.length > 1) {
-            var key = parts.shift();
+            let key = parts.shift();
             assembled[key] = assembled[key] || {};
             _addNestedEmitValue(assembled[key], parts, orig);
         }
@@ -88,11 +84,10 @@ var DbViewBuilder;
     function generateName(keys, values) {
         // view name generation
         // for looking up views using key value combinations
-        var name = "";
+        let name = "";
         if (keys instanceof Array) {
-            var kk = [];
-            for (var _i = 0, keys_4 = keys; _i < keys_4.length; _i++) {
-                var key = keys_4[_i];
+            let kk = [];
+            for (let key of keys) {
                 kk.push(key.split('.').join('_D_'));
             }
             name += kk.join('_K_') + '_A_';
@@ -102,9 +97,8 @@ var DbViewBuilder;
         if (values) {
             name += "_S_";
             if (values instanceof Array) {
-                var vv = [];
-                for (var _a = 0, values_2 = values; _a < values_2.length; _a++) {
-                    var value = values_2[_a];
+                let vv = [];
+                for (let value of values) {
                     vv.push(value.split('.').join('_D_'));
                 }
                 name += vv.join('_V_') + '_A_';

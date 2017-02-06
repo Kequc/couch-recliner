@@ -10,26 +10,24 @@
  *
  */
 "use strict";
-var err_1 = require('./err');
-var stream = require('stream');
-var DbDocAttachment = (function () {
-    function DbDocAttachment(doc) {
+const err_1 = require("./err");
+const stream = require("stream");
+class DbDocAttachment {
+    constructor(doc) {
         this.doc = doc;
     }
-    DbDocAttachment.prototype.read = function (id, name, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    read(id, name, callback = () => { }) {
         if (!id)
             callback(err_1.default.missingId('attachment'));
         else if (!name)
             callback(err_1.default.missingParam('attachment', "name"));
         else
             this._performRead(id, name, callback);
-    };
-    DbDocAttachment.prototype._performRead = function (id, name, callback) {
+    }
+    _performRead(id, name, callback) {
         this.doc.db.raw.attachment.get(id, name, {}, err_1.default.resultFunc('attachment', callback));
-    };
-    DbDocAttachment.prototype.createReadStream = function (id, name, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    createReadStream(id, name, callback = () => { }) {
         if (!id) {
             callback(err_1.default.missingId('attachment'));
             return this._emptyStream();
@@ -40,20 +38,19 @@ var DbDocAttachment = (function () {
         }
         else
             return this._performCreateReadStream(id, name, callback);
-    };
-    DbDocAttachment.prototype._emptyStream = function () {
-        var readable = new stream.Readable();
-        readable._read = function () { };
+    }
+    _emptyStream() {
+        let readable = new stream.Readable();
+        readable._read = () => { };
         readable.push(null);
         return readable;
-    };
-    DbDocAttachment.prototype._performCreateReadStream = function (id, name, callback) {
+    }
+    _performCreateReadStream(id, name, callback) {
         // TODO: truthfully this returns pretty ugly streams when there is an error
         // would be nice to clean up
         return this.doc.db.raw.attachment.get(id, name, {}, err_1.default.resultFunc('attachment', callback));
-    };
-    DbDocAttachment.prototype.write = function (id, name, data, mimeType, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    write(id, name, data, mimeType, callback = () => { }) {
         if (!id)
             callback(err_1.default.missingId('attachment'));
         else if (!name)
@@ -64,19 +61,17 @@ var DbDocAttachment = (function () {
             callback(err_1.default.missingParam('attachment', "mimeType"));
         else
             this._write(id, name, data, mimeType, callback);
-    };
-    DbDocAttachment.prototype._write = function (id, name, data, mimeType, callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _write(id, name, data, mimeType, callback, tries = 0) {
         tries++;
-        this.doc.head(id, function (err, rev) {
+        this.doc.head(id, (err, rev) => {
             if (err)
                 callback(err);
             else {
-                _this._performWrite(id, rev, name, data, mimeType, function (err) {
+                this._performWrite(id, rev, name, data, mimeType, (err) => {
                     if (err) {
-                        if (tries <= _this.doc.db.maxTries && err.name == "conflict")
-                            _this._write(id, name, data, mimeType, callback, tries);
+                        if (tries <= this.doc.db.maxTries && err.name == "conflict")
+                            this._write(id, name, data, mimeType, callback, tries);
                         else
                             callback(err);
                     }
@@ -85,31 +80,28 @@ var DbDocAttachment = (function () {
                 });
             }
         });
-    };
-    DbDocAttachment.prototype._performWrite = function (id, rev, name, data, mimeType, callback) {
+    }
+    _performWrite(id, rev, name, data, mimeType, callback) {
         this.doc.db.raw.attachment.insert(id, name, data, mimeType, { rev: rev }, err_1.default.resultFunc('attachment', callback));
-    };
-    DbDocAttachment.prototype.destroy = function (id, name, callback) {
-        if (callback === void 0) { callback = function () { }; }
+    }
+    destroy(id, name, callback = () => { }) {
         if (!id)
             callback(err_1.default.missingId('attachment'));
         else if (!name)
             callback(err_1.default.missingParam('attachment', "name"));
         else
             this._destroy(id, name, callback);
-    };
-    DbDocAttachment.prototype._destroy = function (id, name, callback, tries) {
-        var _this = this;
-        if (tries === void 0) { tries = 0; }
+    }
+    _destroy(id, name, callback, tries = 0) {
         tries++;
-        this.doc.head(id, function (err, rev) {
+        this.doc.head(id, (err, rev) => {
             if (err)
                 callback(err);
             else {
-                _this._performDestroy(id, rev, name, function (err) {
+                this._performDestroy(id, rev, name, (err) => {
                     if (err) {
-                        if (tries <= _this.doc.db.maxTries && err.name == "conflict")
-                            _this._destroy(id, name, callback, tries);
+                        if (tries <= this.doc.db.maxTries && err.name == "conflict")
+                            this._destroy(id, name, callback, tries);
                         else
                             callback(err);
                     }
@@ -118,11 +110,10 @@ var DbDocAttachment = (function () {
                 });
             }
         });
-    };
-    DbDocAttachment.prototype._performDestroy = function (id, rev, name, callback) {
+    }
+    _performDestroy(id, rev, name, callback) {
         this.doc.db.raw.attachment.destroy(id, name, { rev: rev }, err_1.default.resultFunc('attachment', callback));
-    };
-    return DbDocAttachment;
-}());
+    }
+}
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = DbDocAttachment;
