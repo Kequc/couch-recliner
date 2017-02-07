@@ -2,7 +2,7 @@
 const dbName = 'nano-records-db-doc-attachment-test';
 
 const Helper = require('../helper');
-const NanoRecords = require('../../lib/nano-records');
+const NanoRecords = require('../../index');
 const nano = require('nano')("http://127.0.0.1:5984/");
 const db = new NanoRecords(nano, dbName);
 
