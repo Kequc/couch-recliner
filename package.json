@@ -10,7 +10,7 @@
   "files": [
     "lib/"
   ],
-  "main": "./index.js",
+  "main": "./lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Kequc/nano-records.git"
