@@ -40,7 +40,7 @@ DocAttachmentAssert.createReadStream_Fail = (doc, errorName, done) => {
         expect(err.name).to.equal(errorName);
         done();
     }), (result) => {
-        if (result == '')
+        if (result === '')
             expect(result).to.equal('');
         else
             expect(JSON.parse(result)).to.include.keys('error', 'reason');

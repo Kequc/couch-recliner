@@ -31,7 +31,7 @@ DbDocAttachmentAssert.createReadStream_Fail = (db, id, errorName, done) => {
         expect(err.name).to.equal(errorName);
         done();
     }), (result) => {
-        if (result == '')
+        if (result === '')
             expect(result).to.equal('');
         else
             expect(JSON.parse(result)).to.include.keys('error', 'reason');
@@ -80,7 +80,7 @@ DbDocAttachmentAssert.destroy = (db, id, done) => {
     db.doc.attachment.destroy(id, Helper.fileName, (err) => {
         expect(err).to.be.undefined;
         db.doc.read(id, (err, doc) => {
-            if (err && err.name == 'not_found')
+            if (err && err.name === 'not_found')
                 done();
             else {
                 expect(err).to.be.undefined;

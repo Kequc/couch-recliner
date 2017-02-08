@@ -157,8 +157,8 @@ Access the document body's `_id` and `_rev` properties. Another way of writing `
 Create a deep clone of the full document body `deepExtend({}, doc.body)`<sup>[1](https://github.com/unclechu/node-deep-extend)</sup>.
 
 ```javascript
-doc.getId() == doc.body['_id']; // true
-doc.getRev() == doc.body['_rev']; // true
+doc.getId() === doc.body['_id']; // true
+doc.getRev() === doc.body['_rev']; // true
 
 doc.getBody(); // {}
 ```

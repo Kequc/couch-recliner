@@ -66,7 +66,7 @@ Helper.checkList = (list, asserts) => {
 
 Helper.checkIncompleteBody = (doc, asserts) => {
     for (let key in asserts) {
-        if (key == '_attachments')
+        if (key === '_attachments')
             expect(Object.keys(doc.body[key])).to.eql(Object.keys(asserts[key]));
         else if (key != '_rev')
             expect(doc.body[key]).to.eql(asserts[key]);
