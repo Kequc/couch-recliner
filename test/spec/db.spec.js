@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 
@@ -6,7 +6,7 @@ const dbName = 'nano-records-db-test';
 
 const Helper = require('../helper');
 const NanoRecords = require('../../lib/index');
-const nano = require('nano')("http://127.0.0.1:5984/");
+const nano = require('nano')('http://127.0.0.1:5984/');
 let db;
 
 describe('db', () => {
@@ -33,18 +33,18 @@ describe('db', () => {
             db = new NanoRecords(nano, dbName, Helper.designs);
             expect(db.nano).to.equal(nano);
             expect(db.dbName).to.equal(dbName);
-            expect(db.designs).to.have.all.keys("foo", "bar");
+            expect(db.designs).to.have.all.keys('foo', 'bar');
             
-            expect(db.designs["foo"]).to.have.all.keys("language", "views", "shows");
-            expect(db.designs["foo"]["language"]).to.equal("javascript");
-            expect(db.designs["foo"]["views"]).to.have.all.keys("comments", "all-comments");
-            expect(db.designs["foo"]["views"]["comments"]).to.have.all.keys("map", "reduce");
-            expect(db.designs["foo"]["shows"]).to.have.all.keys("post", "user");
+            expect(db.designs['foo']).to.have.all.keys('language', 'views', 'shows');
+            expect(db.designs['foo']['language']).to.equal('javascript');
+            expect(db.designs['foo']['views']).to.have.all.keys('comments', 'all-comments');
+            expect(db.designs['foo']['views']['comments']).to.have.all.keys('map', 'reduce');
+            expect(db.designs['foo']['shows']).to.have.all.keys('post', 'user');
             
-            expect(db.designs["bar"]).to.have.all.keys("language", "views", "shows");
-            expect(db.designs["bar"]["language"]).to.equal("csharp");
-            expect(db.designs["bar"]["views"]).to.eql({});
-            expect(db.designs["bar"]["shows"]).to.eql({});
+            expect(db.designs['bar']).to.have.all.keys('language', 'views', 'shows');
+            expect(db.designs['bar']['language']).to.equal('csharp');
+            expect(db.designs['bar']['views']).to.eql({});
+            expect(db.designs['bar']['shows']).to.eql({});
             expect(db.raw).to.respondTo('insert'); // is a nano instance
         });
         
@@ -70,10 +70,10 @@ describe('db', () => {
                 // should fail
                 db.destroy('INCORRECT', (err) => {
                     expect(err).to.be.ok;
-                    expect(err.name).to.equal("verify_failed");
+                    expect(err.name).to.equal('verify_failed');
                     db.destroy('_DESTROY_', (err) => {
                         expect(err).to.be.ok;
-                        expect(err.name).to.equal("no_db_file");
+                        expect(err.name).to.equal('no_db_file');
                         done();
                     });
                 });
@@ -82,7 +82,7 @@ describe('db', () => {
                 // should be successful
                 db.reset('INCORRECT', (err) => {
                     expect(err).to.be.ok;
-                    expect(err.name).to.equal("verify_failed");
+                    expect(err.name).to.equal('verify_failed');
                     db.reset('_RESET_', (err) => {
                         expect(err).to.be.undefined;
                         done();
@@ -102,7 +102,7 @@ describe('db', () => {
                 // should fail
                 db.create((err) => {
                     expect(err).to.be.ok;
-                    expect(err.name).to.equal("db_already_exists");
+                    expect(err.name).to.equal('db_already_exists');
                     done();
                 });
             });
@@ -110,7 +110,7 @@ describe('db', () => {
                 // should be successful
                 db.destroy('INCORRECT', (err) => {
                     expect(err).to.be.ok;
-                    expect(err.name).to.equal("verify_failed");
+                    expect(err.name).to.equal('verify_failed');
                     db.destroy('_DESTROY_', (err) => {
                         expect(err).to.be.undefined;
                         done();
@@ -121,7 +121,7 @@ describe('db', () => {
                 // should be successful
                 db.reset('INCORRECT', (err) => {
                     expect(err).to.be.ok;
-                    expect(err.name).to.equal("verify_failed");
+                    expect(err.name).to.equal('verify_failed');
                     db.reset('_RESET_', (err) => {
                         expect(err).to.be.undefined;
                         done();

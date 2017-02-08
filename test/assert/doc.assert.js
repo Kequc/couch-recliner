@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const deepExtend = require('deep-extend');
@@ -48,7 +48,7 @@ DocAssert.read_Fail = (doc, errorName, done) => {
 
 DocAssert.read = (doc, done) => {
     // check read
-    let changes = { more: "Yay!", complex: "cats and dogs" };
+    let changes = { more: 'Yay!', complex: 'cats and dogs' };
     let asserts = deepExtend({}, doc.body, changes);
     Helper.triggerBgUpdate(doc.db, doc.getId(), changes, () => {
         expect(doc.body).to.not.have.keys('more');
@@ -61,7 +61,7 @@ DocAssert.read = (doc, done) => {
 };
 
 DocAssert.write_Fail = (doc, errorName, done) => {
-    doc.write({ boo: "oorns" }, (err) => {
+    doc.write({ boo: 'oorns' }, (err) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         done();
@@ -69,7 +69,7 @@ DocAssert.write_Fail = (doc, errorName, done) => {
 };
 
 DocAssert.write = (doc, done) => {
-    let changes = { more: "attributes", complex: "Samsonite" };
+    let changes = { more: 'attributes', complex: 'Samsonite' };
     let asserts = deepExtend({}, changes);
     expect(doc.body).to.not.include.keys('more');
     expect(doc.body).to.include.keys('num');
@@ -82,23 +82,23 @@ DocAssert.write = (doc, done) => {
 };
 
 DocAssert.write_Retries = (doc, done) => {
-    Helper.triggerBgUpdate(doc.db, doc.getId(), { anotheranother: "changed" }, () => {
+    Helper.triggerBgUpdate(doc.db, doc.getId(), { anotheranother: 'changed' }, () => {
         DocAssert.write(doc, done);
     });
 };
 
 DocAssert.write_Retries_Fail = (doc, done) => {
     Helper.triggerBgUpdate(doc.db, doc.getId(), () => {
-        doc._write({ boo: "oorns" }, (err) => {
+        doc._write({ boo: 'oorns' }, (err) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("conflict");
+            expect(err.name).to.equal('conflict');
             done();
         }, doc.db.maxTries); // tried x times
     });
 };
 
 DocAssert.update_Fail = (doc, errorName, done) => {
-    doc.update({ boo: "oorns" }, (err) => {
+    doc.update({ boo: 'oorns' }, (err) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         done();
@@ -106,7 +106,7 @@ DocAssert.update_Fail = (doc, errorName, done) => {
 };
 
 DocAssert.update = (doc, done, moreChanges) => {
-    let changes = { more: "attributes", complex: "Samsonite" };
+    let changes = { more: 'attributes', complex: 'Samsonite' };
     let asserts = deepExtend({}, moreChanges || {}, changes);
     expect(doc.body).to.not.have.keys('more');
     doc.update(changes, (err) => {
@@ -117,7 +117,7 @@ DocAssert.update = (doc, done, moreChanges) => {
 };
 
 DocAssert.update_Retries = (doc, done) => {
-    let changes = { anotheranother: "changed" };
+    let changes = { anotheranother: 'changed' };
     Helper.triggerBgUpdate(doc.db, doc.getId(), changes, () => {
         DocAssert.update(doc, done, changes);
     });
@@ -125,9 +125,9 @@ DocAssert.update_Retries = (doc, done) => {
 
 DocAssert.update_Retries_Fail = (doc, done) => {
     Helper.triggerBgUpdate(doc.db, doc.getId(), () => {
-        doc._update({ boo: "oorns" }, (err) => {
+        doc._update({ boo: 'oorns' }, (err) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("conflict");
+            expect(err.name).to.equal('conflict');
             done();
         }, doc.db.maxTries); // tried x times
     });
@@ -168,7 +168,7 @@ DocAssert.destroy = (doc, done) => {
         expect(doc.body).to.eql({});
         doc.db.doc.read(id, (err, gotDoc) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("not_found");
+            expect(err.name).to.equal('not_found');
             expect(gotDoc).to.be.undefined;
             done();
         });
@@ -176,7 +176,7 @@ DocAssert.destroy = (doc, done) => {
 };
 
 DocAssert.destroy_Retries = (doc, done) => {
-    Helper.triggerBgUpdate(doc.db, doc.getId(), { anotheranother: "changed" }, () => {
+    Helper.triggerBgUpdate(doc.db, doc.getId(), { anotheranother: 'changed' }, () => {
         DocAssert.destroy(doc, done);
     });
 };
@@ -185,7 +185,7 @@ DocAssert.destroy_Retries_Fail = (doc, done) => {
     Helper.triggerBgUpdate(doc.db, doc.getId(), () => {
         doc._destroy((err) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("conflict");
+            expect(err.name).to.equal('conflict');
             done();
         }, doc.db.maxTries); // tried x times
     });

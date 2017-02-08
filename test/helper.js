@@ -1,35 +1,35 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const deepExtend = require('deep-extend');
 
 const Helper = {
     designs: {
-        "foo": {
-            "views": {
-                "comments": {
-                    "map": "function (doc) { emit(doc._id, doc); }",
-                    "reduce": "function (keys, values, rereduce) { return sum(values); }"
+        'foo': {
+            'views': {
+                'comments': {
+                    'map': 'function (doc) { emit(doc._id, doc); }',
+                    'reduce': 'function (keys, values, rereduce) { return sum(values); }'
                 },
-                "all-comments": {
-                    "map": "function (doc) { emit(doc._id, doc); }"
+                'all-comments': {
+                    'map': 'function (doc) { emit(doc._id, doc); }'
                 }
             },
-            "shows": {
-                "post": "function (doc, req) { return doc ? 'Hello from' + doc._id + '!' : 'Hello world!'; }",
-                "user": "function (doc, req) { return 'My username'; };"
+            'shows': {
+                'post': 'function (doc, req) { return doc ? 'Hello from' + doc._id + '!' : 'Hello world!'; }',
+                'user': 'function (doc, req) { return 'My username'; };'
             }
         },
-        "bar": {
-            "language": "csharp",
-            "views": {}
+        'bar': {
+            'language': 'csharp',
+            'views': {}
         }
     },
-    fileName: "attachment-doesnt-exist.txt",
-    fileContent: "This is an example attachment.",
-    id: "fake-id-doesnt-exist",
-    simpleBody: { hi: "there", num: 4 },
-    complexBody: { complex: 'document', num: 11, deep: { hi: "again.", arr: ["some", "values"] } }
+    fileName: 'attachment-doesnt-exist.txt',
+    fileContent: 'This is an example attachment.',
+    id: 'fake-id-doesnt-exist',
+    simpleBody: { hi: 'there', num: 4 },
+    complexBody: { complex: 'document', num: 11, deep: { hi: 'again.', arr: ['some', 'values'] } }
 };
 
 Helper.triggerBgUpdate = (db, id, changes, callback) => {
@@ -52,7 +52,7 @@ Helper.triggerBgUpdate = (db, id, changes, callback) => {
 };
 
 Helper.triggerBgDesignUpdate = (db, designId, callback) => {
-    Helper.triggerBgUpdate(db, "_design/" + designId, { shows: { "cats": "function (doc, req) { return 'yo'; }" } }, callback);
+    Helper.triggerBgUpdate(db, '_design/' + designId, { shows: { 'cats': 'function (doc, req) { return 'yo'; }' } }, callback);
 }
 
 Helper.checkList = (list, asserts) => {
@@ -66,9 +66,9 @@ Helper.checkList = (list, asserts) => {
 
 Helper.checkIncompleteBody = (doc, asserts) => {
     for (let key in asserts) {
-        if (key == "_attachments")
+        if (key == '_attachments')
             expect(Object.keys(doc.body[key])).to.eql(Object.keys(asserts[key]));
-        else if (key != "_rev")
+        else if (key != '_rev')
             expect(doc.body[key]).to.eql(asserts[key]);
     }
 };

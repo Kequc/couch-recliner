@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const deepExtend = require('deep-extend');
@@ -34,10 +34,10 @@ DbShowAssert.catalog_Retries = (db, id, name, asserts, done) => {
 
 // TODO: not currently a way to test this
 DbShowAssert.catalog_Retries_Fail = (db, design, name, done) => {
-    Helper.triggerBgDesignUpdate(db, "foo", () => {
+    Helper.triggerBgDesignUpdate(db, 'foo', () => {
         db.show.catalog(Helper.id, design, name, (err, result) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("conflict");
+            expect(err.name).to.equal('conflict');
             expect(result).to.be.undefined;
             done();
         }, db.maxTries); // tried x times

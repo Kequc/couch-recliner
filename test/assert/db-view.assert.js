@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const deepExtend = require('deep-extend');
@@ -77,7 +77,7 @@ DbViewAssert.catalog_Retries_Fail = (db, design, name, done) => {
     Helper.triggerBgDesignUpdate(db, design, () => {
         db.view.catalog(design, name, {}, (err, list) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("conflict");
+            expect(err.name).to.equal('conflict');
             expect(list).to.be.ok;
             expect(list.rows.length).to.equal(0);
             done();

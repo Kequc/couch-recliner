@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 const dbName = 'nano-records-doc-test';
 
 const Helper = require('../helper');
 const NanoRecords = require('../../lib/index');
-const nano = require('nano')("http://127.0.0.1:5984/");
+const nano = require('nano')('http://127.0.0.1:5984/');
 const db = new NanoRecords(nano, dbName);
 
 const assert = require('../assert/doc-attachment.assert');
@@ -23,7 +23,7 @@ describe('doc-attachment', () => {
     
     describe('document does not exist', () => {
         beforeEach((done) => {
-            _doc.attachment.write(Helper.fileName, "Oops!", "text/plain", () => {
+            _doc.attachment.write(Helper.fileName, 'Oops!', 'text/plain', () => {
                 _doc.destroy(() => { done(); })
             });
         });
@@ -35,19 +35,19 @@ describe('doc-attachment', () => {
             assert.exists(_doc, false);
         });
         it('read', (done) => {
-            assert.read_Fail(_doc, "missing_id", done);
+            assert.read_Fail(_doc, 'missing_id', done);
         });
         it('createReadStream', (done) => {
-            assert.createReadStream_Fail(_doc, "missing_id", done);
+            assert.createReadStream_Fail(_doc, 'missing_id', done);
         });
         it('write', (done) => {
-            assert.write_Fail(_doc, "missing_id", false, done);
+            assert.write_Fail(_doc, 'missing_id', false, done);
         });
         it('createWriteStream', (done) => {
-            assert.createWriteStream_Fail(_doc, "missing_id", false, done);
+            assert.createWriteStream_Fail(_doc, 'missing_id', false, done);
         });
         it('destroy', (done) => {
-            assert.destroy_Fail(_doc, "missing_id", false, done);
+            assert.destroy_Fail(_doc, 'missing_id', false, done);
         });
     });
     
@@ -62,10 +62,10 @@ describe('doc-attachment', () => {
                 assert.exists(_doc, false);
             });
             it('read', (done) => {
-                assert.read_Fail(_doc, "not_found", done);
+                assert.read_Fail(_doc, 'not_found', done);
             });
             it('createReadStream', (done) => {
-                assert.createReadStream_Fail(_doc, "not_found", done);
+                assert.createReadStream_Fail(_doc, 'not_found', done);
             });
             it('write', (done) => {
                 assert.write(_doc, done);
@@ -92,7 +92,7 @@ describe('doc-attachment', () => {
         
         describe('attachment exists', () => {
             beforeEach((done) => {
-                _doc.attachment.write(Helper.fileName, "This is an example attachment.", "text/plain", () => { done(); });
+                _doc.attachment.write(Helper.fileName, 'This is an example attachment.', 'text/plain', () => { done(); });
             });
             
             describe('just persisted', () => {

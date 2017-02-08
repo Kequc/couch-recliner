@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const deepExtend = require('deep-extend');
@@ -31,8 +31,8 @@ DbDocAttachmentAssert.createReadStream_Fail = (db, id, errorName, done) => {
         expect(err.name).to.equal(errorName);
         done();
     }), (result) => {
-        if (result == "")
-            expect(result).to.equal("");
+        if (result == '')
+            expect(result).to.equal('');
         else
             expect(JSON.parse(result)).to.include.keys('error', 'reason');
     });
@@ -48,7 +48,7 @@ DbDocAttachmentAssert.createReadStream = (db, id, done) => {
 };
 
 DbDocAttachmentAssert.write_Fail = (db, id, errorName, done) => {
-    db.doc.attachment.write(id, Helper.fileName, "Cannot write here.", "text/plain", (err) => {
+    db.doc.attachment.write(id, Helper.fileName, 'Cannot write here.', 'text/plain', (err) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         done();
@@ -56,7 +56,7 @@ DbDocAttachmentAssert.write_Fail = (db, id, errorName, done) => {
 };
 
 DbDocAttachmentAssert.write = (db, id, done) => {
-    db.doc.attachment.write(id, Helper.fileName, "Can write here.", "text/plain", (err) => {
+    db.doc.attachment.write(id, Helper.fileName, 'Can write here.', 'text/plain', (err) => {
         expect(err).to.be.undefined;
         db.doc.read(id, (err, doc) => {
             expect(err).to.be.undefined;
@@ -80,7 +80,7 @@ DbDocAttachmentAssert.destroy = (db, id, done) => {
     db.doc.attachment.destroy(id, Helper.fileName, (err) => {
         expect(err).to.be.undefined;
         db.doc.read(id, (err, doc) => {
-            if (err && err.name == "not_found")
+            if (err && err.name == 'not_found')
                 done();
             else {
                 expect(err).to.be.undefined;

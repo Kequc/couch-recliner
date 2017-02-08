@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
 const deepExtend = require('deep-extend');
@@ -54,7 +54,7 @@ DbDocAssert.head = (db, id, done) => {
 };
 
 DbDocAssert.write_Fail = (db, id, errorName, done) => {
-    db.doc.write(id, { will: "fail" }, (err, doc) => {
+    db.doc.write(id, { will: 'fail' }, (err, doc) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         expect(doc).to.be.undefined;
@@ -73,7 +73,7 @@ DbDocAssert.write = (db, id, done) => {
 };
 
 DbDocAssert.update_Fail = (db, id, errorName, done) => {
-    db.doc.update(id, { will: "fail" }, (err, doc) => {
+    db.doc.update(id, { will: 'fail' }, (err, doc) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         expect(doc).to.be.undefined;
@@ -93,7 +93,7 @@ DbDocAssert.update = (db, id, done, moreChanges) => {
 };
 
 DbDocAssert.updateOrWrite_Fail = (db, id, errorName, done) => {
-    db.doc.updateOrWrite(id, { will: "fail" }, (err, doc) => {
+    db.doc.updateOrWrite(id, { will: 'fail' }, (err, doc) => {
         expect(err).to.be.ok;
         expect(err.name).to.equal(errorName);
         expect(doc).to.be.undefined;
@@ -126,7 +126,7 @@ DbDocAssert.destroy = (db, id, done) => {
         expect(err).to.be.undefined;
         db.doc.read(id, (err, gotDoc) => {
             expect(err).to.be.ok;
-            expect(err.name).to.equal("not_found");
+            expect(err.name).to.equal('not_found');
             expect(gotDoc).to.be.undefined;
             done();
         });

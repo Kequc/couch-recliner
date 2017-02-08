@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 const dbName = 'nano-records-doc-test';
 
 const Helper = require('../helper');
 const NanoRecords = require('../../lib/index');
-const nano = require('nano')("http://127.0.0.1:5984/");
+const nano = require('nano')('http://127.0.0.1:5984/');
 const db = new NanoRecords(nano, dbName);
 
 const assert = require('../assert/doc.assert');
@@ -36,19 +36,19 @@ describe('doc', () => {
             assert.getBody_Fail(_doc);
         });
         it('read', (done) => {
-            assert.read_Fail(_doc, "missing_id", done);
+            assert.read_Fail(_doc, 'missing_id', done);
         });
         it('write', (done) => {
-            assert.write_Fail(_doc, "missing_id", done);
+            assert.write_Fail(_doc, 'missing_id', done);
         });
         it('update', (done) => {
-            assert.update_Fail(_doc, "missing_id", done);
+            assert.update_Fail(_doc, 'missing_id', done);
         });
         it('head', (done) => {
-            assert.head_Fail(_doc, "missing_id", done);
+            assert.head_Fail(_doc, 'missing_id', done);
         });
         it('destroy', (done) => {
-            assert.destroy_Fail(_doc, "missing_id", done);
+            assert.destroy_Fail(_doc, 'missing_id', done);
         });
     });
     
@@ -102,7 +102,7 @@ describe('doc', () => {
         });
         describe('attachment exists', () => {
             beforeEach((done) => {
-                _doc.attachment.write(Helper.fileName, "This is an example attachment.", "text/plain", () => { done(); });
+                _doc.attachment.write(Helper.fileName, 'This is an example attachment.', 'text/plain', () => { done(); });
             });
             
             describe('just persisted', () => {

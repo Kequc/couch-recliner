@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 const dbName = 'nano-records-db-doc-attachment-test';
 
 const Helper = require('../helper');
 const NanoRecords = require('../../lib/index');
-const nano = require('nano')("http://127.0.0.1:5984/");
+const nano = require('nano')('http://127.0.0.1:5984/');
 const db = new NanoRecords(nano, dbName);
 
 const assert = require('../assert/db-doc-attachment.assert');
@@ -19,16 +19,16 @@ describe('db-doc-attachment', () => {
         });
         
         it('read', (done) => {
-            assert.read_Fail(db, Helper.id, "not_found", done);
+            assert.read_Fail(db, Helper.id, 'not_found', done);
         });
         it('createReadStream', (done) => {
-            assert.createReadStream_Fail(db, Helper.id, "not_found", done);
+            assert.createReadStream_Fail(db, Helper.id, 'not_found', done);
         });
         it('write', (done) => {
-            assert.write_Fail(db, Helper.id, "not_found", done);
+            assert.write_Fail(db, Helper.id, 'not_found', done);
         });
         it('destroy', (done) => {
-            assert.destroy_Fail(db, Helper.id, "not_found", done);
+            assert.destroy_Fail(db, Helper.id, 'not_found', done);
         });
         
     });
@@ -44,16 +44,16 @@ describe('db-doc-attachment', () => {
             });
             
             it('read', (done) => {
-                assert.read_Fail(db, Helper.id, "not_found", done);
+                assert.read_Fail(db, Helper.id, 'not_found', done);
             });
             it('createReadStream', (done) => {
-                assert.createReadStream_Fail(db, Helper.id, "not_found", done);
+                assert.createReadStream_Fail(db, Helper.id, 'not_found', done);
             });
             it('write', (done) => {
-                assert.write_Fail(db, Helper.id, "not_found", done);
+                assert.write_Fail(db, Helper.id, 'not_found', done);
             });
             it('destroy', (done) => {
-                assert.destroy_Fail(db, Helper.id, "not_found", done);
+                assert.destroy_Fail(db, Helper.id, 'not_found', done);
             });
             
         });
@@ -71,10 +71,10 @@ describe('db-doc-attachment', () => {
             describe('attachment does not exist', () => {
                 
                 it('read', (done) => {
-                    assert.read_Fail(db, _doc.getId(), "not_found", done);
+                    assert.read_Fail(db, _doc.getId(), 'not_found', done);
                 });
                 it('createReadStream', (done) => {
-                    assert.createReadStream_Fail(db, _doc.getId(), "not_found", done);
+                    assert.createReadStream_Fail(db, _doc.getId(), 'not_found', done);
                 });
                 it('write', (done) => {
                     assert.write(db, _doc.getId(), done);
@@ -90,7 +90,7 @@ describe('db-doc-attachment', () => {
             });
             describe('attachment exists', () => {
                 beforeEach((done) => {
-                    _doc.attachment.write(Helper.fileName, Helper.fileContent, "text/plain", () => { done(); });
+                    _doc.attachment.write(Helper.fileName, Helper.fileContent, 'text/plain', () => { done(); });
                 });
                 
                 it('read', (done) => {

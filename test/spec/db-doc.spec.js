@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 const dbName = 'nano-records-db-doc-test';
 
 const Helper = require('../helper');
 const NanoRecords = require('../../lib/index');
-const nano = require('nano')("http://127.0.0.1:5984/");
+const nano = require('nano')('http://127.0.0.1:5984/');
 const db = new NanoRecords(nano, dbName);
 
 const assert = require('../assert/db-doc.assert');
@@ -22,22 +22,22 @@ describe('db-doc', () => {
             assert.create(db, done);
         });
         it('read', (done) => {
-            assert.read_Fail(db, Helper.id, "not_found", done);
+            assert.read_Fail(db, Helper.id, 'not_found', done);
         });
         it('head', (done) => {
-            assert.head_Fail(db, Helper.id, "not_found", done);
+            assert.head_Fail(db, Helper.id, 'not_found', done);
         });
         it('write', (done) => {
             assert.write(db, Helper.id, done);
         });
         it('update', (done) => {
-            assert.update_Fail(db, Helper.id, "not_found", done);
+            assert.update_Fail(db, Helper.id, 'not_found', done);
         });
         it('updateOrWrite', (done) => {
             assert.updateOrWrite(db, Helper.id, done);
         });
         it('destroy', (done) => {
-            assert.destroy_Fail(db, Helper.id, "not_found", done);
+            assert.destroy_Fail(db, Helper.id, 'not_found', done);
         });
     });
     
@@ -49,22 +49,22 @@ describe('db-doc', () => {
         describe('no id specified', () => {
             
             it('read', (done) => {
-                assert.read_Fail(db, undefined, "missing_id", done);
+                assert.read_Fail(db, undefined, 'missing_id', done);
             });
             it('head', (done) => {
-                assert.head_Fail(db, undefined, "missing_id", done);
+                assert.head_Fail(db, undefined, 'missing_id', done);
             });
             it('write', (done) => {
-                assert.write_Fail(db, undefined, "missing_id", done);
+                assert.write_Fail(db, undefined, 'missing_id', done);
             });
             it('update', (done) => {
-                assert.update_Fail(db, undefined, "missing_id", done);
+                assert.update_Fail(db, undefined, 'missing_id', done);
             });
             it('updateOrWrite', (done) => {
-                assert.updateOrWrite_Fail(db, undefined, "missing_id", done);
+                assert.updateOrWrite_Fail(db, undefined, 'missing_id', done);
             });
             it('destroy', (done) => {
-                assert.destroy_Fail(db, undefined, "missing_id", done);
+                assert.destroy_Fail(db, undefined, 'missing_id', done);
             });
             
         });
@@ -78,22 +78,22 @@ describe('db-doc', () => {
                 assert.create(db, done);
             });
             it('read', (done) => {
-                assert.read_Fail(db, Helper.id, "not_found", done);
+                assert.read_Fail(db, Helper.id, 'not_found', done);
             });
             it('head', (done) => {
-                assert.head_Fail(db, Helper.id, "not_found", done);
+                assert.head_Fail(db, Helper.id, 'not_found', done);
             });
             it('write', (done) => {
                 assert.write(db, Helper.id, done);
             });
             it('update', (done) => {
-                assert.update_Fail(db, Helper.id, "not_found", done);
+                assert.update_Fail(db, Helper.id, 'not_found', done);
             });
             it('updateOrWrite', (done) => {
                 assert.updateOrWrite(db, Helper.id, done);
             });
             it('destroy', (done) => {
-                assert.destroy_Fail(db, Helper.id, "not_found", done);
+                assert.destroy_Fail(db, Helper.id, 'not_found', done);
             });
         });
         
@@ -137,7 +137,7 @@ describe('db-doc', () => {
             });
             describe('attachment exists', () => {
                 beforeEach((done) => {
-                    _doc.attachment.write(Helper.fileName, "This is an example attachment.", "text/plain", () => {
+                    _doc.attachment.write(Helper.fileName, 'This is an example attachment.', 'text/plain', () => {
                         _doc.read(() => { done(); });
                     });
                 });
