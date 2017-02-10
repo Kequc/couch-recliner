@@ -7,6 +7,10 @@ Conflicts are avoided with automated retries, errors are sanitised, designs are 
 
 [npm](https://www.npmjs.com/package/nano-records)
 
+#### Notice:
+
+This repo is under heavy development approaching v1.2.0 please use the version that's on npm until it's ready.
+
 ### Upgrading from 1.0.9 to 1.1.0
 
 * `db.doc.forcedWrite` is now `db.doc.write`
