@@ -16,8 +16,8 @@ const Helper = {
                 }
             },
             'shows': {
-                'post': 'function (doc, req) { return doc ? 'Hello from' + doc._id + '!' : 'Hello world!'; }',
-                'user': 'function (doc, req) { return 'My username'; };'
+                'post': 'function (doc, req) { return doc ? "Hello from" + doc._id + "!" : "Hello world!"; }',
+                'user': 'function (doc, req) { return "My username"; };'
             }
         },
         'bar': {
@@ -52,7 +52,7 @@ Helper.triggerBgUpdate = (db, id, changes, callback) => {
 };
 
 Helper.triggerBgDesignUpdate = (db, designId, callback) => {
-    Helper.triggerBgUpdate(db, '_design/' + designId, { shows: { 'cats': 'function (doc, req) { return 'yo'; }' } }, callback);
+    Helper.triggerBgUpdate(db, '_design/' + designId, { shows: { 'cats': 'function (doc, req) { return "yo"; }' } }, callback);
 }
 
 Helper.checkList = (list, asserts) => {
