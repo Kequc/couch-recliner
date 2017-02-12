@@ -1,5 +1,5 @@
 {
-  "name": "nano-records",
+  "name": "couch-recliner",
   "version": "1.2.0",
   "description": "Utility returns objects for interacting with CouchDB.",
   "author": "mr.kequc@gmail.com",
@@ -13,22 +13,19 @@
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kequc/nano-records.git"
+    "url": "git+https://github.com/Kequc/couch-recliner.git"
   },
   "bugs": {
-    "url": "https://github.com/Kequc/nano-records/issues"
+    "url": "https://github.com/Kequc/couch-recliner/issues"
   },
   "homepage": "http://www.kequc.com",
   "keywords": [
-    "nano",
     "couchdb",
     "nodejs",
-    "typescript"
   ],
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.4.5",
-    "nano": "^6.2.0"
+    "mocha": "^2.4.5"
   },
   "dependencies": {
     "deep-extend": "^0.4.1",
