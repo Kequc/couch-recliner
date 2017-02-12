@@ -1,7 +1,7 @@
 {
   "name": "couch-recliner",
-  "version": "1.2.0",
-  "description": "Utility returns objects for interacting with CouchDB.",
+  "version": "0.0.1",
+  "description": "Utility modules for interacting with CouchDB with Nodejs",
   "author": "mr.kequc@gmail.com",
   "license": "ISC",
   "scripts": {
@@ -21,7 +21,7 @@
   "homepage": "http://www.kequc.com",
   "keywords": [
     "couchdb",
-    "nodejs",
+    "nodejs"
   ],
   "devDependencies": {
     "chai": "^3.5.0",
