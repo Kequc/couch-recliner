@@ -7,6 +7,7 @@ const CouchDb = require('../../../lib/util/couch-db');
 const db = 'http://localhost:5984';
 const dbName = 'nano-records-db-test';
 const id = 'fahfhaj-lfh11sajhfkundefinedjlahfjlkahfjashlkf';
+
 const headers = {
     'content-type': 'application/json',
     accept: 'application/json'
@@ -89,10 +90,7 @@ describe('CouchDb requestBuilder', function () {
         const req = CouchDb.requestBuilder('PUT', [db, dbName, id], { body, attachments: [attachment] });
         expect(req).to.have.property('method', 'PUT');
         expect(req).to.have.property('url', [db, dbName, id].join('/'));
-        expect(req).to.have.property('headers').to.deep.equal({
-            'content-type': 'multipart/related',
-            accept: 'application/json'
-        });
+        expect(req).to.have.property('headers').to.have.property('content-type', 'multipart/related');
         expect(req).to.have.property('multipart');
         expect(req.multipart).to.have.length(2);
         expect(req.multipart[0]).to.have.property('content-type', 'application/json');
@@ -116,6 +114,8 @@ describe('CouchDb requestBuilder', function () {
         const att = { length: 2, content_type: 'cat', stub: true };
         const bodyWithAtt = Object.assign({ _attachments: { att } }, body);
         const req = CouchDb.requestBuilder('PUT', [db, dbName, id], { body: bodyWithAtt, attachments: [attachment] });
+        expect(req).to.have.property('url', [db, dbName, id].join('/'));
+        expect(req).to.have.property('headers').to.have.property('content-type', 'multipart/related');
         expect(req).to.have.property('multipart');
         expect(req.multipart).to.have.length(2);
         expect(req.multipart[0]).to.have.property('content-type', 'application/json');
