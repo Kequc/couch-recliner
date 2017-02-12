@@ -5,7 +5,7 @@
   "author": "mr.kequc@gmail.com",
   "license": "ISC",
   "scripts": {
-    "test": "mocha --recursive ./test/spec"
+    "test": "mocha --recursive ./test"
   },
   "files": [
     "lib/"
@@ -33,6 +33,6 @@
   "dependencies": {
     "deep-extend": "^0.4.1",
     "dev-null": "^0.1.1",
-    "underscore": "^1.8.3"
+    "request": "^2.79.0"
   }
 }
