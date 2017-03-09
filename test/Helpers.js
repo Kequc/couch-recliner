@@ -49,6 +49,16 @@ Helpers.EXPECT_DB = (exists, done) => {
     });
 };
 
+Helpers.DESTROY_DOC = (done) => {
+    CouchRecliner.DocOperations.destroy(Model, Helpers.data.id, (err) => {
+        if (err)
+            expect(err.name).to.equal('not_found');
+        else
+            expect(err).to.be.undefined;
+        done();
+    });
+};
+
 Helpers.CREATE_DOC = (done) => {
     CouchRecliner.DocOperations.write(Model, Helpers.data.id, Helpers.data.doc, (err) => {
         expect(err).to.be.undefined;
