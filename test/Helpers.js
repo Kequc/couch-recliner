@@ -6,8 +6,14 @@ const CouchRecliner = require('../lib');
 
 const Helpers = {};
 
+Helpers.data = {
+    dbName: 'couch-recliner',
+    id: 'fake-id',
+    doc: require('./data/doc.json')
+};
+
 class Model extends CouchRecliner.Model {}
-Model.use('http://localhost:5984', 'couch-recliner');
+Model.use('http://localhost:5984', Helpers.data.dbName);
 
 Helpers.Model = Model;
 
@@ -38,6 +44,25 @@ Helpers.EXPECT_DB = (exists, done) => {
         else {
             expect(err).to.not.be.undefined;
             expect(err.name).to.equal('no_db_file');
+        }
+        done();
+    });
+};
+
+Helpers.CREATE_DOC = (done) => {
+    CouchRecliner.DocOperations.write(Model, Helpers.data.id, Helpers.data.doc, (err) => {
+        expect(err).to.be.undefined;
+        done();
+    });
+};
+
+Helpers.EXPECT_DOC = (exists, done) => {
+    CouchRecliner.DocOperations.head(Model, Helpers.data.id, (err) => {
+        if (exists)
+            expect(err).to.be.undefined;
+        else {
+            expect(err).to.not.be.undefined;
+            expect(err.name).to.equal('not_found');
         }
         done();
     });

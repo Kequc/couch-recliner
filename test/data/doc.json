@@ -1,0 +1,11 @@
+{
+    "test": "data",
+    "hello": 22,
+    "deep": {
+        "more": "hii",
+        "array": [22, 33, 145]
+    },
+    "array": ["some", "text", "here"],
+    "description": "A longer bit of text with perhaps a line break in it.\nRight here.",
+    "bool": true
+}
