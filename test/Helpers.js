@@ -9,6 +9,7 @@ const Helpers = {};
 Helpers.data = {
     dbName: 'couch-recliner',
     id: 'fake-id',
+    rev: '1-fake-rev',
     doc: require('./data/doc.json')
 };
 
@@ -49,6 +50,13 @@ Helpers.EXPECT_DB = (exists, done) => {
     });
 };
 
+Helpers.GENERATE_DOC = () => {
+    return new Helpers.Model(Helpers.data.doc, {
+        id: Helpers.data.id,
+        rev: Helpers.data.rev
+    });
+};
+
 Helpers.DESTROY_DOC = (done) => {
     CouchRecliner.DocOperations.destroy(Model, Helpers.data.id, (err) => {
         if (err)
@@ -59,10 +67,10 @@ Helpers.DESTROY_DOC = (done) => {
     });
 };
 
-Helpers.CREATE_DOC = (done) => {
-    CouchRecliner.DocOperations.write(Model, Helpers.data.id, Helpers.data.doc, (err) => {
+Helpers.CREATE_DOC = (callback) => {
+    CouchRecliner.DocOperations.write(Model, Helpers.data.id, Helpers.data.doc, (err, doc) => {
         expect(err).to.be.undefined;
-        done();
+        callback(doc);
     });
 };
 
