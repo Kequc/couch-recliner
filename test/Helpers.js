@@ -86,4 +86,15 @@ Helpers.EXPECT_DOC = (exists, done) => {
     });
 };
 
+Helpers.CHANGE_DOC = (doc, callback) => {
+    CouchRecliner.DocOperations.update(Model, doc.getId(), { race: 'cat' }, (err, doc2) => {
+        expect(err).to.be.undefined;
+        expect(doc.getId()).to.equal(doc2.getId());
+        expect(doc.getRev()).to.not.equal(doc2.getRev());
+        expect(doc._latestRev).to.not.equal(doc2.getRev());
+        expect(doc.body.race).to.not.equal(doc2.body.race);
+        callback(doc2);
+    });
+};
+
 module.exports = Helpers;
