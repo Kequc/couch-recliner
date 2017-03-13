@@ -88,6 +88,20 @@ describe('DocMeta', function() {
                 Helpers.EXPECT_DOC(true, done, doc2.getId());
             });
         });
+        it('destroyFixed', function(done) {
+            DocMeta.destroyFixed(Helpers.GENERATE_DOC(), (err) => {
+                expect(err).to.not.be.undefined;
+                expect(err.name).to.equal('not_found');
+                done();
+            });
+        });
+        it('destroy', function(done) {
+            DocMeta.destroy(Helpers.Model, Helpers.data.id, (err) => {
+                expect(err).to.not.be.undefined;
+                expect(err.name).to.equal('not_found');
+                done();
+            });
+        });
     });
     describe('database exists', function() {
         beforeEach(Helpers.CREATE_DB);
@@ -171,6 +185,20 @@ describe('DocMeta', function() {
                     expect(doc2._latestRev).to.equal(doc2.getRev());
                     Helpers.EXPECT_DOC_BODY(doc2.body, Helpers.data.doc2);
                     Helpers.EXPECT_DOC(true, done, doc2.getId());
+                });
+            });
+            it('destroyFixed', function(done) {
+                DocMeta.destroyFixed(Helpers.GENERATE_DOC(), (err) => {
+                    expect(err).to.not.be.undefined;
+                    expect(err.name).to.equal('not_found');
+                    done();
+                });
+            });
+            it('destroy', function(done) {
+                DocMeta.destroy(Helpers.Model, Helpers.data.id, (err) => {
+                    expect(err).to.not.be.undefined;
+                    expect(err.name).to.equal('not_found');
+                    done();
                 });
             });
         });
@@ -264,6 +292,22 @@ describe('DocMeta', function() {
                         done();
                     });
                 });
+                it('destroyFixed', function(done) {
+                    DocMeta.destroyFixed(doc, (err) => {
+                        expect(err).to.be.undefined;
+                        expect(doc.getId()).to.be.undefined;
+                        expect(doc.getRev()).to.be.undefined;
+                        expect(doc._latestRev).to.be.undefined;
+                        Helpers.EXPECT_DOC_BODY(doc.body, {});
+                        Helpers.EXPECT_DOC(false, done);
+                    });
+                });
+                it('destroy', function(done) {
+                    DocMeta.destroy(Helpers.Model, Helpers.data.id, (err) => {
+                        expect(err).to.be.undefined;
+                        Helpers.EXPECT_DOC(false, done);
+                    });
+                });
             });
             describe('document changed', function() {
                 let doc2;
@@ -354,6 +398,22 @@ describe('DocMeta', function() {
                         expect(doc2._latestRev).to.equal(doc2.getRev());
                         Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, Helpers.data.doc, { race: 'dog' }));
                         done();
+                    });
+                });
+                it('destroyFixed', function(done) {
+                    DocMeta.destroyFixed(doc, (err) => {
+                        expect(err).to.be.undefined;
+                        expect(doc.getId()).to.be.undefined;
+                        expect(doc.getRev()).to.be.undefined;
+                        expect(doc._latestRev).to.be.undefined;
+                        Helpers.EXPECT_DOC_BODY(doc.body, {});
+                        Helpers.EXPECT_DOC(false, done);
+                    });
+                });
+                it('destroy', function(done) {
+                    DocMeta.destroy(Helpers.Model, Helpers.data.id, (err) => {
+                        expect(err).to.be.undefined;
+                        Helpers.EXPECT_DOC(false, done);
                     });
                 });
             });
