@@ -72,6 +72,22 @@ describe('DocMeta', function() {
                 Helpers.EXPECT_DOC(false, done);
             });
         });
+        it('updateOrWrite', function(done) {
+            DocMeta.updateOrWrite(Helpers.Model, Helpers.data.id, Helpers.data.doc2, (err, doc2) => {
+                expect(err).to.be.undefined;
+                expect(doc2._latestRev).to.equal(doc2.getRev());
+                Helpers.EXPECT_DOC_BODY(doc2.body, Helpers.data.doc2);
+                Helpers.EXPECT_DOC(true, done);
+            });
+        });
+        it('create', function(done) {
+            DocMeta.create(Helpers.Model, Helpers.data.doc2, (err, doc2) => {
+                expect(err).to.be.undefined;
+                expect(doc2._latestRev).to.equal(doc2.getRev());
+                Helpers.EXPECT_DOC_BODY(doc2.body, Helpers.data.doc2);
+                Helpers.EXPECT_DOC(true, done, doc2.getId());
+            });
+        });
     });
     describe('database exists', function() {
         beforeEach(Helpers.CREATE_DB);
@@ -141,6 +157,22 @@ describe('DocMeta', function() {
                     Helpers.EXPECT_DOC(false, done);
                 });
             });
+            it('updateOrWrite', function(done) {
+                DocMeta.updateOrWrite(Helpers.Model, Helpers.data.id, Helpers.data.doc2, (err, doc2) => {
+                    expect(err).to.be.undefined;
+                    expect(doc2._latestRev).to.equal(doc2.getRev());
+                    Helpers.EXPECT_DOC_BODY(doc2.body, Helpers.data.doc2);
+                    Helpers.EXPECT_DOC(true, done);
+                });
+            });
+            it('create', function(done) {
+                DocMeta.create(Helpers.Model, Helpers.data.doc2, (err, doc2) => {
+                    expect(err).to.be.undefined;
+                    expect(doc2._latestRev).to.equal(doc2.getRev());
+                    Helpers.EXPECT_DOC_BODY(doc2.body, Helpers.data.doc2);
+                    Helpers.EXPECT_DOC(true, done, doc2.getId());
+                });
+            });
         });
         describe('document exists', function() {
             let doc;
@@ -149,8 +181,10 @@ describe('DocMeta', function() {
             });
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
+                    const oldRev = doc.getRev();
                     DocMeta.readFixed(doc, (err) => {
                         expect(err).to.be.undefined;
+                        expect(doc.getRev()).to.equal(oldRev);
                         expect(doc._latestRev).to.equal(doc.getRev());
                         done();
                     });
@@ -214,6 +248,15 @@ describe('DocMeta', function() {
                 it('update', function(done) {
                     DocMeta.update(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
                         expect(err).to.be.undefined;
+                        expect(doc2.getId()).to.equal(doc.getId());
+                        expect(doc2.getRev()).to.not.equal(doc.getRev());
+                        expect(doc2._latestRev).to.equal(doc2.getRev());
+                        Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, Helpers.data.doc, { race: 'dog' }));
+                        done();
+                    });
+                });
+                it('updateOrWrite', function(done) {
+                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
                         expect(doc2.getId()).to.equal(doc.getId());
                         expect(doc2.getRev()).to.not.equal(doc.getRev());
                         expect(doc2._latestRev).to.equal(doc2.getRev());
@@ -286,10 +329,9 @@ describe('DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
-                    const oldRev = doc.getRev();
                     DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
                         expect(err).to.be.undefined;
-                        expect(doc.getRev()).to.not.equal(oldRev);
+                        expect(doc.getRev()).to.not.equal(doc2.getRev());
                         expect(doc._latestRev).to.equal(doc.getRev());
                         Helpers.EXPECT_DOC_BODY(doc.body, Object.assign({}, Helpers.data.doc, { race: 'dog' }));
                         done();
@@ -298,6 +340,15 @@ describe('DocMeta', function() {
                 it('update', function(done) {
                     DocMeta.update(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
                         expect(err).to.be.undefined;
+                        expect(doc2.getId()).to.equal(doc.getId());
+                        expect(doc2.getRev()).to.not.equal(doc.getRev());
+                        expect(doc2._latestRev).to.equal(doc2.getRev());
+                        Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, Helpers.data.doc, { race: 'dog' }));
+                        done();
+                    });
+                });
+                it('updateOrWrite', function(done) {
+                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
                         expect(doc2.getId()).to.equal(doc.getId());
                         expect(doc2.getRev()).to.not.equal(doc.getRev());
                         expect(doc2._latestRev).to.equal(doc2.getRev());

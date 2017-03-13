@@ -75,8 +75,8 @@ Helpers.CREATE_DOC = (callback) => {
     });
 };
 
-Helpers.EXPECT_DOC = (exists, done) => {
-    CouchRecliner.DocOperations.head(Model, Helpers.data.id, (err) => {
+Helpers.EXPECT_DOC = (exists, done, id = Helpers.data.id) => {
+    CouchRecliner.DocOperations.head(Model, id, (err) => {
         if (exists)
             expect(err).to.be.undefined;
         else {
