@@ -10,7 +10,8 @@ Helpers.data = {
     dbName: 'couch-recliner',
     id: 'fake-id',
     rev: '1-fake-rev',
-    doc: require('./data/doc.json')
+    doc: require('./data/doc.json'),
+    doc2: require('./data/doc2.json')
 };
 
 class Model extends CouchRecliner.Model {}
@@ -84,6 +85,12 @@ Helpers.EXPECT_DOC = (exists, done) => {
         }
         done();
     });
+};
+
+Helpers.EXPECT_DOC_BODY = (data, data2) => {
+    const body = Object.assign({}, data, { _id: undefined, _rev: undefined });
+    const body2 = Object.assign({}, data2, { _id: undefined, _rev: undefined });
+    expect(body).to.eql(body2);
 };
 
 Helpers.CHANGE_DOC = (doc, callback) => {
