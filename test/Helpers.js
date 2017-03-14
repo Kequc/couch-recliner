@@ -1,6 +1,8 @@
 'use strict';
 const mocha = require('mocha');
 const expect = require('chai').expect;
+const fs = require('fs');
+const path = require('path');
 
 const CouchRecliner = require('../lib');
 
@@ -9,6 +11,15 @@ const Helpers = {};
 Helpers.data = {
     dbName: 'couch-recliner',
     id: 'fake-id',
+    attname: 'fake-attachment.txt',
+    file: {
+        content_type: 'text/html',
+        buffer: fs.readFileSync(path.join(__dirname, './data/attachment.txt'))
+    },
+    file2: {
+        content_type: 'text/html',
+        buffer: fs.readFileSync(path.join(__dirname, './data/attachment2.txt'))
+    },
     rev: '1-fake-rev',
     doc: require('./data/doc.json'),
     doc2: require('./data/doc2.json')
@@ -75,10 +86,35 @@ Helpers.CREATE_DOC = (callback) => {
     });
 };
 
-Helpers.EXPECT_DOC = (exists, done, id = Helpers.data.id) => {
-    CouchRecliner.DocOperations.head(Model, id, (err) => {
-        if (exists)
+Helpers.CREATE_DOC_WITH_ATTACHMENT = (callback) => {
+    Helpers.CREATE_DOC((doc) => {
+        CouchRecliner.AttachmentOperations.writeFixed(doc, Helpers.data.attname, Helpers.data.file, (err) => {
             expect(err).to.be.undefined;
+            callback(doc);
+        });
+    });
+};
+
+Helpers.EXPECT_DOC = (body, done, id = Helpers.data.id) => {
+    CouchRecliner.DocOperations.read(Model, id, (err, doc) => {
+        if (body) {
+            expect(err).to.be.undefined;
+            Helpers.EXPECT_DOC_BODY(doc.body, body);
+        }
+        else {
+            expect(err).to.not.be.undefined;
+            expect(err.name).to.equal('not_found');
+        }
+        done();
+    });
+};
+
+Helpers.EXPECT_ATTACHMENT = (buffer, done, id = Helpers.data.id, attname = Helpers.data.attname) => {
+    CouchRecliner.AttachmentOperations.read(Model, id, attname, (err, body) => {
+        if (buffer) {
+            expect(err).to.be.undefined;
+            Helpers.EXPECT_ATTACHMENT_BODY(body, buffer);
+        }
         else {
             expect(err).to.not.be.undefined;
             expect(err.name).to.equal('not_found');
@@ -88,8 +124,14 @@ Helpers.EXPECT_DOC = (exists, done, id = Helpers.data.id) => {
 };
 
 Helpers.EXPECT_DOC_BODY = (data, data2) => {
-    const body = Object.assign({}, data, { _id: undefined, _rev: undefined });
-    const body2 = Object.assign({}, data2, { _id: undefined, _rev: undefined });
+    const body = Object.assign({}, data, { _id: undefined, _rev: undefined, _attachments: undefined });
+    const body2 = Object.assign({}, data2, { _id: undefined, _rev: undefined, _attachments: undefined });
+    expect(body).to.eql(body2);
+};
+
+Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2 = Helpers.data.file.buffer) => {
+    const body = String.fromCharCode(null, buffer);
+    const body2 = String.fromCharCode(null, buffer2);
     expect(body).to.eql(body2);
 };
 
