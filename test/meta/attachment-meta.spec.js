@@ -198,7 +198,6 @@ describe('AttachmentMeta', function() {
                 });
                 it('writeFixed', function(done) {
                     AttachmentMeta.writeFixed(doc, Helpers.data.attname, Helpers.data.file2, (err) => {
-                        console.log(err);
                         expect(err).to.be.undefined;
                         expect(doc._latestRev).to.not.equal(doc.getRev());
                         expect(doc.body._attachments).to.not.be.undefined;

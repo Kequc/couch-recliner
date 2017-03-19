@@ -95,6 +95,17 @@ Helpers.CREATE_DOC_WITH_ATTACHMENT = (callback) => {
     });
 };
 
+Helpers.EXPECT_REV = (doc, oldRev, changed = false) => {
+    if (changed)
+        expect(doc.getRev()).to.not.equal(oldRev);
+    else
+        expect(doc.getRev()).to.equal(oldRev);
+};
+
+Helpers.EXPECT_LATEST_REV = (doc, expected = doc.getRev()) => {
+    expect(doc._latestRev).to.equal(expected);
+};
+
 Helpers.EXPECT_DOC = (body, done, id = Helpers.data.id) => {
     CouchRecliner.DocOperations.read(Model, id, (err, doc) => {
         if (body) {
@@ -135,6 +146,10 @@ Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2 = Helpers.data.file.buffer) =>
     expect(body).to.eql(body2);
 };
 
+Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {
+    expect(doc1.getId()).to.equal(doc2.getId());
+};
+
 Helpers.CHANGE_DOC = (doc, callback) => {
     CouchRecliner.DocOperations.update(Model, doc.getId(), { race: 'cat' }, (err, doc2) => {
         expect(err).to.be.undefined;
@@ -144,6 +159,14 @@ Helpers.CHANGE_DOC = (doc, callback) => {
         expect(doc.body.race).to.not.equal(doc2.body.race);
         callback(doc2);
     });
+};
+
+Helpers.EXPECT_ERROR = (err, name) => {
+    if (name) {
+        expect(err).is.not.undefined;
+        expect(err.name).to.equal(name);
+    } else
+        expect(err).to.be.undefined;
 };
 
 module.exports = Helpers;
