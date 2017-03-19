@@ -9,27 +9,29 @@ describe('DocMeta', function() {
     beforeEach(Helpers.DESTROY_DB);
     describe('database does not exist', function() {
         it('readFixed', function(done) {
-            DocMeta.readFixed(Helpers.GENERATE_DOC(), (err) => {
+            const doc = Helpers.GENERATE_DOC();
+            DocMeta.readFixed(doc, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
-                done();
+                Helpers.EXPECT_DOC(false, done, doc.getId());
             });
         });
         it('read', function(done) {
             DocMeta.read(Helpers.Model, Helpers.data.id, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
-                done();
+                Helpers.EXPECT_DOC(false, done);
             });
         });
         it('headFixed', function(done) {
-            DocMeta.headFixed(Helpers.GENERATE_DOC(), (err) => {
+            const doc = Helpers.GENERATE_DOC();
+            DocMeta.headFixed(doc, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
-                done();
+                Helpers.EXPECT_DOC(false, done, doc.getId());
             });
         });
         it('head', function(done) {
             DocMeta.head(Helpers.Model, Helpers.data.id, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
-                done();
+                Helpers.EXPECT_DOC(false, done);
             });
         });
         it('writeFixed', function(done) {
@@ -40,7 +42,7 @@ describe('DocMeta', function() {
                 Helpers.EXPECT_REV(doc, oldRev, true);
                 Helpers.EXPECT_LATEST_REV(doc);
                 Helpers.EXPECT_DOC_BODY(doc.body, Helpers.data.doc2);
-                Helpers.EXPECT_DOC(Helpers.data.doc2, done);
+                Helpers.EXPECT_DOC(Helpers.data.doc2, done, doc.getId());
             });
         });
         it('write', function(done) {
@@ -58,7 +60,7 @@ describe('DocMeta', function() {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_REV(doc, oldRev);
                 Helpers.EXPECT_LATEST_REV(doc);
-                Helpers.EXPECT_DOC(false, done);
+                Helpers.EXPECT_DOC(false, done, doc.getId());
             });
         });
         it('update', function(done) {
@@ -84,15 +86,16 @@ describe('DocMeta', function() {
             });
         });
         it('destroyFixed', function(done) {
-            DocMeta.destroyFixed(Helpers.GENERATE_DOC(), (err) => {
+            const doc = Helpers.GENERATE_DOC();
+            DocMeta.destroyFixed(doc, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
-                done();
+                Helpers.EXPECT_DOC(false, done, doc.getId());
             });
         });
         it('destroy', function(done) {
             DocMeta.destroy(Helpers.Model, Helpers.data.id, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
-                done();
+                Helpers.EXPECT_DOC(false, done);
             });
         });
     });
@@ -102,25 +105,26 @@ describe('DocMeta', function() {
             it('readFixed', function(done) {
                 DocMeta.readFixed(Helpers.GENERATE_DOC(), (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
-                    done();
+                    Helpers.EXPECT_DOC(false, done);
                 });
             });
             it('read', function(done) {
                 DocMeta.read(Helpers.Model, Helpers.data.id, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
-                    done();
+                    Helpers.EXPECT_DOC(false, done);
                 });
             });
             it('headFixed', function(done) {
-                DocMeta.headFixed(Helpers.GENERATE_DOC(), (err) => {
+                const doc = Helpers.GENERATE_DOC();
+                DocMeta.headFixed(doc, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
-                    done();
+                    Helpers.EXPECT_DOC(false, done, doc.getId());
                 });
             });
             it('head', function(done) {
                 DocMeta.head(Helpers.Model, Helpers.data.id, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
-                    done();
+                    Helpers.EXPECT_DOC(false, done);
                 });
             });
             it('writeFixed', function(done) {
@@ -131,7 +135,7 @@ describe('DocMeta', function() {
                     Helpers.EXPECT_REV(doc, oldRev, true);
                     Helpers.EXPECT_LATEST_REV(doc);
                     Helpers.EXPECT_DOC_BODY(doc.body, Helpers.data.doc2);
-                    Helpers.EXPECT_DOC(Helpers.data.doc2, done);
+                    Helpers.EXPECT_DOC(Helpers.data.doc2, done, doc.getId());
                 });
             });
             it('write', function(done) {
@@ -149,7 +153,7 @@ describe('DocMeta', function() {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_REV(doc, oldRev);
                     Helpers.EXPECT_LATEST_REV(doc);
-                    Helpers.EXPECT_DOC(false, done);
+                    Helpers.EXPECT_DOC(false, done, doc.getId());
                 });
             });
             it('update', function(done) {
@@ -175,15 +179,17 @@ describe('DocMeta', function() {
                 });
             });
             it('destroyFixed', function(done) {
-                DocMeta.destroyFixed(Helpers.GENERATE_DOC(), (err) => {
+                const doc = Helpers.GENERATE_DOC();
+                const oldId = doc.getId();
+                DocMeta.destroyFixed(doc, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
-                    done();
+                    Helpers.EXPECT_DOC(false, done, oldId)
                 });
             });
             it('destroy', function(done) {
                 DocMeta.destroy(Helpers.Model, Helpers.data.id, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
-                    done();
+                    Helpers.EXPECT_DOC(false, done);
                 });
             });
         });
@@ -195,11 +201,13 @@ describe('DocMeta', function() {
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
                     const oldRev = doc.getRev();
+                    const oldBody = Object.assign({}, doc.body);
                     DocMeta.readFixed(doc, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        done();
+                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
+                        Helpers.EXPECT_DOC(oldBody, done, doc.getId());
                     });
                 });
                 it('read', function(done) {
@@ -209,23 +217,25 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_REV(doc2, doc.getRev());
                         Helpers.EXPECT_LATEST_REV(doc2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, doc.body);
-                        done();
+                        Helpers.EXPECT_DOC(doc.body, done, doc2.getId());
                     });
                 });
                 it('headFixed', function(done) {
                     const oldRev = doc.getRev();
+                    const oldBody = Object.assign({}, doc.body);
                     DocMeta.headFixed(doc, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        done();
+                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
+                        Helpers.EXPECT_DOC(oldBody, done, doc.getId());
                     });
                 });
                 it('head', function(done) {
                     DocMeta.head(Helpers.Model, doc.getId(), (err, rev) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, rev);
-                        done();
+                        Helpers.EXPECT_DOC(doc.body, done, doc.getId());
                     });
                 });
                 it('writeFixed', function(done) {
@@ -250,11 +260,12 @@ describe('DocMeta', function() {
                 });
                 it('updateFixed', function(done) {
                     const oldRev = doc.getRev();
+                    const oldBody = Object.assign({}, doc.body);
                     DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, oldRev, true);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        const expected = Object.assign({}, Helpers.data.doc, { race: 'dog' });
+                        const expected = Object.assign({}, oldBody, { race: 'dog' });
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC(expected, done, doc.getId());
                     });
@@ -265,29 +276,31 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV(doc2, doc.getRev(), true);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, Helpers.data.doc, { race: 'dog' });
+                        const expected = Object.assign({}, doc.body, { race: 'dog' });
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC(expected, done, doc.getId());
                     });
                 });
                 it('updateOrWrite', function(done) {
+                    const oldBody = Object.assign({}, doc.body);
                     DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV(doc2, doc.getRev(), true);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, Helpers.data.doc, { race: 'dog' });
+                        const expected = Object.assign({}, oldBody, { race: 'dog' });
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC(expected, done, doc.getId());
                     });
                 });
                 it('destroyFixed', function(done) {
+                    const oldId = doc.getId();
                     DocMeta.destroyFixed(doc, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         expect(doc.getId()).to.be.undefined;
                         expect(doc.getRev()).to.be.undefined;
                         expect(doc._latestRev).to.be.undefined;
                         Helpers.EXPECT_DOC_BODY(doc.body, {});
-                        Helpers.EXPECT_DOC(false, done);
+                        Helpers.EXPECT_DOC(false, done, oldId);
                     });
                 });
                 it('destroy', function(done) {
@@ -307,8 +320,8 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc);
-                        expect(doc.body.race).to.equal(doc2.body.race);
-                        done();
+                        Helpers.EXPECT_DOC_BODY(doc.body, doc2.body);
+                        Helpers.EXPECT_DOC(doc2.body, done, doc.getId());
                     });
                 });
                 it('read', function(done) {
@@ -317,17 +330,18 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV(doc3, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        expect(doc3.body.race).to.equal(doc2.body.race);
-                        done();
+                        Helpers.EXPECT_DOC_BODY(doc3.body, doc2.body);
+                        Helpers.EXPECT_DOC(doc2.body, done, doc.getId());
                     });
                 });
                 it('headFixed', function(done) {
+                    const oldBody = Object.assign({}, doc.body);
                     DocMeta.headFixed(doc, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, doc2.getRev(), true);
                         Helpers.EXPECT_LATEST_REV(doc, doc2.getRev());
-                        expect(doc.body.race).to.not.equal(doc2.body.race);
-                        done();
+                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
+                        Helpers.EXPECT_DOC(doc2.body, done, doc.getId());
                     });
                 });
                 it('head', function(done) {
@@ -335,7 +349,7 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc2, rev);
                         Helpers.EXPECT_LATEST_REV(doc2, rev);
-                        done();
+                        Helpers.EXPECT_DOC(doc2.body, done, doc.getId());
                     });
                 });
                 it('writeFixed', function(done) {
@@ -358,11 +372,12 @@ describe('DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
+                    const oldBody = Object.assign({}, doc.body);
                     DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_REV(doc, doc2.getRev(), true);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        const expected = Object.assign({}, Helpers.data.doc, { race: 'dog' });
+                        const expected = Object.assign({}, oldBody, { race: 'dog' });
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC(expected, done, doc.getId());
                     });
@@ -373,7 +388,7 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV(doc2, doc.getRev(), true);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, Helpers.data.doc, { race: 'dog' });
+                        const expected = Object.assign({}, doc.body, { race: 'dog' });
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC(expected, done, doc.getId());
                     });
@@ -384,19 +399,20 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV(doc2, doc.getRev(), true);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, Helpers.data.doc, { race: 'dog' });
+                        const expected = Object.assign({}, doc.body, { race: 'dog' });
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC(expected, done, doc.getId());
                     });
                 });
                 it('destroyFixed', function(done) {
+                    const oldId = doc.getId();
                     DocMeta.destroyFixed(doc, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         expect(doc.getId()).to.be.undefined;
                         expect(doc.getRev()).to.be.undefined;
                         expect(doc._latestRev).to.be.undefined;
                         Helpers.EXPECT_DOC_BODY(doc.body, {});
-                        Helpers.EXPECT_DOC(false, done);
+                        Helpers.EXPECT_DOC(false, done, oldId);
                     });
                 });
                 it('destroy', function(done) {
