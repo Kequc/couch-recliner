@@ -90,7 +90,10 @@ Helpers.CREATE_DOC_WITH_ATTACHMENT = (callback) => {
     Helpers.CREATE_DOC((doc) => {
         CouchRecliner.AttachmentOperations.writeFixed(doc, Helpers.data.attname, Helpers.data.file, (err) => {
             expect(err).to.be.undefined;
-            callback(doc);
+            CouchRecliner.DocOperations.readFixed(doc, (err) => {
+                expect(err).to.be.undefined;
+                callback(doc);
+            });
         });
     });
 };
@@ -103,7 +106,10 @@ Helpers.EXPECT_REV = (doc, oldRev, changed = false) => {
 };
 
 Helpers.EXPECT_LATEST_REV = (doc, expected = doc.getRev()) => {
-    expect(doc._latestRev).to.equal(expected);
+    if (expected === false)
+        expect(doc._latestRev).to.not.equal(expected);
+    else
+        expect(doc._latestRev).to.equal(expected);
 };
 
 Helpers.EXPECT_DOC = (body, done, id = Helpers.data.id) => {
@@ -134,15 +140,25 @@ Helpers.EXPECT_ATTACHMENT = (buffer, done, id = Helpers.data.id, attname = Helpe
     });
 };
 
-Helpers.EXPECT_DOC_BODY = (data, data2) => {
-    const body = Object.assign({}, data, { _id: undefined, _rev: undefined, _attachments: undefined });
-    const body2 = Object.assign({}, data2, { _id: undefined, _rev: undefined, _attachments: undefined });
-    expect(body).to.eql(body2);
+Helpers.EXPECT_ATTACHMENT_STUB = (doc, attname = Helpers.data.attname) => {
+    if (attname === false)
+        expect((doc.body._attachments || {})[attname]).to.be.undefined;
+    else {
+        expect(doc.body._attachments).to.not.be.undefined;
+        expect(doc.body._attachments[attname]).to.not.be.undefined;
+        expect(doc.body._attachments[attname].stub).to.be.true;
+    }
 };
 
 Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2 = Helpers.data.file.buffer) => {
     const body = String.fromCharCode(null, buffer);
     const body2 = String.fromCharCode(null, buffer2);
+    expect(body).to.eql(body2);
+};
+
+Helpers.EXPECT_DOC_BODY = (data, data2) => {
+    const body = Object.assign({}, data, { _id: undefined, _rev: undefined, _attachments: undefined });
+    const body2 = Object.assign({}, data2, { _id: undefined, _rev: undefined, _attachments: undefined });
     expect(body).to.eql(body2);
 };
 
