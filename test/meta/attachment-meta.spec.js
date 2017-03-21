@@ -34,6 +34,19 @@ describe('AttachmentMeta', function() {
                 Helpers.EXPECT_ATTACHMENT(false, done);
             });
         });
+        it('destroyFixed', function(done) {
+            const doc = Helpers.GENERATE_DOC();
+            AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
+                Helpers.EXPECT_ERROR(err, 'not_found');
+                Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+            });
+        });
+        it('destroy', function(done) {
+            AttachmentMeta.destroy(Helpers.Model, Helpers.data.id, Helpers.data.attname, (err) => {
+                Helpers.EXPECT_ERROR(err, 'not_found');
+                Helpers.EXPECT_ATTACHMENT(false, done);
+            });
+        });
     });
     describe('database exists', function() {
         beforeEach(Helpers.CREATE_DB);
@@ -60,6 +73,19 @@ describe('AttachmentMeta', function() {
             });
             it('write', function(done) {
                 AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file, (err) => {
+                    Helpers.EXPECT_ERROR(err, 'not_found');
+                    Helpers.EXPECT_ATTACHMENT(false, done);
+                });
+            });
+            it('destroyFixed', function(done) {
+                const doc = Helpers.GENERATE_DOC();
+                AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
+                    Helpers.EXPECT_ERROR(err, 'not_found');
+                    Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                });
+            });
+            it('destroy', function(done) {
+                AttachmentMeta.destroy(Helpers.Model, Helpers.data.id, Helpers.data.attname, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_ATTACHMENT(false, done);
                 });
@@ -99,6 +125,19 @@ describe('AttachmentMeta', function() {
                         Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
                     });
                 });
+                it('destroyFixed', function(done) {
+                    AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_LATEST_REV(doc, false);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                    });
+                });
+                it('destroy', function(done) {
+                    AttachmentMeta.destroy(Helpers.Model, doc.getId(), Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                    });
+                });
             });
             describe('document changed', function() {
                 let doc2;
@@ -129,6 +168,19 @@ describe('AttachmentMeta', function() {
                     AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                    });
+                });
+                it('destroyFixed', function(done) {
+                    AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_LATEST_REV(doc, false);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                    });
+                });
+                it('destroy', function(done) {
+                    AttachmentMeta.destroy(Helpers.Model, doc.getId(), Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
                     });
                 });
             });
@@ -167,6 +219,19 @@ describe('AttachmentMeta', function() {
                         Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.buffer, done, doc.getId());
                     });
                 });
+                it('destroyFixed', function(done) {
+                    AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_LATEST_REV(doc, false);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                    });
+                });
+                it('destroy', function(done) {
+                    AttachmentMeta.destroy(Helpers.Model, doc.getId(), Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                    });
+                });
             });
             describe('document changed', function() {
                 let doc2;
@@ -199,6 +264,19 @@ describe('AttachmentMeta', function() {
                     AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file2, (err) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.buffer, done, doc.getId());
+                    });
+                });
+                it('destroyFixed', function(done) {
+                    AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_LATEST_REV(doc, false);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
+                    });
+                });
+                it('destroy', function(done) {
+                    AttachmentMeta.destroy(Helpers.Model, doc.getId(), Helpers.data.attname, (err) => {
+                        Helpers.EXPECT_ERROR(err);
+                        Helpers.EXPECT_ATTACHMENT(false, done, doc.getId());
                     });
                 });
             });
