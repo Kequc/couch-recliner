@@ -87,14 +87,13 @@ Helpers.CREATE_DOC = (callback) => {
 };
 
 Helpers.CREATE_DOC_WITH_ATTACHMENT = (callback) => {
-    Helpers.CREATE_DOC((doc) => {
-        CouchRecliner.AttachmentOperations.writeFixed(doc, Helpers.data.attname, Helpers.data.file, (err) => {
-            expect(err).to.be.undefined;
-            CouchRecliner.DocOperations.readFixed(doc, (err) => {
-                expect(err).to.be.undefined;
-                callback(doc);
-            });
-        });
+    const _attachments = {
+        [Helpers.data.attname]: Helpers.data.file
+    };
+    const body = Object.assign({}, Helpers.data.doc, { _attachments });
+    CouchRecliner.DocOperations.write(Model, Helpers.data.id, body, (err, doc) => {
+        expect(err).to.be.undefined;
+        callback(doc);
     });
 };
 
