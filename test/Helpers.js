@@ -14,11 +14,11 @@ Helpers.data = {
     attname: 'fake-attachment.txt',
     file: {
         content_type: 'text/html',
-        buffer: fs.readFileSync(path.join(__dirname, './data/attachment.txt'))
+        body: fs.readFileSync(path.join(__dirname, './data/attachment.txt'))
     },
     file2: {
         content_type: 'text/html',
-        buffer: fs.readFileSync(path.join(__dirname, './data/attachment2.txt'))
+        body: fs.readFileSync(path.join(__dirname, './data/attachment2.txt'))
     },
     rev: '1-fake-rev',
     doc: require('./data/doc.json'),
@@ -149,7 +149,7 @@ Helpers.EXPECT_ATTACHMENT_STUB = (doc, attname = Helpers.data.attname) => {
     }
 };
 
-Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2 = Helpers.data.file.buffer) => {
+Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2 = Helpers.data.file.body) => {
     const body = String.fromCharCode(null, buffer);
     const body2 = String.fromCharCode(null, buffer2);
     expect(body).to.eql(body2);

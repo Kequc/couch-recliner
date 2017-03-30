@@ -116,13 +116,13 @@ describe('AttachmentMeta', function() {
                         Helpers.EXPECT_REV(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc, false);
                         Helpers.EXPECT_ATTACHMENT_STUB(doc);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('write', function(done) {
                     AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file, (err) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('destroyFixed', function(done) {
@@ -161,13 +161,13 @@ describe('AttachmentMeta', function() {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_LATEST_REV(doc, false);
                         Helpers.EXPECT_ATTACHMENT_STUB(doc);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('write', function(done) {
                     AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file, (err) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('destroyFixed', function(done) {
@@ -195,14 +195,14 @@ describe('AttachmentMeta', function() {
                     AttachmentMeta.readFixed(doc, Helpers.data.attname, (err, body) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_ATTACHMENT_BODY(body);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('read', function(done) {
                     AttachmentMeta.read(Helpers.Model, doc.getId(), Helpers.data.attname, (err, body) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_ATTACHMENT_BODY(body);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('writeFixed', function(done) {
@@ -210,13 +210,13 @@ describe('AttachmentMeta', function() {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_LATEST_REV(doc, false);
                         Helpers.EXPECT_ATTACHMENT_STUB(doc);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.body, done, doc.getId());
                     });
                 });
                 it('write', function(done) {
                     AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file2, (err) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.body, done, doc.getId());
                     });
                 });
                 it('destroyFixed', function(done) {
@@ -242,14 +242,14 @@ describe('AttachmentMeta', function() {
                     AttachmentMeta.readFixed(doc, Helpers.data.attname, (err, body) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_ATTACHMENT_BODY(body);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('read', function(done) {
                     AttachmentMeta.read(Helpers.Model, doc.getId(), Helpers.data.attname, (err, body) => {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_ATTACHMENT_BODY(body);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file.body, done, doc.getId());
                     });
                 });
                 it('writeFixed', function(done) {
@@ -257,13 +257,13 @@ describe('AttachmentMeta', function() {
                         Helpers.EXPECT_ERROR(err);
                         Helpers.EXPECT_LATEST_REV(doc, false);
                         Helpers.EXPECT_ATTACHMENT_STUB(doc);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.body, done, doc.getId());
                     });
                 });
                 it('write', function(done) {
                     AttachmentMeta.write(Helpers.Model, Helpers.data.id, Helpers.data.attname, Helpers.data.file2, (err) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.buffer, done, doc.getId());
+                        Helpers.EXPECT_ATTACHMENT(Helpers.data.file2.body, done, doc.getId());
                     });
                 });
                 it('destroyFixed', function(done) {
