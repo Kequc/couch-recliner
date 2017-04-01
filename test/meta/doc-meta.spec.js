@@ -221,11 +221,10 @@ describe('DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const oldRev = doc.getRev();
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.headFixed(doc, (err) => {
+                    DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_REV(doc, oldRev);
+                        Helpers.EXPECT_REV(doc, rev);
                         Helpers.EXPECT_LATEST_REV(doc);
                         Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
                         Helpers.EXPECT_DOC(oldBody, done, doc.getId());
@@ -336,10 +335,11 @@ describe('DocMeta', function() {
                 });
                 it('headFixed', function(done) {
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.headFixed(doc, (err) => {
+                    DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_REV(doc, doc2.getRev(), true);
-                        Helpers.EXPECT_LATEST_REV(doc, doc2.getRev());
+                        Helpers.EXPECT_REV(doc2, rev);
+                        Helpers.EXPECT_REV(doc, rev, true);
+                        Helpers.EXPECT_LATEST_REV(doc, rev);
                         Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
                         Helpers.EXPECT_DOC(doc2.body, done, doc.getId());
                     });
@@ -453,11 +453,10 @@ describe('DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const oldRev = doc.getRev();
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.headFixed(doc, (err) => {
+                    DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_REV(doc, oldRev);
+                        Helpers.EXPECT_REV(doc, rev);
                         Helpers.EXPECT_LATEST_REV(doc);
                         Helpers.EXPECT_ATTACHMENT_STUB(doc);
                         Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
@@ -578,10 +577,11 @@ describe('DocMeta', function() {
                 });
                 it('headFixed', function(done) {
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.headFixed(doc, (err) => {
+                    DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_ERROR(err);
-                        Helpers.EXPECT_REV(doc, doc2.getRev(), true);
-                        Helpers.EXPECT_LATEST_REV(doc, doc2.getRev());
+                        Helpers.EXPECT_REV(doc2, rev);
+                        Helpers.EXPECT_REV(doc, rev, true);
+                        Helpers.EXPECT_LATEST_REV(doc, rev);
                         Helpers.EXPECT_ATTACHMENT_STUB(doc);
                         Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
                         Helpers.EXPECT_DOC(doc2.body, done, doc.getId());
