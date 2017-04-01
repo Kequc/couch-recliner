@@ -26,8 +26,7 @@ Helpers.data = {
 };
 
 class Model extends CouchRecliner.Model {}
-Model.use('http://localhost:5984', Helpers.data.dbName);
-
+Model.dbName = Helpers.data.dbName;
 Helpers.Model = Model;
 
 Helpers.DESTROY_DB = (done) => {
