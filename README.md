@@ -255,7 +255,7 @@ const atta = {
 It is possible to write attachments directly without caring about the document very much.
 
 ```javascript
-Cat.Attachment.write('jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
+Cat.writeAttachment('jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
     if (!err) console.log('success!');
 });
 ```
@@ -263,7 +263,7 @@ Cat.Attachment.write('jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
 success!
 ```
 
-You can also use the attachment helper directly, it is similar to syntax for the helper for documents. The following is identical to the example above.
+You can also use the attachment helper directly, it is similar in syntax to document helpers. The following is identical to the example above.
 
 ```javascript
 const { AttachmentOperations } = require('couch-recliner');
@@ -281,7 +281,7 @@ You can perform the same operation using the document instance.
 ```javascript
 // Equivalent to: AttachmentOperations.writeFixed(doc, ...)
 
-doc.attachment.write('vet-bill-03-05-2017.htm', atta, (err) => {
+doc.writeAttachment('vet-bill-03-05-2017.htm', atta, (err) => {
     if (!err) console.log(doc.body._attachments);
 });
 ```
@@ -307,7 +307,7 @@ Reading an attachment returns data in the form of a buffer.
 ```javascript
 // Equivalent to: AttachmentOperations.read(Cat, ...)
 
-Cat.Attachment.read('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
+Cat.readAttachment('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
     if (!err) console.log(buffer.length);
 });
 ```
@@ -320,7 +320,7 @@ You may also use this operation inline.
 ```javascript
 // Equivalent to: AttachmentOperations.readFixed(doc, ...)
 
-doc.attachment.read('vet-bill-03-05-2017.htm', (err, buffer) => {
+doc.readAttachment('vet-bill-03-05-2017.htm', (err, buffer) => {
     if (!err) console.log(buffer.length);
 });
 ```
@@ -333,7 +333,7 @@ doc.attachment.read('vet-bill-03-05-2017.htm', (err, buffer) => {
 ```javascript
 // Equivalent to: AttachmentOperations.destroy(Cat, ...)
 
-Cat.Attachment.destroy('jacob', 'vet-bill-03-05-2017.htm', (err) => {
+Cat.destroyAttachment('jacob', 'vet-bill-03-05-2017.htm', (err) => {
     if (!err) console.log('success!');
 });
 ```
@@ -346,7 +346,7 @@ Also works inline.
 ```javascript
 // Equivalent to: AttachmentOperations.destroyFixed(doc, ...)
 
-doc.attachment.destroy('vet-bill-03-05-2017.htm', (err) => {
+doc.destroyAttachment('vet-bill-03-05-2017.htm', (err) => {
     if (!err) console.log(doc.body._attachments);
 });
 ```
