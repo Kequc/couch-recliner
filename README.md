@@ -20,9 +20,9 @@ npm install couch-recliner --save
 Couch Recliner exposes set of Model centric helper methods, therefore you must have a Model describing your database.
 
 ```javascript
-const CouchRecliner = require('couch-recliner');
+const { Model } = require('couch-recliner');
 
-class Cat extends CouchRecliner.Model {
+class Cat extends Model {
     meow() {
         console.log(this.body.name + ' meows.');
     }
@@ -47,7 +47,7 @@ Sally meows.
 In all instances you may choose instead to use the provided helpers directly. The following code example is equivalent to the above.
 
 ```javascript
-const DocOperations = CouchRecliner.DocOperations;
+const { DocOperations } = require('couch-recliner');
 
 DocOperations.create(Cat, { name: 'Sally' }, (err, doc) => {
     if (!err) doc.meow();
@@ -203,6 +203,161 @@ doc.destroy((err) => {
 ```
 ```
 {}
+```
+
+### Multipart requests
+
+It is possible to add/remove/modify attachments with your documents at the same time. To do this make changes to the `body._attachments` object. In it you'll see existing attachments listed in key value form, where key is the name of the attachment.
+
+
+```javascript
+// Example of an existing attachment in a document body
+
+{
+    _attachments: {
+        'vet-bill-01-20-2017.htm': {
+            stub: true,
+            content_type: 'text/html',
+            length: 521
+        }
+    }
+}
+```
+
+If you remove this object, it will be deleted on the server. If you add something to it ensure it has a `content_type`, and a `body` property which can be either string or a Buffer.
+
+
+```javascript
+const atta = {
+    content_type: 'text/html',
+    body: fs.readFileSync(path.join(__dirname, './Documents/vet-bill-03-05-2017.htm'))
+};
+```
+
+```javascript
+// Modify the document, leave the existing attachment add a new one
+
+{
+    name: 'Jacob the expensive cat',
+    _attachments: {
+        'vet-bill-01-20-2017.htm': {
+            stub: true,
+            content_type: 'text/html',
+            length: 521
+        },
+        'vet-bill-03-05-2017.htm': atta
+    }
+}
+```
+
+### Writing attachments
+
+It is possible to write attachments directly without caring about the document very much.
+
+```javascript
+Cat.Attachment.write('jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
+    if (!err) console.log('success!');
+});
+```
+```
+success!
+```
+
+You can also use the attachment helper directly, it is similar to syntax for the helper for documents. The following is identical to the example above.
+
+```javascript
+const { AttachmentOperations } = require('couch-recliner');
+
+AttachmentOperations.write(Cat, 'jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
+    if (!err) console.log('success!');
+});
+```
+```
+success!
+```
+
+You can perform the same operation using the document instance.
+
+```javascript
+// Equivalent to: AttachmentOperations.writeFixed(doc, ...)
+
+doc.attachment.write('vet-bill-03-05-2017.htm', atta, (err) => {
+    if (!err) console.log(doc.body._attachments);
+});
+```
+```
+{
+    'vet-bill-01-20-2017.htm': {
+        stub: true,
+        content_type: 'text/html',
+        length: 521
+    },
+    'vet-bill-03-05-2017.htm': {
+        stub: true,
+        content_type: 'text/html',
+        length: 470
+    }
+}
+```
+
+### Reading attachments
+
+Reading an attachment returns data in the form of a buffer.
+
+```javascript
+// Equivalent to: AttachmentOperations.read(Cat, ...)
+
+Cat.Attachment.read('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
+    if (!err) console.log(buffer.length);
+});
+```
+```
+470
+```
+
+You may also use this operation inline.
+
+```javascript
+// Equivalent to: AttachmentOperations.readFixed(doc, ...)
+
+doc.attachment.read('vet-bill-03-05-2017.htm', (err, buffer) => {
+    if (!err) console.log(buffer.length);
+});
+```
+```
+470
+```
+
+### Destroying attachments
+
+```javascript
+// Equivalent to: AttachmentOperations.destroy(Cat, ...)
+
+Cat.Attachment.destroy('jacob', 'vet-bill-03-05-2017.htm', (err) => {
+    if (!err) console.log('success!');
+});
+```
+```
+success!
+```
+
+Also works inline.
+
+```javascript
+// Equivalent to: AttachmentOperations.destroyFixed(doc, ...)
+
+doc.attachment.destroy('vet-bill-03-05-2017.htm', (err) => {
+    if (!err) console.log(doc.body._attachments);
+});
+```
+```
+{
+    'vet-bill-01-20-2017.htm': {
+        stub: true,
+        content_type: 'text/html',
+        length: 521
+    }
+}
 ```
 
 ### Contribute
