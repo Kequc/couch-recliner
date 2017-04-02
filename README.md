@@ -228,7 +228,7 @@ If you remove this object, it will be deleted on the server. If you add somethin
 
 
 ```javascript
-const atta = {
+const myAttachment = {
     content_type: 'text/html',
     body: fs.readFileSync(path.join(__dirname, './Documents/vet-bill-03-05-2017.htm'))
 };
@@ -245,30 +245,21 @@ const atta = {
             content_type: 'text/html',
             length: 521
         },
-        'vet-bill-03-05-2017.htm': atta
+        'vet-bill-03-05-2017.htm': myAttachment
     }
 }
 ```
 
+As a tip, you generally do not need to care about existing attachments, if you are updating a document you will only extend the exisitng object. If you intend to remove an attachment in an update operation you will need to set the key `undefined` explicitly.
+
 ### Writing attachments
 
-It is possible to write attachments directly without caring about the document very much.
-
-```javascript
-Cat.writeAttachment('jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
-    if (!err) console.log('success!');
-});
-```
-```
-success!
-```
-
-You can also use the attachment helper directly, it is similar in syntax to document helpers. The following is identical to the example above.
+It is possible to write attachments directly without caring very much about the document.
 
 ```javascript
 const { AttachmentOperations } = require('couch-recliner');
 
-AttachmentOperations.write(Cat, 'jacob', 'vet-bill-03-05-2017.htm', atta, (err) => {
+AttachmentOperations.write(Cat, 'jacob', 'vet-bill-03-05-2017.htm', myAttachment, (err) => {
     if (!err) console.log('success!');
 });
 ```
@@ -279,9 +270,7 @@ success!
 You can perform the same operation using the document instance.
 
 ```javascript
-// Equivalent to: AttachmentOperations.writeFixed(doc, ...)
-
-doc.writeAttachment('vet-bill-03-05-2017.htm', atta, (err) => {
+AttachmentOperations.writeFixed(doc, 'vet-bill-03-05-2017.htm', myAttachment, (err) => {
     if (!err) console.log(doc.body._attachments);
 });
 ```
@@ -302,12 +291,10 @@ doc.writeAttachment('vet-bill-03-05-2017.htm', atta, (err) => {
 
 ### Reading attachments
 
-Reading an attachment returns data in the form of a buffer.
+Reading an attachment returns data in the form of a Buffer.
 
 ```javascript
-// Equivalent to: AttachmentOperations.read(Cat, ...)
-
-Cat.readAttachment('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
+AttachmentOperations.read(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
     if (!err) console.log(buffer.length);
 });
 ```
@@ -318,9 +305,7 @@ Cat.readAttachment('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
 You may also use this operation inline.
 
 ```javascript
-// Equivalent to: AttachmentOperations.readFixed(doc, ...)
-
-doc.readAttachment('vet-bill-03-05-2017.htm', (err, buffer) => {
+AttachmentOperations.readFixed(doc, 'vet-bill-03-05-2017.htm', (err, buffer) => {
     if (!err) console.log(buffer.length);
 });
 ```
@@ -331,9 +316,7 @@ doc.readAttachment('vet-bill-03-05-2017.htm', (err, buffer) => {
 ### Destroying attachments
 
 ```javascript
-// Equivalent to: AttachmentOperations.destroy(Cat, ...)
-
-Cat.destroyAttachment('jacob', 'vet-bill-03-05-2017.htm', (err) => {
+AttachmentOperations.destroy(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err) => {
     if (!err) console.log('success!');
 });
 ```
@@ -344,9 +327,7 @@ success!
 Also works inline.
 
 ```javascript
-// Equivalent to: AttachmentOperations.destroyFixed(doc, ...)
-
-doc.destroyAttachment('vet-bill-03-05-2017.htm', (err) => {
+AttachmentOperations.destroyFixed(doc, 'vet-bill-03-05-2017.htm', (err) => {
     if (!err) console.log(doc.body._attachments);
 });
 ```
