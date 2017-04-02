@@ -53,6 +53,9 @@ DocOperations.create(Cat, { name: 'Sally' }, (err, doc) => {
     if (!err) doc.meow();
 });
 ```
+```
+Sally meows.
+```
 
 ### Writing documents
 
@@ -294,7 +297,9 @@ AttachmentOperations.writeFixed(doc, 'vet-bill-03-05-2017.htm', myAttachment, (e
 Reading an attachment returns data in the form of a Buffer.
 
 ```javascript
-AttachmentOperations.read(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
+// Equivalent to: AttachmentOperations.read(Cat, ...)
+
+Cat.attachment('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
     if (!err) console.log(buffer.length);
 });
 ```
@@ -305,7 +310,9 @@ AttachmentOperations.read(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err, buffer)
 You may also use this operation inline.
 
 ```javascript
-AttachmentOperations.readFixed(doc, 'vet-bill-03-05-2017.htm', (err, buffer) => {
+// Equivalent to: AttachmentOperations.readFixed(doc, ...)
+
+doc.attachment('vet-bill-03-05-2017.htm', (err, buffer) => {
     if (!err) console.log(buffer.length);
 });
 ```
