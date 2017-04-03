@@ -11,25 +11,25 @@ describe('DbMeta', function() {
         it('head', function(done) {
             DbMeta.head(Helpers.Model, (err, res) => {
                 Helpers.EXPECT_ERROR(err, 'no_db_file');
-                Helpers.EXPECT_DB(false, done);
+                Helpers.EXPECT_DB_DOES_NOT_EXIST(done);
             });
         });
         it('create', function(done) {
             DbMeta.create(Helpers.Model, (err) => {
-                Helpers.EXPECT_ERROR(err);
-                Helpers.EXPECT_DB(true, done);
+                Helpers.EXPECT_NO_ERROR(err);
+                Helpers.EXPECT_DB_EXISTS(done);
             });
         });
         it('destroy', function(done) {
             DbMeta.destroy(Helpers.Model, (err) => {
                 Helpers.EXPECT_ERROR(err, 'no_db_file');
-                Helpers.EXPECT_DB(false, done);
+                Helpers.EXPECT_DB_DOES_NOT_EXIST(done);
             });
         });
         it('reset', function (done) {
             DbMeta.reset(Helpers.Model, (err) => {
-                Helpers.EXPECT_ERROR(err);
-                Helpers.EXPECT_DB(true, done);
+                Helpers.EXPECT_NO_ERROR(err);
+                Helpers.EXPECT_DB_EXISTS(done);
             });
         });
     });
@@ -37,26 +37,26 @@ describe('DbMeta', function() {
         beforeEach(Helpers.CREATE_DB);
         it('head', function(done) {
             DbMeta.head(Helpers.Model, (err, res) => {
-                Helpers.EXPECT_ERROR(err);
-                Helpers.EXPECT_DB(true, done);
+                Helpers.EXPECT_NO_ERROR(err);
+                Helpers.EXPECT_DB_EXISTS(done);
             });
         });
         it('create', function(done) {
             DbMeta.create(Helpers.Model, (err) => {
                 Helpers.EXPECT_ERROR(err, 'db_already_exists');
-                Helpers.EXPECT_DB(true, done);
+                Helpers.EXPECT_DB_EXISTS(done);
             });
         });
         it('destroy', function(done) {
             DbMeta.destroy(Helpers.Model, (err) => {
-                Helpers.EXPECT_ERROR(err);
-                Helpers.EXPECT_DB(false, done);
+                Helpers.EXPECT_NO_ERROR(err);
+                Helpers.EXPECT_DB_DOES_NOT_EXIST(done);
             });
         });
         it('reset', function (done) {
             DbMeta.reset(Helpers.Model, (err) => {
-                Helpers.EXPECT_ERROR(err);
-                Helpers.EXPECT_DB(true, done);
+                Helpers.EXPECT_NO_ERROR(err);
+                Helpers.EXPECT_DB_EXISTS(done);
             });
         });
     });

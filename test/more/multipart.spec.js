@@ -23,7 +23,7 @@ describe('DocMeta multipart', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.BG_CHANGE_DOC(doc, model => { doc2 = model; done(); });
                 });
             });
         });
@@ -37,7 +37,7 @@ describe('DocMeta multipart', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.BG_CHANGE_DOC(doc, model => { doc2 = model; done(); });
                 });
             });
         });

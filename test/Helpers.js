@@ -49,14 +49,16 @@ Helpers.CREATE_DB = (done) => {
     });
 };
 
-Helpers.EXPECT_DB = (exists, done) => {
+Helpers.EXPECT_DB_DOES_NOT_EXIST = (done) => {
     CouchRecliner.DbOperations.head(Model, (err) => {
-        if (exists)
-            expect(err).to.be.undefined;
-        else {
-            expect(err).to.not.be.undefined;
-            expect(err.name).to.equal('no_db_file');
-        }
+        Helpers.EXPECT_ERROR(err, 'no_db_file');
+        done();
+    });
+};
+
+Helpers.EXPECT_DB_EXISTS = (done) => {
+    CouchRecliner.DbOperations.head(Model, (err) => {
+        Helpers.EXPECT_NO_ERROR(err, 'no_db_file');
         done();
     });
 };
@@ -91,64 +93,82 @@ Helpers.CREATE_DOC_WITH_ATTACHMENT = (callback) => {
     };
     const body = Object.assign({}, Helpers.data.doc, { _attachments });
     CouchRecliner.DocOperations.write(Model, Helpers.data.id, body, (err, doc) => {
-        expect(err).to.be.undefined;
+        Helpers.EXPECT_NO_ERROR(err);
         callback(doc);
     });
 };
 
-Helpers.EXPECT_REV = (doc, oldRev, changed = false) => {
-    if (changed)
-        expect(doc.getRev()).to.not.equal(oldRev);
-    else
-        expect(doc.getRev()).to.equal(oldRev);
+Helpers.EXPECT_REV_CHANGED = (doc, oldRev) => {
+    expect(doc.getRev()).to.not.equal(oldRev);
 };
 
-Helpers.EXPECT_LATEST_REV = (doc, expected = doc.getRev()) => {
-    if (expected === false)
-        expect(doc._latestRev).to.not.equal(expected);
-    else
-        expect(doc._latestRev).to.equal(expected);
+Helpers.EXPECT_REV = (doc, rev) => {
+    expect(doc.getRev()).to.equal(rev);
 };
 
-Helpers.EXPECT_DOC = (body, done, id = Helpers.data.id) => {
+Helpers.EXPECT_LATEST_REV_CHANGED = (doc, rev) => {
+    expect(doc._latestRev).to.not.equal(rev || doc.getRev());
+};
+
+Helpers.EXPECT_LATEST_REV = (doc, rev) => {
+    expect(doc._latestRev).to.equal(rev || doc.getRev());
+};
+
+Helpers.EXPECT_DOC_DOES_NOT_EXIST = (id, done) => {
+    CouchRecliner.DocOperations.head(Model, id, (err) => {
+        Helpers.EXPECT_ERROR(err, 'not_found');
+        done();
+    });
+};
+
+Helpers.EXPECT_DOC_EXISTS = (id, done) => {
+    CouchRecliner.DocOperations.head(Model, id, (err) => {
+        Helpers.EXPECT_NO_ERROR(err);
+        done();
+    });
+};
+
+Helpers.EXPECT_DOC_EXISTS_WITH_BODY = (id, body, done) => {
     CouchRecliner.DocOperations.read(Model, id, (err, doc) => {
-        if (body) {
-            expect(err).to.be.undefined;
-            Helpers.EXPECT_DOC_BODY(doc.body, body);
-        }
-        else {
-            expect(err).to.not.be.undefined;
-            expect(err.name).to.equal('not_found');
-        }
+        Helpers.EXPECT_NO_ERROR(err);
+        Helpers.EXPECT_DOC_BODY(doc.body, body);
         done();
     });
 };
 
-Helpers.EXPECT_ATTACHMENT = (buffer, done, id = Helpers.data.id, attname = Helpers.data.attname) => {
+Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST = (id, attname, done) => {
     CouchRecliner.AttachmentOperations.read(Model, id, attname, (err, body) => {
-        if (buffer) {
-            expect(err).to.be.undefined;
-            Helpers.EXPECT_ATTACHMENT_BODY(body, buffer);
-        }
-        else {
-            expect(err).to.not.be.undefined;
-            expect(err.name).to.equal('not_found');
-        }
+        Helpers.EXPECT_ERROR(err, 'not_found');
         done();
     });
 };
 
-Helpers.EXPECT_ATTACHMENT_STUB = (doc, attname = Helpers.data.attname) => {
-    if (attname === false)
-        expect((doc.body._attachments || {})[attname]).to.be.undefined;
-    else {
-        expect(doc.body._attachments).to.not.be.undefined;
-        expect(doc.body._attachments[attname]).to.not.be.undefined;
-        expect(doc.body._attachments[attname].stub).to.be.true;
-    }
+Helpers.EXPECT_ATTACHMENT_EXISTS = (id, attname, done) => {
+    CouchRecliner.AttachmentOperations.read(Model, id, attname, (err, body) => {
+        Helpers.EXPECT_NO_ERROR(err);
+        done();
+    });
 };
 
-Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2 = Helpers.data.file.body) => {
+Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER = (id, attname, buffer, done) => {
+    CouchRecliner.AttachmentOperations.read(Model, id, attname, (err, body) => {
+        Helpers.EXPECT_NO_ERROR(err);
+        Helpers.EXPECT_ATTACHMENT_BODY(body, buffer);
+        done();
+    });
+};
+
+Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST = (doc, attname) => {
+    expect((doc.body._attachments || {})[attname]).to.be.undefined;
+};
+
+Helpers.EXPECT_ATTACHMENT_STUB_EXISTS = (doc, attname) => {
+    expect(doc.body._attachments).to.not.be.undefined;
+    expect(doc.body._attachments[attname]).to.not.be.undefined;
+    expect(doc.body._attachments[attname].stub).to.be.true;
+};
+
+Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2) => {
     const body = String.fromCharCode(null, buffer);
     const body2 = String.fromCharCode(null, buffer2);
     expect(body).to.eql(body2);
@@ -164,23 +184,24 @@ Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {
     expect(doc1.getId()).to.equal(doc2.getId());
 };
 
-Helpers.CHANGE_DOC = (doc, callback) => {
+Helpers.BG_CHANGE_DOC = (doc, callback) => {
     CouchRecliner.DocOperations.update(Model, doc.getId(), { race: 'cat' }, (err, doc2) => {
-        expect(err).to.be.undefined;
-        expect(doc.getId()).to.equal(doc2.getId());
-        expect(doc.getRev()).to.not.equal(doc2.getRev());
-        expect(doc._latestRev).to.not.equal(doc2.getRev());
-        expect(doc.body.race).to.not.equal(doc2.body.race);
+        Helpers.EXPECT_NO_ERROR(err);
+        Helpers.EXPECT_SAME_DOC(doc2, doc);
+        Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
+        Helpers.EXPECT_LATEST_REV(doc2);
+        Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, doc.body, { race: 'cat' }));
         callback(doc2);
     });
 };
 
+Helpers.EXPECT_NO_ERROR = (err) => {
+    expect(err).to.be.undefined;
+};
+
 Helpers.EXPECT_ERROR = (err, name) => {
-    if (name) {
-        expect(err).is.not.undefined;
-        expect(err.name).to.equal(name);
-    } else
-        expect(err).to.be.undefined;
+    expect(err).is.not.undefined;
+    expect(err.name).to.equal(name);
 };
 
 module.exports = Helpers;
