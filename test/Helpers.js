@@ -12,6 +12,8 @@ Helpers.data = {
     dbName: 'couch-recliner',
     id: 'fake-id',
     attname: 'fake-attachment.txt',
+    update: { race: 'cat' },
+    update2: { dog: 'ball' },
     file: {
         content_type: 'text/html',
         body: fs.readFileSync(path.join(__dirname, './data/attachment.txt'))
@@ -184,13 +186,13 @@ Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {
     expect(doc1.getId()).to.equal(doc2.getId());
 };
 
-Helpers.BG_CHANGE_DOC = (doc, callback) => {
-    CouchRecliner.DocOperations.update(Model, doc.getId(), { race: 'cat' }, (err, doc2) => {
+Helpers.BACKGROUND_CHANGE_DOC = (doc, callback) => {
+    CouchRecliner.DocOperations.update(Model, doc.getId(), Helpers.data.update, (err, doc2) => {
         Helpers.EXPECT_NO_ERROR(err);
         Helpers.EXPECT_SAME_DOC(doc2, doc);
         Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
         Helpers.EXPECT_LATEST_REV(doc2);
-        Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, doc.body, { race: 'cat' }));
+        Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, doc.body, Helpers.data.update));
         callback(doc2);
     });
 };

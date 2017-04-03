@@ -149,7 +149,7 @@ describe('AttachmentMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BG_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     const oldRev = doc.getRev();
@@ -261,7 +261,7 @@ describe('AttachmentMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BG_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     const oldRev = doc.getRev();

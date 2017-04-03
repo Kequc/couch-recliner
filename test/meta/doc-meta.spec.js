@@ -56,7 +56,7 @@ describe('DocMeta', function() {
         it('updateFixed', function(done) {
             const doc = Helpers.GENERATE_DOC();
             const oldRev = doc.getRev();
-            DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
+            DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_REV(doc, oldRev);
                 Helpers.EXPECT_LATEST_REV(doc);
@@ -64,7 +64,7 @@ describe('DocMeta', function() {
             });
         });
         it('update', function(done) {
-            DocMeta.update(Helpers.Model, Helpers.data.id, { race: 'dog' }, (err) => {
+            DocMeta.update(Helpers.Model, Helpers.data.id, Helpers.data.update2, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_DOC_DOES_NOT_EXIST(Helpers.data.id, done);
             });
@@ -149,7 +149,7 @@ describe('DocMeta', function() {
             it('updateFixed', function(done) {
                 const doc = Helpers.GENERATE_DOC();
                 const oldRev = doc.getRev();
-                DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
+                DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_REV(doc, oldRev);
                     Helpers.EXPECT_LATEST_REV(doc);
@@ -157,7 +157,7 @@ describe('DocMeta', function() {
                 });
             });
             it('update', function(done) {
-                DocMeta.update(Helpers.Model, Helpers.data.id, { race: 'dog' }, (err, doc2) => {
+                DocMeta.update(Helpers.Model, Helpers.data.id, Helpers.data.update2, (err, doc2) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_DOC_DOES_NOT_EXIST(Helpers.data.id, done);
                 });
@@ -260,34 +260,34 @@ describe('DocMeta', function() {
                 it('updateFixed', function(done) {
                     const oldRev = doc.getRev();
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
+                    DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        const expected = Object.assign({}, oldBody, { race: 'dog' });
+                        const expected = Object.assign({}, oldBody, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('update', function(done) {
-                    DocMeta.update(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
+                    DocMeta.update(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, doc.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
+                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, oldBody, { race: 'dog' });
+                        const expected = Object.assign({}, oldBody, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
@@ -313,7 +313,7 @@ describe('DocMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BG_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     DocMeta.readFixed(doc, (err) => {
@@ -373,33 +373,33 @@ describe('DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
-                    DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
+                    DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc);
-                        const expected = Object.assign({}, doc2.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('update', function(done) {
-                    DocMeta.update(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc3) => {
+                    DocMeta.update(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        const expected = Object.assign({}, doc2.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc3) => {
+                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        const expected = Object.assign({}, doc2.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
@@ -493,35 +493,35 @@ describe('DocMeta', function() {
                 });
                 it('updateFixed', function(done) {
                     const oldBody = Object.assign({}, doc.body);
-                    DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
+                    DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, oldBody._rev);
                         Helpers.EXPECT_LATEST_REV(doc);
                         Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        const expected = Object.assign({}, oldBody, { race: 'dog' });
+                        const expected = Object.assign({}, oldBody, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('update', function(done) {
-                    DocMeta.update(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
+                    DocMeta.update(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
                         Helpers.EXPECT_LATEST_REV(doc2);
                         Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
-                        const expected = Object.assign({}, doc.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc2) => {
+                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
                         Helpers.EXPECT_LATEST_REV(doc2);
                         Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
-                        const expected = Object.assign({}, doc.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
@@ -548,7 +548,7 @@ describe('DocMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BG_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     DocMeta.readFixed(doc, (err) => {
@@ -612,36 +612,36 @@ describe('DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
-                    DocMeta.updateFixed(doc, { race: 'dog' }, (err) => {
+                    DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc);
                         Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        const expected = Object.assign({}, doc2.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('update', function(done) {
-                    DocMeta.update(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc3) => {
+                    DocMeta.update(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc3);
                         Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc3, Helpers.data.attname);
-                        const expected = Object.assign({}, doc2.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), { race: 'dog' }, (err, doc3) => {
+                    DocMeta.updateOrWrite(Helpers.Model, doc.getId(), Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.getRev());
                         Helpers.EXPECT_LATEST_REV(doc3);
                         Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc3, Helpers.data.attname);
-                        const expected = Object.assign({}, doc2.body, { race: 'dog' });
+                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, done);
                     });
