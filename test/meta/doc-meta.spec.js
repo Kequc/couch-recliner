@@ -9,7 +9,7 @@ describe('DocMeta', function() {
     beforeEach(Helpers.DESTROY_DB);
     describe('database does not exist', function() {
         it('readFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             DocMeta.readFixed(doc, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_DOC_DOES_NOT_EXIST(doc.getId(), done);
@@ -22,7 +22,7 @@ describe('DocMeta', function() {
             });
         });
         it('headFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             DocMeta.headFixed(doc, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_DOC_DOES_NOT_EXIST(doc.getId(), done);
@@ -35,7 +35,7 @@ describe('DocMeta', function() {
             });
         });
         it('writeFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             const oldRev = doc.getRev();
             DocMeta.writeFixed(doc, Helpers.data.doc2, (err) => {
                 Helpers.EXPECT_NO_ERROR(err);
@@ -54,7 +54,7 @@ describe('DocMeta', function() {
             });
         });
         it('updateFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             const oldRev = doc.getRev();
             DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
@@ -86,7 +86,7 @@ describe('DocMeta', function() {
             });
         });
         it('destroyFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             DocMeta.destroyFixed(doc, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_DOC_DOES_NOT_EXIST(doc.getId(), done);
@@ -103,7 +103,7 @@ describe('DocMeta', function() {
         beforeEach(Helpers.CREATE_DB);
         describe('document does not exist', function() {
             it('readFixed', function(done) {
-                DocMeta.readFixed(Helpers.GENERATE_DOC(), (err) => {
+                DocMeta.readFixed(Helpers.GENERATE_FAKE_DOC(), (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_DOC_DOES_NOT_EXIST(Helpers.data.id, done);
                 });
@@ -115,7 +115,7 @@ describe('DocMeta', function() {
                 });
             });
             it('headFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 DocMeta.headFixed(doc, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_DOC_DOES_NOT_EXIST(doc.getId(), done);
@@ -128,7 +128,7 @@ describe('DocMeta', function() {
                 });
             });
             it('writeFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 const oldRev = doc.getRev();
                 DocMeta.writeFixed(doc, Helpers.data.doc2, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
@@ -147,7 +147,7 @@ describe('DocMeta', function() {
                 });
             });
             it('updateFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 const oldRev = doc.getRev();
                 DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
@@ -179,7 +179,7 @@ describe('DocMeta', function() {
                 });
             });
             it('destroyFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 const oldId = doc.getId();
                 DocMeta.destroyFixed(doc, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
@@ -313,7 +313,7 @@ describe('DocMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.CHANGE_DOC_IN_BACKGROUND(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     DocMeta.readFixed(doc, (err) => {
@@ -548,7 +548,7 @@ describe('DocMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.CHANGE_DOC_IN_BACKGROUND(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     DocMeta.readFixed(doc, (err) => {

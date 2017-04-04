@@ -9,7 +9,7 @@ describe('AttachmentMeta', function() {
     beforeEach(Helpers.DESTROY_DB);
     describe('database does not exist', function() {
         it('readFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             AttachmentMeta.readFixed(doc, Helpers.data.attname, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.getId(), Helpers.data.attname, done);
@@ -22,7 +22,7 @@ describe('AttachmentMeta', function() {
             });
         });
         it('writeFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             AttachmentMeta.writeFixed(doc, Helpers.data.attname, Helpers.data.file, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.getId(), Helpers.data.attname, done);
@@ -35,7 +35,7 @@ describe('AttachmentMeta', function() {
             });
         });
         it('destroyFixed', function(done) {
-            const doc = Helpers.GENERATE_DOC();
+            const doc = Helpers.GENERATE_FAKE_DOC();
             AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
                 Helpers.EXPECT_ERROR(err, 'not_found');
                 Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.getId(), Helpers.data.attname, done);
@@ -52,7 +52,7 @@ describe('AttachmentMeta', function() {
         beforeEach(Helpers.CREATE_DB);
         describe('document does not exist', function() {
             it('readFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 AttachmentMeta.readFixed(doc, Helpers.data.attname, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.getId(), Helpers.data.attname, done);
@@ -65,7 +65,7 @@ describe('AttachmentMeta', function() {
                 });
             });
             it('writeFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 AttachmentMeta.writeFixed(doc, Helpers.data.attname, Helpers.data.file, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.getId(), Helpers.data.attname, done);
@@ -78,7 +78,7 @@ describe('AttachmentMeta', function() {
                 });
             });
             it('destroyFixed', function(done) {
-                const doc = Helpers.GENERATE_DOC();
+                const doc = Helpers.GENERATE_FAKE_DOC();
                 AttachmentMeta.destroyFixed(doc, Helpers.data.attname, (err) => {
                     Helpers.EXPECT_ERROR(err, 'not_found');
                     Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.getId(), Helpers.data.attname, done);
@@ -99,7 +99,7 @@ describe('AttachmentMeta', function() {
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
                     const oldRev = doc.getRev();
-                    AttachmentMeta.readFixed(doc, Helpers.data.attname, (err) => {
+                    AttachmentMeta.readFixed(doc, Helpers.data.attname, (err, body) => {
                         Helpers.EXPECT_ERROR(err, 'not_found');
                         Helpers.EXPECT_REV(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
@@ -149,7 +149,7 @@ describe('AttachmentMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.CHANGE_DOC_IN_BACKGROUND(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     const oldRev = doc.getRev();
@@ -261,7 +261,7 @@ describe('AttachmentMeta', function() {
             describe('document changed', function() {
                 let doc2;
                 beforeEach(function(done) {
-                    Helpers.BACKGROUND_CHANGE_DOC(doc, model => { doc2 = model; done(); });
+                    Helpers.CHANGE_DOC_IN_BACKGROUND(doc, model => { doc2 = model; done(); });
                 });
                 it('readFixed', function(done) {
                     const oldRev = doc.getRev();

@@ -12,6 +12,7 @@ Helpers.data = {
     dbName: 'couch-recliner',
     id: 'fake-id',
     attname: 'fake-attachment.txt',
+    attname2: 'fake-attachment-2.txt',
     update: { race: 'cat' },
     update2: { dog: 'ball' },
     file: {
@@ -51,6 +52,13 @@ Helpers.CREATE_DB = (done) => {
     });
 };
 
+Helpers.RESET_DB = (done) => {
+    CouchRecliner.DbOperations.reset(Model, '_RESET_', (err) => {
+        expect(err).to.be.undefined;
+        done();
+    });
+};
+
 Helpers.EXPECT_DB_DOES_NOT_EXIST = (done) => {
     CouchRecliner.DbOperations.head(Model, (err) => {
         Helpers.EXPECT_ERROR(err, 'no_db_file');
@@ -65,7 +73,7 @@ Helpers.EXPECT_DB_EXISTS = (done) => {
     });
 };
 
-Helpers.GENERATE_DOC = () => {
+Helpers.GENERATE_FAKE_DOC = () => {
     return new Helpers.Model(Helpers.data.doc, {
         id: Helpers.data.id,
         rev: Helpers.data.rev
@@ -186,7 +194,7 @@ Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {
     expect(doc1.getId()).to.equal(doc2.getId());
 };
 
-Helpers.BACKGROUND_CHANGE_DOC = (doc, callback) => {
+Helpers.CHANGE_DOC_IN_BACKGROUND = (doc, callback) => {
     CouchRecliner.DocOperations.update(Model, doc.getId(), Helpers.data.update, (err, doc2) => {
         Helpers.EXPECT_NO_ERROR(err);
         Helpers.EXPECT_SAME_DOC(doc2, doc);
@@ -198,6 +206,11 @@ Helpers.BACKGROUND_CHANGE_DOC = (doc, callback) => {
 };
 
 Helpers.EXPECT_NO_ERROR = (err) => {
+    if (err) {
+        console.log('UNEXPECTED ERROR:');
+        console.log('name', err.name);
+        console.log('raw', err.raw);
+    }
     expect(err).to.be.undefined;
 };
 
