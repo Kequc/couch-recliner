@@ -109,19 +109,19 @@ Helpers.CREATE_DOC_WITH_ATTACHMENT = (callback) => {
 };
 
 Helpers.EXPECT_REV_CHANGED = (doc, oldRev) => {
-    expect(doc.getRev()).to.not.equal(oldRev);
+    expect(doc.rev).to.not.equal(oldRev);
 };
 
 Helpers.EXPECT_REV = (doc, rev) => {
-    expect(doc.getRev()).to.equal(rev);
+    expect(doc.rev).to.equal(rev);
 };
 
 Helpers.EXPECT_LATEST_REV_CHANGED = (doc, rev) => {
-    expect(doc._latestRev).to.not.equal(rev || doc.getRev());
+    expect(doc._latestRev).to.not.equal(rev || doc.rev);
 };
 
 Helpers.EXPECT_LATEST_REV = (doc, rev) => {
-    expect(doc._latestRev).to.equal(rev || doc.getRev());
+    expect(doc._latestRev).to.equal(rev || doc.rev);
 };
 
 Helpers.EXPECT_DOC_DOES_NOT_EXIST = (id, done) => {
@@ -191,18 +191,26 @@ Helpers.EXPECT_DOC_BODY = (data, data2) => {
 };
 
 Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {
-    expect(doc1.getId()).to.equal(doc2.getId());
+    expect(doc1.id).to.equal(doc2.id);
 };
 
 Helpers.CHANGE_DOC_IN_BACKGROUND = (doc, callback) => {
-    CouchRecliner.DocOperations.update(Model, doc.getId(), Helpers.data.update, (err, doc2) => {
+    CouchRecliner.DocOperations.update(Model, doc.id, Helpers.data.update, (err, doc2) => {
         Helpers.EXPECT_NO_ERROR(err);
         Helpers.EXPECT_SAME_DOC(doc2, doc);
-        Helpers.EXPECT_REV_CHANGED(doc2, doc.getRev());
+        Helpers.EXPECT_REV_CHANGED(doc2, doc.rev);
         Helpers.EXPECT_LATEST_REV(doc2);
         Helpers.EXPECT_DOC_BODY(doc2.body, Object.assign({}, doc.body, Helpers.data.update));
         callback(doc2);
     });
+};
+
+Helpers.EXPECT_VALID_ID = (id) => {
+    expect(typeof id).to.equal('string');
+    expect(id.length).to.be.gt(0);
+    for (const char of id) {
+        expect('0123456789abcfdef').to.contain(char);
+    }
 };
 
 Helpers.EXPECT_NO_ERROR = (err) => {

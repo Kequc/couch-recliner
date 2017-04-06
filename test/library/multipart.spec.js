@@ -18,8 +18,8 @@ describe('DocMeta multipart', function() {
                 Helpers.EXPECT_NO_ERROR(err);
                 Helpers.EXPECT_DOC_BODY(doc.body, body);
                 Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.getId(), Helpers.data.attname, Helpers.data.file.body, () => {
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), Helpers.data.doc, done);
+                Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc, done);
                 });
             });
         });
@@ -35,9 +35,9 @@ describe('DocMeta multipart', function() {
                 Helpers.EXPECT_DOC_BODY(doc.body, body);
                 Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
                 Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
-                Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), Helpers.data.doc, () => {
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.getId(), Helpers.data.attname, Helpers.data.file.body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.getId(), Helpers.data.attname2, Helpers.data.file2.body, done);
+                Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc, () => {
+                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
                     });
                 });
             });
@@ -56,8 +56,8 @@ describe('DocMeta multipart', function() {
                 Helpers.EXPECT_NO_ERROR(err);
                 Helpers.EXPECT_DOC_BODY(doc.body, body);
                 Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.getId(), Helpers.data.attname, new Buffer(file.body, 'binary'), () => {
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), Helpers.data.doc, done);
+                Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, new Buffer(file.body, 'binary'), () => {
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc, done);
                 });
             });
         });
@@ -84,9 +84,9 @@ describe('DocMeta multipart', function() {
                 Helpers.EXPECT_DOC_BODY(doc.body, expected);
                 Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
                 Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
-                Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.getId(), expected, () => {
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.getId(), Helpers.data.attname, Helpers.data.file.body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.getId(), Helpers.data.attname2, Helpers.data.file2.body, done);
+                Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
+                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
                     });
                 });
             });
