@@ -22,7 +22,7 @@ describe('DbMeta', function() {
         });
         it('destroy', function(done) {
             DbMeta.destroy(Helpers.Model, (err) => {
-                Helpers.EXPECT_ERROR(err, 'no_db_file');
+                Helpers.EXPECT_NO_ERROR(err);
                 Helpers.EXPECT_DB_DOES_NOT_EXIST(done);
             });
         });
@@ -43,7 +43,7 @@ describe('DbMeta', function() {
         });
         it('create', function(done) {
             DbMeta.create(Helpers.Model, (err) => {
-                Helpers.EXPECT_ERROR(err, 'db_already_exists');
+                Helpers.EXPECT_NO_ERROR(err);
                 Helpers.EXPECT_DB_EXISTS(done);
             });
         });
