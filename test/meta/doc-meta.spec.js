@@ -201,13 +201,13 @@ describe('DocMeta', function() {
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
                     const oldRev = doc.rev;
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body);
                     DocMeta.readFixed(doc, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
-                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, oldBody, done);
+                        Helpers.EXPECT_DOC_BODY(doc.body, expected);
+                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('read', function(done) {
@@ -221,13 +221,13 @@ describe('DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc, rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
-                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, oldBody, done);
+                        Helpers.EXPECT_DOC_BODY(doc.body, expected);
+                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('head', function(done) {
@@ -259,35 +259,33 @@ describe('DocMeta', function() {
                 });
                 it('updateFixed', function(done) {
                     const oldRev = doc.rev;
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body, Helpers.data.update2);
                     DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        const expected = Object.assign({}, oldBody, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('update', function(done) {
+                    const expected = Object.assign({}, doc.body, Helpers.data.update2);
                     DocMeta.update(Helpers.Model, doc.id, Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.rev);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, doc.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body, Helpers.data.update2);
                     DocMeta.updateOrWrite(Helpers.Model, doc.id, Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.rev);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        const expected = Object.assign({}, oldBody, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
@@ -335,14 +333,14 @@ describe('DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc2, rev);
                         Helpers.EXPECT_REV_CHANGED(doc, rev);
                         Helpers.EXPECT_LATEST_REV(doc, rev);
                         Helpers.EXPECT_LATEST_REV_CHANGED(doc);
-                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
+                        Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, doc2.body, done);
                     });
                 });
@@ -373,33 +371,33 @@ describe('DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
+                    const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                     DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('update', function(done) {
+                    const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                     DocMeta.update(Helpers.Model, doc.id, Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
+                    const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                     DocMeta.updateOrWrite(Helpers.Model, doc.id, Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
@@ -429,14 +427,13 @@ describe('DocMeta', function() {
             });
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body);
                     DocMeta.readFixed(doc, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
-                        Helpers.EXPECT_REV(doc, oldBody._rev);
+                        Helpers.EXPECT_REV(doc, expected._rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
-                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, oldBody, done);
+                        Helpers.EXPECT_DOC_BODY(doc.body, expected);
+                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('read', function(done) {
@@ -445,27 +442,24 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV(doc2, doc.rev);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc2.body, doc.body);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, doc.body, done);
                     });
                 });
                 it('headFixed', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc, rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
-                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, oldBody, done);
+                        Helpers.EXPECT_DOC_BODY(doc.body, expected);
+                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('head', function(done) {
                     DocMeta.head(Helpers.Model, doc.id, (err, rev) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc, rev);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, doc.body, done);
                     });
                 });
@@ -475,7 +469,6 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc.body, Helpers.data.doc2);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc2, done);
                     });
@@ -486,42 +479,38 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.rev);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc2, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc2.body, Helpers.data.doc2);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc2, done);
                     });
                 });
                 it('updateFixed', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const oldRev = doc.rev;
+                    const expected = Object.assign({}, doc.body, Helpers.data.update2);
                     DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
-                        Helpers.EXPECT_REV_CHANGED(doc, oldBody._rev);
+                        Helpers.EXPECT_REV_CHANGED(doc, oldRev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        const expected = Object.assign({}, oldBody, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('update', function(done) {
+                    const expected = Object.assign({}, doc.body, Helpers.data.update2);
                     DocMeta.update(Helpers.Model, doc.id, Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.rev);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
-                        const expected = Object.assign({}, doc.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
+                    const expected = Object.assign({}, doc.body, Helpers.data.update2);
                     DocMeta.updateOrWrite(Helpers.Model, doc.id, Helpers.data.update2, (err, doc2) => {
                         Helpers.EXPECT_SAME_DOC(doc2, doc);
                         Helpers.EXPECT_REV_CHANGED(doc2, doc.rev);
                         Helpers.EXPECT_LATEST_REV(doc2);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
-                        const expected = Object.assign({}, doc.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc2.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
@@ -533,7 +522,6 @@ describe('DocMeta', function() {
                         expect(doc.id).to.be.undefined;
                         expect(doc.rev).to.be.undefined;
                         expect(doc._latestRev).to.be.undefined;
-                        Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc.body, {});
                         Helpers.EXPECT_DOC_DOES_NOT_EXIST(oldId, done);
                     });
@@ -555,7 +543,6 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc.body, doc2.body);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, doc2.body, done);
                     });
@@ -566,20 +553,18 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV(doc3, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc3, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc3.body, doc2.body);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, doc2.body, done);
                     });
                 });
                 it('headFixed', function(done) {
-                    const oldBody = Object.assign({}, doc.body);
+                    const expected = Object.assign({}, doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV(doc2, rev);
                         Helpers.EXPECT_REV_CHANGED(doc, rev);
                         Helpers.EXPECT_LATEST_REV(doc, rev);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        Helpers.EXPECT_DOC_BODY(doc.body, oldBody);
+                        Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, doc2.body, done);
                     });
                 });
@@ -595,7 +580,6 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc.body, Helpers.data.doc2);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc2, done);
                     });
@@ -606,42 +590,38 @@ describe('DocMeta', function() {
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc3, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc3.body, Helpers.data.doc2);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, Helpers.data.doc2, done);
                     });
                 });
                 it('updateFixed', function(done) {
+                    const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                     DocMeta.updateFixed(doc, Helpers.data.update2, (err) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_REV_CHANGED(doc, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('update', function(done) {
+                    const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                     DocMeta.update(Helpers.Model, doc.id, Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc3, Helpers.data.attname);
-                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
                 });
                 it('updateOrWrite', function(done) {
+                    const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                     DocMeta.updateOrWrite(Helpers.Model, doc.id, Helpers.data.update2, (err, doc3) => {
                         Helpers.EXPECT_NO_ERROR(err);
                         Helpers.EXPECT_SAME_DOC(doc3, doc2);
                         Helpers.EXPECT_REV_CHANGED(doc3, doc2.rev);
                         Helpers.EXPECT_LATEST_REV(doc3);
-                        Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc3, Helpers.data.attname);
-                        const expected = Object.assign({}, doc2.body, Helpers.data.update2);
                         Helpers.EXPECT_DOC_BODY(doc3.body, expected);
                         Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, done);
                     });
@@ -653,7 +633,6 @@ describe('DocMeta', function() {
                         expect(doc.id).to.be.undefined;
                         expect(doc.rev).to.be.undefined;
                         expect(doc._latestRev).to.be.undefined;
-                        Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
                         Helpers.EXPECT_DOC_BODY(doc.body, {});
                         Helpers.EXPECT_DOC_DOES_NOT_EXIST(oldId, done);
                     });

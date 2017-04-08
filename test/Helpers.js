@@ -162,16 +162,6 @@ Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER = (id, attname, buffer, done) => {
     });
 };
 
-Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST = (doc, attname) => {
-    expect((doc.body._attachments || {})[attname]).to.be.undefined;
-};
-
-Helpers.EXPECT_ATTACHMENT_STUB_EXISTS = (doc, attname) => {
-    expect(doc.body._attachments).to.not.be.undefined;
-    expect(doc.body._attachments[attname]).to.not.be.undefined;
-    expect(doc.body._attachments[attname].stub).to.be.true;
-};
-
 Helpers.EXPECT_ATTACHMENT_BODY = (buffer, buffer2) => {
     const body = String.fromCharCode(null, buffer);
     const body2 = String.fromCharCode(null, buffer2);
@@ -185,6 +175,12 @@ Helpers.EXPECT_DOC_BODY = (data, data2) => {
     const attnames = Object.keys(data._attachments || {});
     const attnames2 = Object.keys(data2._attachments || {});
     expect(attnames).to.have.members(attnames2);
+    for (const attname of attnames) {
+        const att = data._attachments[attname];
+        expect(att.stub).to.be.true;
+        expect(att.content_type).to.equal(data2._attachments[attname].content_type);
+        expect(att).to.have.property('length');
+    }
 };
 
 Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {

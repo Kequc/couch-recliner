@@ -18,9 +18,8 @@ describe('DocMeta multipart', function() {
                 DocMeta.write(Helpers.Model, Helpers.data.id, body, (err, doc) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
-                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, done);
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, done);
                     });
                 });
             });
@@ -34,8 +33,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.write(Helpers.Model, Helpers.data.id, body, (err, doc) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -45,7 +42,7 @@ describe('DocMeta multipart', function() {
             });
             it('should write a document with text encoded attachment', function(done) {
                 const file = {
-                    contentType: 'text/html',
+                    content_type: 'text/html',
                     body: "Hi I'm some data"
                 };
                 const body = Object.assign({}, Helpers.data.doc, {
@@ -56,9 +53,8 @@ describe('DocMeta multipart', function() {
                 DocMeta.write(Helpers.Model, Helpers.data.id, body, (err, doc) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, new Buffer(file.body, 'binary'), () => {
-                        Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, done);
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, new Buffer(file.body, 'binary'), done);
                     });
                 });
             });
@@ -79,11 +75,9 @@ describe('DocMeta multipart', function() {
                 DocMeta.write(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname2);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc2, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
-                            Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, done);
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, () => {
+                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
                         });
                     });
                 });
@@ -98,8 +92,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.write(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -109,7 +101,7 @@ describe('DocMeta multipart', function() {
             });
             it('should write a document with text encoded attachment', function(done) {
                 const file = {
-                    contentType: 'text/html',
+                    content_type: 'text/html',
                     body: "Hi I'm some data"
                 };
                 const body = Object.assign({}, Helpers.data.doc2, {
@@ -120,11 +112,9 @@ describe('DocMeta multipart', function() {
                 DocMeta.write(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname2);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc2, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, new Buffer(file.body, 'binary'), () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
-                            Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, done);
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, new Buffer(file.body, 'binary'), () => {
+                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
                         });
                     });
                 });
@@ -140,11 +130,9 @@ describe('DocMeta multipart', function() {
                 DocMeta.writeFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
-                            Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, done);
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, () => {
+                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
                         });
                     });
                 });
@@ -159,8 +147,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.writeFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -170,7 +156,7 @@ describe('DocMeta multipart', function() {
             });
             it('should write a document with text encoded attachment', function(done) {
                 const file = {
-                    contentType: 'text/html',
+                    content_type: 'text/html',
                     body: "Hi I'm some data"
                 };
                 const body = Object.assign({}, Helpers.data.doc2, {
@@ -181,11 +167,9 @@ describe('DocMeta multipart', function() {
                 DocMeta.writeFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, new Buffer(file.body, 'binary'), () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
-                            Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, done);
+                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
+                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, new Buffer(file.body, 'binary'), () => {
+                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
                         });
                     });
                 });
@@ -207,8 +191,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -230,7 +212,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file2.body, done);
                     });
@@ -251,8 +232,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc2, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc2, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -270,7 +249,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc2, Helpers.data.attname);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
                     });
@@ -293,8 +271,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.updateFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -316,7 +292,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.updateFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file2.body, done);
                     });
@@ -337,8 +312,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.updateFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
-                    Helpers.EXPECT_ATTACHMENT_STUB_EXISTS(doc, Helpers.data.attname2);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
                             Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
@@ -356,7 +329,6 @@ describe('DocMeta multipart', function() {
                 DocMeta.updateFixed(doc, body, (err) => {
                     Helpers.EXPECT_NO_ERROR(err);
                     Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_ATTACHMENT_STUB_DOES_NOT_EXIST(doc, Helpers.data.attname);
                     Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
                         Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
                     });
