@@ -34,27 +34,21 @@ Helpers.Model = Model;
 
 Helpers.DESTROY_DB = (done) => {
     CouchRecliner.DbOperations.destroy(Model, '_DESTROY_', (err) => {
-        if (err)
-            expect(err.name).to.equal('no_db_file');
-        else
-            expect(err).to.be.undefined;
+        Helpers.EXPECT_NO_ERROR(err);
         done();
     });
 };
 
 Helpers.CREATE_DB = (done) => {
     CouchRecliner.DbOperations.create(Model, (err) => {
-        if (err)
-            expect(err.name).to.equal('db_already_exists');
-        else
-            expect(err).to.be.undefined;
+        Helpers.EXPECT_NO_ERROR(err);
         done();
     });
 };
 
 Helpers.RESET_DB = (done) => {
     CouchRecliner.DbOperations.reset(Model, '_RESET_', (err) => {
-        expect(err).to.be.undefined;
+        Helpers.EXPECT_NO_ERROR(err);
         done();
     });
 };
@@ -188,6 +182,9 @@ Helpers.EXPECT_DOC_BODY = (data, data2) => {
     const body = Object.assign({}, data, { _id: undefined, _rev: undefined, _attachments: undefined });
     const body2 = Object.assign({}, data2, { _id: undefined, _rev: undefined, _attachments: undefined });
     expect(body).to.eql(body2);
+    const attnames = Object.keys(data._attachments || {});
+    const attnames2 = Object.keys(data2._attachments || {});
+    expect(attnames).to.have.members(attnames2);
 };
 
 Helpers.EXPECT_SAME_DOC = (doc1, doc2) => {
