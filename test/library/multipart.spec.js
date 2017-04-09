@@ -197,7 +197,7 @@ describe('DocMeta multipart', function() {
                 });
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [DATA.attname]: DATA.file2,
+                        [DATA.attname]: DATA.file2
                     }
                 });
                 DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
@@ -277,7 +277,7 @@ describe('DocMeta multipart', function() {
                 });
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [DATA.attname]: DATA.file2,
+                        [DATA.attname]: DATA.file2
                     }
                 });
                 DocMeta.updateFixed(doc, body, (err) => {
