@@ -7,5 +7,6 @@
     },
     "array": ["some", "text", "here"],
     "description": "A longer bit of text with perhaps a line break in it.\nRight here.",
-    "bool": true
+    "bool": true,
+    "schema": "basics"
 }
