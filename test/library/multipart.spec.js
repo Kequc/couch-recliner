@@ -1,60 +1,61 @@
 'use strict';
 const mocha = require('mocha');
-const expect = require('chai').expect;
 
 const DocMeta = require('../../lib/meta/doc-meta');
-const Helpers = require('../Helpers');
+
+const ATTACHMENT = require('../helpers/attachment-helpers');
+const BODY = require('../helpers/body-helpers');
+const DATA = require('../helpers/data-helpers');
+const DB = require('../helpers/db-helpers');
+const DOC = require('../helpers/doc-helpers');
+const ERR = require('../helpers/err-helpers');
 
 describe('DocMeta multipart', function() {
-    beforeEach(Helpers.RESET_DB);
+    beforeEach(DB.RESET);
     describe('document does not exist', function() {
         describe('write', function() {
             it('should write a document with attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.doc, {
+                const body = Object.assign({}, DATA.doc, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file
+                        [DATA.attname]: DATA.file
                     }
                 });
-                DocMeta.write(Helpers.Model, Helpers.data.id, body, (err, doc) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, done);
+                DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, done);
                     });
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Object.assign({}, Helpers.data.doc, {
+                const body = Object.assign({}, DATA.doc, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: DATA.file,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                DocMeta.write(Helpers.Model, Helpers.data.id, body, (err, doc) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const file = {
-                    content_type: 'text/html',
-                    body: "Hi I'm some data"
-                };
-                const body = Object.assign({}, Helpers.data.doc, {
+                const body = Object.assign({}, DATA.doc, {
                     _attachments: {
-                        [Helpers.data.attname]: file
+                        [DATA.attname]: DATA.fileText
                     }
                 });
-                DocMeta.write(Helpers.Model, Helpers.data.id, body, (err, doc) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, new Buffer(file.body, 'binary'), done);
+                DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, new Buffer(DATA.fileText.body, 'binary'), done);
                     });
                 });
             });
@@ -63,58 +64,54 @@ describe('DocMeta multipart', function() {
     describe('attachment exists', function() {
         let doc;
         beforeEach(function(done) {
-            Helpers.CREATE_DOC_WITH_ATTACHMENT(model => { doc = model; done(); });
+            DOC.CREATE_WITH_ATTACHMENT(model => { doc = model; done(); });
         });
         describe('write', function() {
             it('should write a document with attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.doc2, {
+                const body = Object.assign({}, DATA.doc2, {
                     _attachments: {
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                DocMeta.write(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
+                DocMeta.write(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, () => {
+                            ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
                     });
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Object.assign({}, Helpers.data.doc2, {
+                const body = Object.assign({}, DATA.doc2, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: DATA.file,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                DocMeta.write(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                DocMeta.write(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const file = {
-                    content_type: 'text/html',
-                    body: "Hi I'm some data"
-                };
-                const body = Object.assign({}, Helpers.data.doc2, {
+                const body = Object.assign({}, DATA.doc2, {
                     _attachments: {
-                        [Helpers.data.attname2]: file
+                        [DATA.attname2]: DATA.fileText
                     }
                 });
-                DocMeta.write(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, new Buffer(file.body, 'binary'), () => {
-                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
+                DocMeta.write(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, new Buffer(DATA.fileText.body, 'binary'), () => {
+                            ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
                     });
                 });
@@ -122,54 +119,50 @@ describe('DocMeta multipart', function() {
         });
         describe('writeFixed', function() {
             it('should write a document with attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.doc2, {
+                const body = Object.assign({}, DATA.doc2, {
                     _attachments: {
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname2]: DATA.file2
                     }
                 });
                 DocMeta.writeFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, () => {
+                            ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
                     });
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Object.assign({}, Helpers.data.doc2, {
+                const body = Object.assign({}, DATA.doc2, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: DATA.file,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
                 DocMeta.writeFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const file = {
-                    content_type: 'text/html',
-                    body: "Hi I'm some data"
-                };
-                const body = Object.assign({}, Helpers.data.doc2, {
+                const body = Object.assign({}, DATA.doc2, {
                     _attachments: {
-                        [Helpers.data.attname2]: file
+                        [DATA.attname2]: DATA.fileText
                     }
                 });
                 DocMeta.writeFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, body);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, body, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, new Buffer(file.body, 'binary'), () => {
-                            Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, body);
+                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, new Buffer(DATA.fileText.body, 'binary'), () => {
+                            ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
                     });
                 });
@@ -177,160 +170,160 @@ describe('DocMeta multipart', function() {
         });
         describe('update', function() {
             it('updates a document with new attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: DATA.file,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('updates a document to overwrite an attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file2
+                        [DATA.attname]: DATA.file2
                     }
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file2,
+                        [DATA.attname]: DATA.file2,
                     }
                 });
-                DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file2.body, done);
+                DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file2.body, done);
                     });
                 });
             });
             it('updates a document with new attachment deletes old attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: undefined,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: undefined,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('updates a document removing all attachments', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: undefined
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: undefined
                 });
-                DocMeta.update(Helpers.Model, doc.id, body, (err, doc2) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc2.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
+                DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc2, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                     });
                 });
             });
         });
         describe('updateFixed', function() {
             it('updates a document with new attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: DATA.file,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
                 DocMeta.updateFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file.body, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('updates a document to overwrite an attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file2
+                        [DATA.attname]: DATA.file2
                     }
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: Helpers.data.file2,
+                        [DATA.attname]: DATA.file2,
                     }
                 });
                 DocMeta.updateFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname, Helpers.data.file2.body, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file2.body, done);
                     });
                 });
             });
             it('updates a document with new attachment deletes old attachment', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname]: undefined,
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname]: undefined,
+                        [DATA.attname2]: DATA.file2
                     }
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
-                        [Helpers.data.attname2]: Helpers.data.file2
+                        [DATA.attname2]: DATA.file2
                     }
                 });
                 DocMeta.updateFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, () => {
-                            Helpers.EXPECT_ATTACHMENT_EXISTS_WITH_BUFFER(doc.id, Helpers.data.attname2, Helpers.data.file2.body, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, () => {
+                            ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
                     });
                 });
             });
             it('updates a document removing all attachments', function(done) {
-                const body = Object.assign({}, Helpers.data.update, {
+                const body = Object.assign({}, DATA.update, {
                     _attachments: undefined
                 });
-                const expected = Object.assign({}, doc.body, Helpers.data.update, {
+                const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: undefined
                 });
                 DocMeta.updateFixed(doc, body, (err) => {
-                    Helpers.EXPECT_NO_ERROR(err);
-                    Helpers.EXPECT_DOC_BODY(doc.body, expected);
-                    Helpers.EXPECT_DOC_EXISTS_WITH_BODY(doc.id, expected, () => {
-                        Helpers.EXPECT_ATTACHMENT_DOES_NOT_EXIST(doc.id, Helpers.data.attname, done);
+                    ERR.EXPECT_NONE(err);
+                    BODY.EXPECT(doc, expected);
+                    DOC.EXPECT_EXISTS(doc.id, expected, () => {
+                        ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                     });
                 });
             });

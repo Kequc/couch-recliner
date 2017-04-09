@@ -3,18 +3,18 @@ const mocha = require('mocha');
 const expect = require('chai').expect;
 
 const ShowMeta = require('../../lib/meta/show-meta');
-const Helpers = require('../Helpers');
+
+const DB = require('../helpers/db-helpers');
 
 describe('ShowMeta', function() {
-    beforeEach(Helpers.DESTROY_DB);
+    beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
     });
     describe('database exists', function() {
-        beforeEach(Helpers.CREATE_DB);
+        beforeEach(DB.CREATE);
         describe('document does not exist', function() {
         });
         describe('document exists', function() {
-            beforeEach(Helpers.CREATE_DOC);
         });
     });
 });

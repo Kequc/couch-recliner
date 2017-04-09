@@ -3,13 +3,22 @@ const mocha = require('mocha');
 const expect = require('chai').expect;
 
 const Couch = require('../../lib/couch');
-const Helpers = require('../Helpers');
 
-function _populateIds(couch, done) {
+const ERR = require('../helpers/err-helpers');
+
+function _EXPECT_GENERATED_ID(id) {
+    expect(typeof id).to.equal('string');
+    expect(id.length).to.equal(32);
+    for (const char of id) {
+        expect('0123456789abcfdef').to.contain(char);
+    }
+}
+
+function _POPULATE_IDS(couch, done) {
     expect(couch._ids.length).to.equal(0);
     couch.getNextId((err, id) => {
-        Helpers.EXPECT_NO_ERROR(err);
-        Helpers.EXPECT_VALID_ID(id);
+        ERR.EXPECT_NONE(err);
+        _EXPECT_GENERATED_ID(id);
         expect(couch._ids.length).to.equal(couch.CACHE_IDS_COUNT - 1);
         done();
     });
@@ -50,19 +59,19 @@ describe('Couch', function() {
     });
     describe('getNextId', function() {
         it('populates cache', function(done) {
-            _populateIds(couch, done);
+            _POPULATE_IDS(couch, done);
         });
         it('returns ids from cache', function(done) {
-            _populateIds(couch, () => {
+            _POPULATE_IDS(couch, () => {
                 while (couch._ids.length > 0) {
                     const count = couch._ids.length;
                     couch.getNextId((err, id) => {
-                        Helpers.EXPECT_NO_ERROR(err);
-                        Helpers.EXPECT_VALID_ID(id);
+                        ERR.EXPECT_NONE(err);
+                        _EXPECT_GENERATED_ID(id);
                         expect(couch._ids.length).to.equal(count - 1);
                     });
                 }
-                _populateIds(couch, done);
+                _POPULATE_IDS(couch, done);
             });
         });
     });
