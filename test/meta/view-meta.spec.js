@@ -1,8 +1,7 @@
 'use strict';
-const mocha = require('mocha');
-const expect = require('chai').expect;
+// const expect = require('chai').expect;
 
-const ViewMeta = require('../../lib/meta/view-meta');
+// const ViewMeta = require('../../lib/meta/view-meta');
 
 const DB = require('../helpers/db-helpers');
 

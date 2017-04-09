@@ -1,6 +1,4 @@
 'use strict';
-const mocha = require('mocha');
-
 const DocMeta = require('../../lib/meta/doc-meta');
 
 const ATTACHMENT = require('../helpers/attachment-helpers');

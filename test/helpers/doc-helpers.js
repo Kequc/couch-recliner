@@ -22,9 +22,7 @@ DOC.CREATE = (callback) => {
 };
 
 DOC.CREATE_WITH_ATTACHMENT = (callback) => {
-    const _attachments = {
-        [DATA.attname]: DATA.file
-    };
+    const _attachments = { [DATA.attname]: DATA.file };
     const body = Object.assign({}, DATA.doc, { _attachments });
     DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
         ERR.EXPECT_NONE(err);

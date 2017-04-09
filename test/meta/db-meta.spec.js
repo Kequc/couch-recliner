@@ -1,6 +1,4 @@
 'use strict';
-const mocha = require('mocha');
-
 const DbMeta = require('../../lib/meta/db-meta');
 
 const DATA = require('../helpers/data-helpers');

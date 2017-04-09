@@ -1,10 +1,8 @@
 'use strict';
-const mocha = require('mocha');
 const expect = require('chai').expect;
 
 const DocMeta = require('../../lib/meta/doc-meta');
 
-const ATTACHMENT = require('../helpers/attachment-helpers');
 const BODY = require('../helpers/body-helpers');
 const DATA = require('../helpers/data-helpers');
 const DB = require('../helpers/db-helpers');
@@ -163,7 +161,7 @@ describe('DocMeta', function() {
                 });
             });
             it('update', function(done) {
-                DocMeta.update(DATA.Model, DATA.id, DATA.update2, (err, doc2) => {
+                DocMeta.update(DATA.Model, DATA.id, DATA.update2, (err) => {
                     ERR.EXPECT(err, 'not_found');
                     DOC.EXPECT_DOES_NOT_EXIST(DATA.id, done);
                 });
@@ -189,7 +187,7 @@ describe('DocMeta', function() {
                 const oldId = doc.id;
                 DocMeta.destroyFixed(doc, (err) => {
                     ERR.EXPECT(err, 'not_found');
-                    DOC.EXPECT_DOES_NOT_EXIST(oldId, done)
+                    DOC.EXPECT_DOES_NOT_EXIST(oldId, done);
                 });
             });
             it('destroy', function(done) {

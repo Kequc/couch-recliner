@@ -9,7 +9,7 @@ const ERR = require('./err-helpers');
 const ATTACHMENT = {};
 
 ATTACHMENT.EXPECT_DOES_NOT_EXIST = (id, attname, done) => {
-    AttachmentMeta.read(DATA.Model, id, attname, (err, body) => {
+    AttachmentMeta.read(DATA.Model, id, attname, (err) => {
         ERR.EXPECT(err, 'not_found');
         done();
     });

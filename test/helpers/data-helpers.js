@@ -22,7 +22,7 @@ const DATA = {
     },
     fileText: {
         content_type: 'text/html',
-        body: "Hi I'm some data"
+        body: 'Hi I\'m some data'
     },
     doc: require('./data/doc.json'),
     doc2: require('./data/doc2.json')
