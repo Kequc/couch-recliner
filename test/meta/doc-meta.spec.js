@@ -30,6 +30,7 @@ describe('DocMeta', function() {
             const doc = DATA.GENERATE_FAKE_DOC();
             DocMeta.headFixed(doc, (err) => {
                 ERR.EXPECT(err, 'not_found');
+                BODY.EXPECT_LATEST_REV(doc, undefined);
                 DOC.EXPECT_DOES_NOT_EXIST(doc.id, done);
             });
         });
@@ -64,7 +65,7 @@ describe('DocMeta', function() {
             DocMeta.updateFixed(doc, DATA.update2, (err) => {
                 ERR.EXPECT(err, 'not_found');
                 BODY.EXPECT_REV(doc, oldRev);
-                BODY.EXPECT_LATEST_REV(doc, doc.rev);
+                BODY.EXPECT_LATEST_REV(doc, undefined);
                 DOC.EXPECT_DOES_NOT_EXIST(doc.id, done);
             });
         });
@@ -123,6 +124,7 @@ describe('DocMeta', function() {
                 const doc = DATA.GENERATE_FAKE_DOC();
                 DocMeta.headFixed(doc, (err) => {
                     ERR.EXPECT(err, 'not_found');
+                    BODY.EXPECT_LATEST_REV(doc, undefined);
                     DOC.EXPECT_DOES_NOT_EXIST(doc.id, done);
                 });
             });
@@ -157,7 +159,7 @@ describe('DocMeta', function() {
                 DocMeta.updateFixed(doc, DATA.update2, (err) => {
                     ERR.EXPECT(err, 'not_found');
                     BODY.EXPECT_REV(doc, oldRev);
-                    BODY.EXPECT_LATEST_REV(doc, doc.rev);
+                    BODY.EXPECT_LATEST_REV(doc, undefined);
                     DOC.EXPECT_DOES_NOT_EXIST(doc.id, done);
                 });
             });

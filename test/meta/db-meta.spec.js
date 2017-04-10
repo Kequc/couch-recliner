@@ -10,7 +10,7 @@ describe('DbMeta', function() {
     describe('database does not exist', function() {
         it('head', function(done) {
             DbMeta.head(DATA.Model, (err) => {
-                ERR.EXPECT(err, 'no_db_file');
+                ERR.EXPECT(err, 'not_found');
                 DB.EXPECT_DOES_NOT_EXIST(done);
             });
         });
