@@ -2,7 +2,6 @@
 const expect = require('chai').expect;
 
 const DocMeta = require('../../lib/meta/doc-meta');
-const Finder = require('../../lib/util/finder');
 
 const BODY = require('../helpers/body-helpers');
 const DATA = require('../helpers/data-helpers');
@@ -312,14 +311,6 @@ describe('DocMeta', function() {
                     DocMeta.destroy(DATA.Model, doc.id, (err) => {
                         ERR.EXPECT_NONE(err);
                         DOC.EXPECT_DOES_NOT_EXIST(doc.id, done);
-                    });
-                });
-                it.skip('find', function(done) {
-                    const finder = new Finder(DATA.find);
-                    DocMeta.find(DATA.Model, finder, (err, body) => {
-                        ERR.EXPECT_NONE(err);
-                        console.log('body', body);
-                        done();
                     });
                 });
             });

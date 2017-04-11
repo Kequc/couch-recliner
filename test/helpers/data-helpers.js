@@ -27,11 +27,11 @@ const DATA = {
     doc: require('./data/doc.json'),
     doc2: require('./data/doc2.json'),
     find: {
-        selector: { hello: { '$gt': 1 } },
+        selector: { hello: { '$gt': 100 } },
         fields: ['test', 'hello', 'deep', 'array', 'bool']
     },
     find2: {
-        selector: { hello: { '$gt': 100 } },
+        selector: { hello: { '$gt': 1 } },
         fields: ['test', 'hello', 'deep', 'array', 'bool']
     }
 };

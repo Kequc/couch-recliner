@@ -7,24 +7,29 @@ const ERR = require('./err-helpers');
 
 const DOC = {};
 
-DOC.DESTROY = (done) => {
-    DocMeta.destroy(DATA.Model, DATA.id, (err) => {
+DOC.CREATE = (callback) => {
+    DocMeta.create(DATA.Model, DATA.doc, (err, doc) => {
         ERR.EXPECT_NONE(err);
-        done();
+        callback(doc);
     });
 };
 
-DOC.CREATE = (callback) => {
-    DocMeta.write(DATA.Model, DATA.id, DATA.doc, (err, doc) => {
+DOC.CREATE_MULTI = (callback) => {
+    const _attachments = { [DATA.attname]: DATA.file };
+    const body = Object.assign({}, DATA.doc, { _attachments });
+    DocMeta.create(DATA.Model, body, (err, doc) => {
         ERR.EXPECT_NONE(err);
-        callback(doc);
+        DocMeta.create(DATA.Model, DATA.doc2, (err, doc2) => {
+            ERR.EXPECT_NONE(err);
+            callback(doc, doc2);
+        });
     });
 };
 
 DOC.CREATE_WITH_ATTACHMENT = (callback) => {
     const _attachments = { [DATA.attname]: DATA.file };
     const body = Object.assign({}, DATA.doc, { _attachments });
-    DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
+    DocMeta.create(DATA.Model, body, (err, doc) => {
         ERR.EXPECT_NONE(err);
         callback(doc);
     });

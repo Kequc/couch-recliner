@@ -38,4 +38,13 @@ BODY.EXPECT = (doc, expected) => {
     }
 };
 
+BODY.EXPECT_LIST = (list, expected) => {
+    expect(Array.isArray(list)).to.be.true;
+    expect(list.length).to.equal(expected.length);
+    for (let i = 0; i < list.length; i++) {
+        BODY.EXPECT(list[i], expected[i]);
+        BODY.EXPECT_LATEST_REV(list[i], undefined);
+    }
+};
+
 module.exports = BODY;
