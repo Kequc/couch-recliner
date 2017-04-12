@@ -1,5 +1,5 @@
 'use strict';
-const DocMeta = require('../../lib/meta/doc-meta');
+const FindMeta = require('../../lib/meta/find-meta');
 const Finder = require('../../lib/models/finder');
 
 const BODY = require('../helpers/body-helpers');
@@ -16,18 +16,18 @@ function _pluck(body, finder) {
     return result;
 }
 
-describe('Find', function() {
+describe('FindMeta', function() {
     beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
         it('find', function(done) {
-            DocMeta.find(DATA.Model, new Finder(DATA.find), (err, list) => {
+            FindMeta.find(DATA.Model, new Finder(DATA.find), (err, list) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_LIST(list, []);
                 done();
             });
         });
         it('findOne', function(done) {
-            DocMeta.findOne(DATA.Model, new Finder(DATA.find), (err) => {
+            FindMeta.findOne(DATA.Model, new Finder(DATA.find), (err) => {
                 ERR.EXPECT(err, 'not_found');
                 done();
             });
@@ -37,14 +37,14 @@ describe('Find', function() {
         beforeEach(DB.CREATE);
         describe('documents do not exist', function() {
             it('find', function(done) {
-                DocMeta.find(DATA.Model, new Finder(DATA.find), (err, list) => {
+                FindMeta.find(DATA.Model, new Finder(DATA.find), (err, list) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_LIST(list, []);
                     done();
                 });
             });
             it('findOne', function(done) {
-                DocMeta.findOne(DATA.Model, new Finder(DATA.find), (err) => {
+                FindMeta.findOne(DATA.Model, new Finder(DATA.find), (err) => {
                     ERR.EXPECT(err, 'not_found');
                     done();
                 });
@@ -58,7 +58,7 @@ describe('Find', function() {
             });
             it('find', function(done) {
                 const finder = new Finder(DATA.find);
-                DocMeta.find(DATA.Model, finder, (err, list) => {
+                FindMeta.find(DATA.Model, finder, (err, list) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_LIST(list, [_pluck(doc2.body, finder)]);
                     done();
@@ -66,7 +66,7 @@ describe('Find', function() {
             });
             it('find (multiple)', function(done) {
                 const finder = new Finder(DATA.find2);
-                DocMeta.find(DATA.Model, finder, (err, list) => {
+                FindMeta.find(DATA.Model, finder, (err, list) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_LIST(list, [_pluck(doc.body, finder), _pluck(doc2.body, finder)]);
                     done();
@@ -74,7 +74,7 @@ describe('Find', function() {
             });
             it('findOne', function(done) {
                 const finder = new Finder(DATA.find2);
-                DocMeta.findOne(DATA.Model, finder, (err, doc) => {
+                FindMeta.findOne(DATA.Model, finder, (err, doc) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT(doc, _pluck(doc.body, finder));
                     BODY.EXPECT_LATEST_REV(doc, undefined);
