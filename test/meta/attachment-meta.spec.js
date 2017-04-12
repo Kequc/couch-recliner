@@ -1,6 +1,8 @@
 'use strict';
 const AttachmentMeta = require('../../lib/meta/attachment-meta');
 
+const Attachment = require('../../lib/models/attachment');
+
 const ATTACHMENT = require('../helpers/attachment-helpers');
 const BODY = require('../helpers/body-helpers');
 const DATA = require('../helpers/data-helpers');
@@ -26,13 +28,15 @@ describe('AttachmentMeta', function() {
         });
         it('writeFixed', function(done) {
             const doc = DATA.GENERATE_FAKE_DOC();
-            AttachmentMeta.writeFixed(doc, DATA.attname, DATA.file, (err) => {
+            const attachment = new Attachment(DATA.file);
+            AttachmentMeta.writeFixed(doc, DATA.attname, attachment, (err) => {
                 ERR.EXPECT(err, 'not_found');
                 ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
             });
         });
         it('write', function(done) {
-            AttachmentMeta.write(DATA.Model, DATA.id, DATA.attname, DATA.file, (err) => {
+            const attachment = new Attachment(DATA.file);
+            AttachmentMeta.write(DATA.Model, DATA.id, DATA.attname, attachment, (err) => {
                 ERR.EXPECT(err, 'not_found');
                 ATTACHMENT.EXPECT_DOES_NOT_EXIST(DATA.id, DATA.attname, done);
             });
@@ -69,13 +73,15 @@ describe('AttachmentMeta', function() {
             });
             it('writeFixed', function(done) {
                 const doc = DATA.GENERATE_FAKE_DOC();
-                AttachmentMeta.writeFixed(doc, DATA.attname, DATA.file, (err) => {
+                const attachment = new Attachment(DATA.file);
+                AttachmentMeta.writeFixed(doc, DATA.attname, attachment, (err) => {
                     ERR.EXPECT(err, 'not_found');
                     ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                 });
             });
             it('write', function(done) {
-                AttachmentMeta.write(DATA.Model, DATA.id, DATA.attname, DATA.file, (err) => {
+                const attachment = new Attachment(DATA.file);
+                AttachmentMeta.write(DATA.Model, DATA.id, DATA.attname, attachment, (err) => {
                     ERR.EXPECT(err, 'not_found');
                     ATTACHMENT.EXPECT_DOES_NOT_EXIST(DATA.id, DATA.attname, done);
                 });
@@ -120,18 +126,20 @@ describe('AttachmentMeta', function() {
                 const oldRev = doc.rev;
                 const _attachments = { [DATA.attname]: DATA.file };
                 const expected = Object.assign({}, doc.body, { _attachments });
-                AttachmentMeta.writeFixed(doc, DATA.attname, DATA.file, (err) => {
+                const attachment = new Attachment(DATA.file);
+                AttachmentMeta.writeFixed(doc, DATA.attname, attachment, (err) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_REV(doc, oldRev);
                     BODY.EXPECT_NOT_LATEST_REV(doc, doc.rev);
                     BODY.EXPECT(doc, expected);
-                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, done);
+                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, attachment.body, done);
                 });
             });
             it('write', function(done) {
-                AttachmentMeta.write(DATA.Model, doc.id, DATA.attname, DATA.file, (err) => {
+                const attachment = new Attachment(DATA.file);
+                AttachmentMeta.write(DATA.Model, doc.id, DATA.attname, attachment, (err) => {
                     ERR.EXPECT_NONE(err);
-                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, done);
+                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, attachment.body, done);
                 });
             });
             it('destroyFixed', function(done) {
@@ -181,18 +189,20 @@ describe('AttachmentMeta', function() {
                 const oldRev = doc.rev;
                 const _attachments = { [DATA.attname]: DATA.file2 };
                 const expected = Object.assign({}, doc.body, { _attachments });
-                AttachmentMeta.writeFixed(doc, DATA.attname, DATA.file2, (err) => {
+                const attachment = new Attachment(DATA.file2);
+                AttachmentMeta.writeFixed(doc, DATA.attname, attachment, (err) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_REV(doc, oldRev);
                     BODY.EXPECT_NOT_LATEST_REV(doc, doc.rev);
                     BODY.EXPECT(doc, expected);
-                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file2.body, done);
+                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, attachment.body, done);
                 });
             });
             it('write', function(done) {
-                AttachmentMeta.write(DATA.Model, doc.id, DATA.attname, DATA.file2, (err) => {
+                const attachment = new Attachment(DATA.file2);
+                AttachmentMeta.write(DATA.Model, doc.id, DATA.attname, attachment, (err) => {
                     ERR.EXPECT_NONE(err);
-                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file2.body, done);
+                    ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, attachment.body, done);
                 });
             });
             it('destroyFixed', function(done) {
