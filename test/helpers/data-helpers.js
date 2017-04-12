@@ -4,6 +4,8 @@ const path = require('path');
 
 const ModelBase = require('../../lib/model');
 
+const DocMutator = require('../../lib/util/doc-mutator');
+
 const DATA = {
     dbName: 'couch-recliner',
     id: 'fake-id',
@@ -40,11 +42,6 @@ class Model extends ModelBase {}
 Model.dbName = DATA.dbName;
 DATA.Model = Model;
 
-DATA.GENERATE_FAKE_DOC = () => {
-    return new DATA.Model(DATA.doc, {
-        id: DATA.id,
-        rev: DATA.rev
-    });
-};
+DATA.GENERATE_FAKE_DOC = () => DocMutator.build(DATA.Model, DATA.doc, DATA.id, DATA.rev, DATA.rev);
 
 module.exports = DATA;

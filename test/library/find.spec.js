@@ -1,6 +1,6 @@
 'use strict';
 const DocMeta = require('../../lib/meta/doc-meta');
-const Finder = require('../../lib/util/finder');
+const Finder = require('../../lib/models/finder');
 
 const BODY = require('../helpers/body-helpers');
 const DATA = require('../helpers/data-helpers');
