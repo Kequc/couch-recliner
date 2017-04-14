@@ -42,18 +42,46 @@ describe('Models Couch', function() {
             expect(couch.CACHE_IDS_COUNT).to.equal(expected);
         });
     });
-    describe('url =', function() {
+    describe('envs =', function() {
         it('throws an error on invalid data', function() {
-            expect(() => couch.url = {}).to.throw(Error);
-            expect(() => couch.url = 1).to.throw(Error);
+            expect(() => couch.envs = undefined).to.throw(Error);
+            expect(() => couch.envs = 1).to.throw(Error);
+            expect(() => couch.envs = { development: undefined }).to.throw(Error);
+            expect(() => couch.envs = { development: 1 }).to.throw(Error);
         });
-        it('has a default', function() {
-            expect(couch.url).to.not.be.undefined;
+        it('has a default baseUrl', function() {
+            expect(couch.baseUrl).to.not.be.undefined;
         });
-        it('sets the value', function() {
-            const expected = couch.url + '-blah';
-            couch.url = expected;
-            expect(couch.url).to.equal(expected);
+        it('can supply a default baseUrl', function() {
+            const expected = couch.baseUrl + '-blah';
+            couch.envs = {
+                default: expected,
+                fakeenv: 'http://notthisone.com'
+            };
+            expect(couch.baseUrl).to.equal(expected);
+        });
+        it('sets the baseUrl', function() {
+            const expected = couch.baseUrl + '-blah';
+            const env = process.env.NODE_ENV || 'development';
+            couch.envs = {
+                fakeenv: 'http://notthisone.com',
+                [env]: expected,
+                default: 'http://notthisoneeither.com'
+            };
+            expect(couch.baseUrl).to.equal(expected);
+        });
+    });
+    describe('urlTo', function() {
+        it('resolves a path', function() {
+            expect(couch.urlTo('hi', 'there', 55, '100')).to.equal(couch.baseUrl + '/hi/there/55/100');
+        });
+        it('recovers from trailing slash on baseUrl', function() {
+            const baseUrl = 'http://testing.com/hello/';
+            couch.envs = { default: baseUrl };
+            expect(couch.urlTo('hi', 'there', 55, '100')).to.equal(baseUrl + 'hi/there/55/100');
+        });
+        it('throws an error on invalid data', function() {
+            expect(() => couch.urlTo('hi', undefined)).to.throw(Error);
         });
     });
     describe('getNextId', function() {
