@@ -25,10 +25,10 @@
   ],
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^2.4.5"
+    "mocha": "^3.2.0"
   },
   "dependencies": {
-    "json-artisan": "^0.1.1",
+    "json-artisan": "^0.1.2",
     "request": "^2.81.0"
   }
 }
