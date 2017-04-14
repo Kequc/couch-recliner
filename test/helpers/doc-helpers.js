@@ -1,5 +1,6 @@
 'use strict';
 const DocMeta = require('../../lib/meta/doc-meta');
+const Body = require('../../lib/models/body');
 
 const BODY = require('./body-helpers');
 const DATA = require('./data-helpers');
@@ -8,7 +9,7 @@ const ERR = require('./err-helpers');
 const DOC = {};
 
 DOC.CREATE = (callback) => {
-    DocMeta.create(DATA.Model, DATA.doc, (err, doc) => {
+    DocMeta.create(DATA.Model, Body.create(DATA.doc), (err, doc) => {
         ERR.EXPECT_NONE(err);
         callback(doc);
     });
@@ -16,10 +17,10 @@ DOC.CREATE = (callback) => {
 
 DOC.CREATE_MULTI = (callback) => {
     const _attachments = { [DATA.attname]: DATA.file };
-    const body = Object.assign({}, DATA.doc, { _attachments });
+    const body = Body.create(Object.assign({}, DATA.doc, { _attachments }));
     DocMeta.create(DATA.Model, body, (err, doc) => {
         ERR.EXPECT_NONE(err);
-        DocMeta.create(DATA.Model, DATA.doc2, (err, doc2) => {
+        DocMeta.create(DATA.Model, Body.create(DATA.doc2), (err, doc2) => {
             ERR.EXPECT_NONE(err);
             callback(doc, doc2);
         });
@@ -28,7 +29,7 @@ DOC.CREATE_MULTI = (callback) => {
 
 DOC.CREATE_WITH_ATTACHMENT = (callback) => {
     const _attachments = { [DATA.attname]: DATA.file };
-    const body = Object.assign({}, DATA.doc, { _attachments });
+    const body = Body.create(Object.assign({}, DATA.doc, { _attachments }));
     DocMeta.create(DATA.Model, body, (err, doc) => {
         ERR.EXPECT_NONE(err);
         callback(doc);
@@ -51,7 +52,7 @@ DOC.EXPECT_EXISTS = (id, body, done) => {
 };
 
 DOC.CHANGE_IN_BACKGROUND = (doc, callback) => {
-    DocMeta.update(DATA.Model, doc.id, DATA.update, (err, doc2) => {
+    DocMeta.update(DATA.Model, doc.id, Body.create(DATA.update), (err, doc2) => {
         ERR.EXPECT_NONE(err);
         BODY.EXPECT_ID(doc2, doc.id);
         BODY.EXPECT_NOT_REV(doc2, doc.rev);

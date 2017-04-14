@@ -3,5 +3,5 @@
 
 // const Res = require('../../lib/util/res');
 
-describe('Res', function() {
+describe('Util Res', function() {
 });

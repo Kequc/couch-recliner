@@ -5,7 +5,7 @@
 
 const DB = require('../helpers/db-helpers');
 
-describe('ViewMeta', function() {
+describe('Meta ViewMeta', function() {
     beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
     });

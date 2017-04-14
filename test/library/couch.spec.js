@@ -23,7 +23,7 @@ function _POPULATE_IDS(couch, done) {
     });
 }
 
-describe('Couch', function() {
+describe('Library Couch', function() {
     let couch;
     beforeEach(function() {
         couch = new Couch();

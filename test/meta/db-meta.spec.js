@@ -5,7 +5,7 @@ const DATA = require('../helpers/data-helpers');
 const DB = require('../helpers/db-helpers');
 const ERR = require('../helpers/err-helpers');
 
-describe('DbMeta', function() {
+describe('Meta DbMeta', function() {
     beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
         it('head', function(done) {

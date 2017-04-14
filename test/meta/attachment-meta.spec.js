@@ -1,6 +1,5 @@
 'use strict';
 const AttachmentMeta = require('../../lib/meta/attachment-meta');
-
 const Attachment = require('../../lib/models/attachment');
 
 const ATTACHMENT = require('../helpers/attachment-helpers');
@@ -10,7 +9,7 @@ const DB = require('../helpers/db-helpers');
 const DOC = require('../helpers/doc-helpers');
 const ERR = require('../helpers/err-helpers');
 
-describe('AttachmentMeta', function() {
+describe('Meta AttachmentMeta', function() {
     beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
         it('readFixed', function(done) {

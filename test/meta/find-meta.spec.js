@@ -16,7 +16,7 @@ function _pluck(body, finder) {
     return result;
 }
 
-describe('FindMeta', function() {
+describe('Meta FindMeta', function() {
     beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
         it('find', function(done) {

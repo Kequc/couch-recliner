@@ -1,5 +1,6 @@
 'use strict';
 const DocMeta = require('../../lib/meta/doc-meta');
+const Body = require('../../lib/models/body');
 
 const ATTACHMENT = require('../helpers/attachment-helpers');
 const BODY = require('../helpers/body-helpers');
@@ -8,35 +9,37 @@ const DB = require('../helpers/db-helpers');
 const DOC = require('../helpers/doc-helpers');
 const ERR = require('../helpers/err-helpers');
 
-describe('DocMeta multipart', function() {
+describe('Library multipart', function() {
     beforeEach(DB.RESET);
     describe('document does not exist', function() {
         describe('write', function() {
             it('should write a document with attachment', function(done) {
-                const body = Object.assign({}, DATA.doc, {
+                const body = Body.create(Object.assign({}, DATA.doc, {
                     _attachments: {
                         [DATA.attname]: DATA.file
                     }
-                });
+                }));
                 DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT_ID(doc, DATA.id);
+                    BODY.EXPECT(doc, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, done);
                     });
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Object.assign({}, DATA.doc, {
+                const body = Body.create(Object.assign({}, DATA.doc, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT_ID(doc, DATA.id);
+                    BODY.EXPECT(doc, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
                             ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
@@ -44,15 +47,16 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const body = Object.assign({}, DATA.doc, {
+                const body = Body.create(Object.assign({}, DATA.doc, {
                     _attachments: {
                         [DATA.attname]: DATA.fileText
                     }
-                });
+                }));
                 DocMeta.write(DATA.Model, DATA.id, body, (err, doc) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT_ID(doc, DATA.id);
+                    BODY.EXPECT(doc, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, new Buffer(DATA.fileText.body, 'binary'), done);
                     });
                 });
@@ -66,15 +70,16 @@ describe('DocMeta multipart', function() {
         });
         describe('write', function() {
             it('should write a document with attachment', function(done) {
-                const body = Object.assign({}, DATA.doc2, {
+                const body = Body.create(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 DocMeta.write(DATA.Model, doc.id, body, (err, doc2) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc2, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT_ID(doc2, doc.id);
+                    BODY.EXPECT(doc2, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, () => {
                             ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
@@ -82,16 +87,17 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Object.assign({}, DATA.doc2, {
+                const body = Body.create(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 DocMeta.write(DATA.Model, doc.id, body, (err, doc2) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc2, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT_ID(doc2, doc.id);
+                    BODY.EXPECT(doc2, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
                             ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
@@ -99,15 +105,16 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const body = Object.assign({}, DATA.doc2, {
+                const body = Body.create(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.fileText
                     }
-                });
+                }));
                 DocMeta.write(DATA.Model, doc.id, body, (err, doc2) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc2, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT_ID(doc2, doc.id);
+                    BODY.EXPECT(doc2, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, new Buffer(DATA.fileText.body, 'binary'), () => {
                             ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
@@ -117,15 +124,15 @@ describe('DocMeta multipart', function() {
         });
         describe('writeFixed', function() {
             it('should write a document with attachment', function(done) {
-                const body = Object.assign({}, DATA.doc2, {
+                const body = Body.create(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 DocMeta.writeFixed(doc, body, (err) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT(doc, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, () => {
                             ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
@@ -133,16 +140,16 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Object.assign({}, DATA.doc2, {
+                const body = Body.create(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 DocMeta.writeFixed(doc, body, (err) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT(doc, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname, DATA.file.body, () => {
                             ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, DATA.file2.body, done);
                         });
@@ -150,15 +157,15 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const body = Object.assign({}, DATA.doc2, {
+                const body = Body.create(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.fileText
                     }
-                });
+                }));
                 DocMeta.writeFixed(doc, body, (err) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, body);
-                    DOC.EXPECT_EXISTS(doc.id, body, () => {
+                    BODY.EXPECT(doc, body.forDoc());
+                    DOC.EXPECT_EXISTS(doc.id, body.forDoc(), () => {
                         ATTACHMENT.EXPECT_EXISTS(doc.id, DATA.attname2, new Buffer(DATA.fileText.body, 'binary'), () => {
                             ATTACHMENT.EXPECT_DOES_NOT_EXIST(doc.id, DATA.attname, done);
                         });
@@ -168,11 +175,11 @@ describe('DocMeta multipart', function() {
         });
         describe('update', function() {
             it('updates a document with new attachment', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
@@ -190,11 +197,11 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('updates a document to overwrite an attachment', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
@@ -209,12 +216,12 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('updates a document with new attachment deletes old attachment', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: undefined,
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
@@ -231,9 +238,9 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('updates a document removing all attachments', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: undefined
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: undefined
                 });
@@ -248,11 +255,11 @@ describe('DocMeta multipart', function() {
         });
         describe('updateFixed', function() {
             it('updates a document with new attachment', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
@@ -270,11 +277,11 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('updates a document to overwrite an attachment', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
@@ -289,12 +296,12 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('updates a document with new attachment deletes old attachment', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: undefined,
                         [DATA.attname2]: DATA.file2
                     }
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
@@ -311,9 +318,9 @@ describe('DocMeta multipart', function() {
                 });
             });
             it('updates a document removing all attachments', function(done) {
-                const body = Object.assign({}, DATA.update, {
+                const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: undefined
-                });
+                }));
                 const expected = Object.assign({}, doc.body, DATA.update, {
                     _attachments: undefined
                 });
