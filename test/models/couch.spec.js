@@ -1,7 +1,7 @@
 'use strict';
 const expect = require('chai').expect;
 
-const Couch = require('../../lib/couch');
+const Couch = require('../../lib/models/couch');
 
 const ERR = require('../helpers/err-helpers');
 
@@ -23,7 +23,7 @@ function _POPULATE_IDS(couch, done) {
     });
 }
 
-describe('Library Couch', function() {
+describe('Models Couch', function() {
     let couch;
     beforeEach(function() {
         couch = new Couch();
