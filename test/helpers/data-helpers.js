@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 
 const Model = require('../../lib/model');
-
 const DocMutator = require('../../lib/util/doc-mutator');
 
 const DATA = {

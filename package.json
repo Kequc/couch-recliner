@@ -28,8 +28,7 @@
     "mocha": "^2.4.5"
   },
   "dependencies": {
-    "dev-null": "^0.1.1",
     "json-artisan": "^0.1.1",
-    "needle": "^1.5.0"
+    "request": "^2.81.0"
   }
 }
