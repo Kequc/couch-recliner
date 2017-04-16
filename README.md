@@ -11,7 +11,7 @@ npm install couch-recliner --save
 
 ### Usage
 
-It exposes set of Model centric modules, so in order to interact with your database you must have a Model describing it.
+This library exposes set of Model centric modules, in order to interact with your database you must have a Model describing it.
 
 ```javascript
 const { Model } = require('couch-recliner');
@@ -61,7 +61,8 @@ In cases where you know which `id` you intend to use, and want to write directly
 // Equivalent to: DocOperations.write(Cat, ...)
 
 Cat.write('jacob', { name: 'Jacob' }, (err, doc) => {
-    if (!err) doc.meow();
+    if (!err)
+        doc.meow();
 });
 ```
 ```
@@ -74,7 +75,8 @@ This writes a document to the database with an id of `jacob`. If you already hav
 // Equivalent to: DocOperations.writeFixed(doc, ...)
 
 doc.write({ name: 'Jacob' }, (err) => {
-    if (!err) doc.meow();
+    if (!err)
+        doc.meow();
 });
 ```
 ```
