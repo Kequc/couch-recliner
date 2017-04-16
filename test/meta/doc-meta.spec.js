@@ -1,5 +1,5 @@
 'use strict';
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const DocMeta = require('../../lib/meta/doc-meta');
 const Body = require('../../lib/models/body');

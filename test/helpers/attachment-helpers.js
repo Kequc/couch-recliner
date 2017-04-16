@@ -1,5 +1,5 @@
 'use strict';
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const AttachmentMeta = require('../../lib/meta/attachment-meta');
 

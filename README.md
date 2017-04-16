@@ -201,12 +201,17 @@ success!
 // Equivalent to: DocOperations.destroyFixed(doc, ...)
 
 doc.destroy((err) => {
-    if (!err)
+    if (!err) {
         console.log(doc.body);
+        console.log(doc.id);
+        console.log(doc.rev);
+    }
 });
 ```
 ```
 {}
+undefined
+undefined
 ```
 
 ### Multipart requests
@@ -252,7 +257,7 @@ const vet = {
 }
 ```
 
-**As a tip:** You generally do not need to care about existing attachments, if you are updating a document it will only extend the ones that are already there. An attachment will only be removed in an update if you set it's value `undefined` explicitly.
+**As a tip:** If you are updating a document, you do not need to care about existing attachments. An attachment will only be destroyed if it's value is set `undefined` explicitly.
 
 ### Reading attachments
 

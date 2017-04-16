@@ -1,5 +1,5 @@
 'use strict';
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const DocMutator = require('../../lib/util/doc-mutator');
 const Attachment = require('../../lib/models/attachment');

@@ -1,10 +1,29 @@
 'use strict';
-const expect = require('chai').expect;
+const { expect } = require('chai');
+
+const Finder = require('../../lib/models/finder');
 
 const BODY = {};
 
+BODY.PLUCK = (body, finder) => {
+    if (!(finder instanceof Finder)) finder = new Finder(finder);
+    const result = {};
+    for (const field of finder.getFields()) {
+        result[field] = body[field];
+    }
+    return result;
+};
+
 BODY.EXPECT_ID = (doc, id) => {
     expect(doc.id).to.equal(id);
+};
+
+BODY.EXPECT_GENERATED_ID = (id) => {
+    expect(typeof id).to.equal('string');
+    expect(id.length).to.equal(32);
+    for (const char of id) {
+        expect('0123456789abcfdef').to.contain(char);
+    }
 };
 
 BODY.EXPECT_REV = (doc, rev) => {

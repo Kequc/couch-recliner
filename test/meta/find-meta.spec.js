@@ -8,14 +8,6 @@ const DB = require('../helpers/db-helpers');
 const DOC = require('../helpers/doc-helpers');
 const ERR = require('../helpers/err-helpers');
 
-function _pluck(body, finder) {
-    const result = {};
-    for (const field of finder.getFields()) {
-        result[field] = body[field];
-    }
-    return result;
-}
-
 describe('Meta FindMeta', function() {
     beforeEach(DB.DESTROY);
     describe('database does not exist', function() {
@@ -60,7 +52,7 @@ describe('Meta FindMeta', function() {
                 const finder = new Finder(DATA.find);
                 FindMeta.find(DATA.Model, finder, (err, list) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT_LIST(list, [_pluck(doc2.body, finder)]);
+                    BODY.EXPECT_LIST(list, [BODY.PLUCK(doc2.body, finder)]);
                     done();
                 });
             });
@@ -68,7 +60,7 @@ describe('Meta FindMeta', function() {
                 const finder = new Finder(DATA.find2);
                 FindMeta.find(DATA.Model, finder, (err, list) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT_LIST(list, [_pluck(doc.body, finder), _pluck(doc2.body, finder)]);
+                    BODY.EXPECT_LIST(list, [BODY.PLUCK(doc.body, finder), BODY.PLUCK(doc2.body, finder)]);
                     done();
                 });
             });
@@ -76,7 +68,7 @@ describe('Meta FindMeta', function() {
                 const finder = new Finder(DATA.find2);
                 FindMeta.findOne(DATA.Model, finder, (err, doc) => {
                     ERR.EXPECT_NONE(err);
-                    BODY.EXPECT(doc, _pluck(doc.body, finder));
+                    BODY.EXPECT(doc, BODY.PLUCK(doc.body, finder));
                     BODY.EXPECT_LATEST_REV(doc, undefined);
                     done();
                 });

@@ -1,5 +1,5 @@
 'use strict';
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const Attachment = require('../../lib/models/attachment');
 const DATA = require('../helpers/data-helpers');

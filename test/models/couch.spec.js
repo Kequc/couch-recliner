@@ -1,23 +1,16 @@
 'use strict';
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 const Couch = require('../../lib/models/couch');
 
+const BODY = require('../helpers/body-helpers');
 const ERR = require('../helpers/err-helpers');
-
-function _EXPECT_GENERATED_ID(id) {
-    expect(typeof id).to.equal('string');
-    expect(id.length).to.equal(32);
-    for (const char of id) {
-        expect('0123456789abcfdef').to.contain(char);
-    }
-}
 
 function _POPULATE_IDS(couch, done) {
     expect(couch._ids.length).to.equal(0);
     couch.getNextId((err, id) => {
         ERR.EXPECT_NONE(err);
-        _EXPECT_GENERATED_ID(id);
+        BODY.EXPECT_GENERATED_ID(id);
         expect(couch._ids.length).to.equal(couch.CACHE_IDS_COUNT - 1);
         done();
     });
@@ -94,7 +87,7 @@ describe('Models Couch', function() {
                     const count = couch._ids.length;
                     couch.getNextId((err, id) => {
                         ERR.EXPECT_NONE(err);
-                        _EXPECT_GENERATED_ID(id);
+                        BODY.EXPECT_GENERATED_ID(id);
                         expect(couch._ids.length).to.equal(count - 1);
                     });
                 }
