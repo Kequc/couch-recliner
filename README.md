@@ -3,10 +3,14 @@ Couch Recliner
 
 Utility modules for interacting with CouchDB2.0/Cloudant using Nodejs. It retries requests and generally tries to keep things as simple as possible.
 
+[npm](https://www.npmjs.com/package/couch-recliner)
+
 ### Installation
 
+Install the library from npm.
+
 ```
-npm install couch-recliner --save
+npm i couch-recliner --save
 ```
 
 ### Usage
@@ -276,8 +280,6 @@ Cat.attachment('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
 ```
 470
 ```
-
-You may also use this operation inline.
 
 ```javascript
 // Equivalent to: AttachmentOperations.readFixed(doc, ...)

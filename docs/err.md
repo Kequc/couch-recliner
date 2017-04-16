@@ -34,7 +34,7 @@ No additional information available.
 
 ### checkOpsFixed
 
-A helper for generating errors based on user input. Validates that the provided Model and detects missing parameters.
+A helper for generating errors based on user input. Validates the provided Model and detects missing parameters.
 
 ```javascript
 const err = Err.checkOpsFixed(doc, { body: undefined });
