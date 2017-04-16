@@ -435,9 +435,10 @@ describe('Meta DocMeta', function() {
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
                     const expected = Object.assign({}, doc.body);
+                    const oldRev = doc.rev;
                     DocMeta.readFixed(doc, (err) => {
                         ERR.EXPECT_NONE(err);
-                        BODY.EXPECT_REV(doc, expected._rev);
+                        BODY.EXPECT_REV(doc, oldRev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
                         BODY.EXPECT(doc, expected);
                         DOC.EXPECT_EXISTS(doc.id, expected, done);

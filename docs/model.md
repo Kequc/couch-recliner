@@ -50,64 +50,64 @@ Your models come with a default set of helper methods, which are actually just a
 
 #### #create
 
-`DocOperations.create`
+`DocOperations.create(this, ...);`
 
 #### #read
 
-`DocOperations.read`
+`DocOperations.read(this, ...);`
 
 #### #write
 
-`DocOperations.write`
+`DocOperations.write(this, ...);`
 
 #### #update
 
-`DocOperations.update`
+`DocOperations.update(this, ...);`
 
 #### #updateofWrite
 
-`DocOperations.updateOrWrite`
+`DocOperations.updateOrWrite(this, ...);`
 
 #### #destroy
 
-`DocOperations.destroy`
+`DocOperations.destroy(this, ...);`
 
 #### #head
 
-`DocOperations.head`
+`DocOperations.head(this, ...);`
 
 #### #findOne
 
-`FindOperations.findOne`
+`FindOperations.findOne(this, ...);`
 
 #### #find
 
-`FindOperations.find`
+`FindOperations.find(this, ...);`
 
 #### #attachment
 
-`AttachmentOperations.read`
+`AttachmentOperations.read(this, ...);`
 
 #### .read
 
-`DocOperations.readFixed`
+`DocOperations.readFixed(this, ...);`
 
 #### .write
 
-`DocOperations.writeFixed`
+`DocOperations.writeFixed(this, ...);`
 
 #### .update
 
-`DocOperations.updateFixed`
+`DocOperations.updateFixed(this, ...);`
 
 #### .destroy
 
-`DocOperations.destroyFixed`
+`DocOperations.destroyFixed(this, ...);`
 
 #### .head
 
-`DocOperations.headFixed`
+`DocOperations.headFixed(this, ...);`
 
 #### .attachment
 
-`AttachmentOperations.readFixed`
+`AttachmentOperations.readFixed(this, ...);`

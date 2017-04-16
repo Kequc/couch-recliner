@@ -82,17 +82,13 @@ true
 
 ### forDoc
 
-Formats the body for use in a model instance. An id and rev are both expected to be provided, as that information is generally outside the scope of this class.
+Formats the body for use in a model instance.
 
 ```javascript
-const id = 'cat-011';
-const rev = '3-efa0539cc8d54024b95851082c074942';
-console.log(body.forDoc(id, rev));
+console.log(body.forDoc());
 ```
 ```
 {
-    _id: 'cat-011',
-    _rev: '3-efa0539cc8d54024b95851082c074942',
     name: 'Cat name',
     eyes: 'purple',
     _attachments: {
@@ -107,9 +103,10 @@ console.log(body.forDoc(id, rev));
 
 ### forHttp
 
-Formats your body for transport over http. If there are new attachments you will receive a `multipart` parameter, otherwise simply a `body`.
+Formats your body for transport over http. If there are new attachments you will receive a `multipart` parameter, otherwise simply a `body`. A rev is expected to be provided, as that information is generally outside the scope of this class.
 
 ```javascript
+const rev = '3-efa0539cc8d54024b95851082c074942';
 console.log(body.forHttp(rev));
 ```
 ```

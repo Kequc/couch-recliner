@@ -191,30 +191,19 @@ describe('Models Body', function() {
     });
     describe('forDoc', function() {
         it('returns data formatted for doc', function() {
-            const result = Body.create(DATA.doc).forDoc(DATA.id, DATA.rev);
+            const result = Body.create(DATA.doc).forDoc();
             expect(result).to.eql(Object.assign({}, DATA.doc, {
-                _attachments: {},
-                _id: DATA.id,
-                _rev: DATA.rev
-            }));
-        });
-        it('returns data formatted with no _rev', function() {
-            const result = Body.create(DATA.doc).forDoc(DATA.id, undefined);
-            expect(result).to.eql(Object.assign({}, DATA.doc, {
-                _attachments: {},
-                _id: DATA.id
+                _attachments: {}
             }));
         });
         it('returns data formatted with no _attachments', function() {
             const body = Body.create(Object.assign({}, DATA.doc, {
                 _attachments: undefined
             }));
-            const result = body.forDoc(DATA.id, DATA.rev);
+            const result = body.forDoc();
             expect(body.attachments).to.be.undefined;
             expect(result).to.eql(Object.assign({}, DATA.doc, {
-                _attachments: {},
-                _id: DATA.id,
-                _rev: DATA.rev
+                _attachments: {}
             }));
         });
         it('returns attachments formatted for doc', function() {
@@ -225,15 +214,13 @@ describe('Models Body', function() {
                     [DATA.attname3]: DATA.fileStub
                 }
             }));
-            const result = body.forDoc(DATA.id, DATA.rev);
+            const result = body.forDoc();
             expect(result).to.eql(Object.assign({}, DATA.doc, {
                 _attachments: {
                     [DATA.attname]: body.attachments[DATA.attname].toStub(),
                     [DATA.attname2]: body.attachments[DATA.attname2].toStub(),
                     [DATA.attname3]: body.attachments[DATA.attname3].toStub()
-                },
-                _id: DATA.id,
-                _rev: DATA.rev
+                }
             }));
         });
     });
@@ -251,7 +238,8 @@ describe('Models Body', function() {
             const result = Body.create(DATA.doc).forHttp(undefined);
             expect(result).to.eql({
                 body: Object.assign({}, DATA.doc, {
-                    _attachments: {}
+                    _attachments: {},
+                    _rev: undefined
                 })
             });
         });

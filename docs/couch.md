@@ -56,7 +56,7 @@ b77509102b4dc0a1389ae3b6d248e619
 
 ### CACHE_IDS_COUNT =
 
-By default your couch instance will cache 10 ids at a time. You can set this to any number you like. Internally this library just uses the built in `{db}/_uuids` utility.
+By default your couch instance will cache 10 ids at a time. You can set this to any number you like. Internally this method uses the built in `{db}/_uuids` utility.
 
 Change this variable to request fewer or more ids when needed from the database.
 
@@ -66,22 +66,23 @@ myCouch.CACHE_IDS_COUNT = 50;
 
 ### envs =
 
-Envs are set when you create the couch instance but you can change it at any time, if you ever needed to.
+Envs are set when you create the couch instance but you can set them any time, if you want to.
 
 ```javascript
 myCouch.envs = {
-    production: 'https://a-different-url.com,
+    production: 'https://a-different-url.com',
+    development: 'http://localhost:1001',
     any: 'http://localhost:5984'
 };
 console.log(myCouch.baseUrl);
 ```
 ```
-http://localhost:5984
+http://localhost:1001
 ```
 
 ### urlTo
 
-Function which will output any specified path to your database.
+Function which will output a path to your database.
 
 ```javascript
 const url = myCouch.urlTo('hello', 50, 'there');

@@ -1,7 +1,7 @@
 Couch Recliner
 ===
 
-Utility modules for interacting with CouchDB/Cloudant using Nodejs. It retries requests and generally tries to keep things as simple as possible.
+Utility modules for interacting with CouchDB2.0/Cloudant using Nodejs. It retries requests and generally tries to keep things as simple as possible.
 
 ### Installation
 
