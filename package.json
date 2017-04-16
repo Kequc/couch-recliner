@@ -1,6 +1,6 @@
 {
   "name": "couch-recliner",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Utility modules for interacting with CouchDB2.0/Cloudant using Nodejs",
   "author": "mr.kequc@gmail.com",
   "license": "ISC",
