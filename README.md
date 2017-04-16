@@ -1,13 +1,7 @@
 Couch Recliner
 ===
 
-Utility modules for interacting with CouchDB using Nodejs
-
-#### Notice:
-
-This repo is under heavy development my previous library is available on npm until this is ready.
-
-[nano-records](https://www.npmjs.com/package/nano-records)
+Utility modules for interacting with CouchDB/Cloudant using Nodejs. It retries requests and generally tries to keep things as simple as possible.
 
 ### Installation
 
@@ -17,7 +11,7 @@ npm install couch-recliner --save
 
 ### Usage
 
-Couch Recliner exposes set of Model centric helper methods, therefore you must have a Model describing your database.
+It exposes set of Model centric modules, so in order to interact with your database you must have a Model describing it.
 
 ```javascript
 const { Model } = require('couch-recliner');
@@ -31,26 +25,28 @@ class Cat extends Model {
 Cat.dbName = 'cats';
 ```
 
-Your model must have a `dbName` representing the database you want to use. Custom extensions access the document body at `this.body`, it is recommended not to modify the body directly. Instead manipulate data using the methods which follow.
+Your model will have a `dbName` representing the name of the database you want it to use. Within a model instance the document body can be accessed at `this.body`, it is recommended not to modify the body directly. Instead manipulate data using the methods which follow.
 
 ### Creating documents
 
 ```javascript
 Cat.create({ name: 'Sally' }, (err, doc) => {
-    if (!err) doc.meow();
+    if (!err)
+        doc.meow();
 });
 ```
 ```
 Sally meows.
 ```
 
-In all instances you may choose instead to use the provided helpers directly. The following code example is equivalent to the above.
+You may instead choose to use the [DocOperations](./docs/doc-operations.md) module directly which will do the exact same thing. The following code is equivalent to the above.
 
 ```javascript
 const { DocOperations } = require('couch-recliner');
 
 DocOperations.create(Cat, { name: 'Sally' }, (err, doc) => {
-    if (!err) doc.meow();
+    if (!err)
+        doc.meow();
 });
 ```
 ```
@@ -59,7 +55,7 @@ Sally meows.
 
 ### Writing documents
 
-In cases where you know which `id` you intend to use, and wish to write directly to that `id` overwriting anything which may be there.
+In cases where you know which `id` you intend to use, and want to write directly to that `id`.
 
 ```javascript
 // Equivalent to: DocOperations.write(Cat, ...)
@@ -72,7 +68,7 @@ Cat.write('jacob', { name: 'Jacob' }, (err, doc) => {
 Jacob meows.
 ```
 
-The above writes a document to the database with a fixed id of `jacob`. If you already have a `doc` instance you may choose to overwrite it, for this purpose there is `writeFixed`.
+This writes a document to the database with an id of `jacob`. If you already have a `doc` instance you may choose to use it, for this purpose there is `writeFixed`.
 
 ```javascript
 // Equivalent to: DocOperations.writeFixed(doc, ...)
@@ -85,30 +81,30 @@ doc.write({ name: 'Jacob' }, (err) => {
 Jacob meows.
 ```
 
-The write operation will overwrite any existing document, replacing it entirely, so be careful with it.
+The write operation will overwrite existing data, replacing it entirely so be careful with it.
 
 ### Reading documents
 
-If you have a document in the database and you want the most up to date version, use the `read` operation.
+If you have a document in the database and you want the most up to date version use `read`.
 
 ```javascript
 // Equivalent to: DocOperations.read(Cat, ...)
 
 Cat.read('jacob', (err, doc) => {
-    if (!err) doc.meow();
+    if (!err)
+        doc.meow();
 });
 ```
 ```
 Jacob meows.
 ```
 
-You may also use this operation inline.
-
 ```javascript
 // Equivalent to: DocOperations.readFixed(doc, ...)
 
 doc.read((err) => {
-    if (!err) doc.meow();
+    if (!err)
+        doc.meow();
 });
 ```
 ```
@@ -121,35 +117,38 @@ Jacob meows.
 // Equivalent to: DocOperations.update(Cat, ...)
 
 Cat.update('jacob', { breed: 'Cheshire' }, (err, doc) => {
-    if (!err) console.log(doc.body.name + ' is a ' + doc.body.breed + ' cat.');
+    if (!err)
+        console.log(doc.body.name + ' is a ' + doc.body.breed + ' cat.');
 });
 ```
 ```
 Jacob is a Cheshire cat.
 ```
-
-For more complex updates look at [json-artisan](https://github.com/Kequc/json-artisan), Couch Recliner uses this module internally to provide update operations.
 
 ```javascript
 // Equivalent to: DocOperations.updateFixed(doc, ...)
 
 doc.update({ breed: 'Cheshire' }, (err) => {
-    if (!err) console.log(doc.body.name + ' is a ' + doc.body.breed + ' cat.');
+    if (!err)
+        console.log(doc.body.name + ' is a ' + doc.body.breed + ' cat.');
 });
 ```
 ```
 Jacob is a Cheshire cat.
 ```
 
+For more complex updates look at [json-artisan](https://github.com/Kequc/json-artisan), Couch Recliner uses this library internally to provide update operations.
+
 ### Updating documents even if they don't exist
 
-Sometimes you are not sure or do not care about whether a document exists in the database, the `updateOrWrite` operation will first try to update it. But if it doesn't exist will create one.
+Sometimes you are not sure or do not care about whether a document exists in the database, the `updateOrWrite` method will first try to update it. But if it doesn't exist will create it.
 
 ```javascript
 // Equivalent to: DocOperations.updateOrWrite(Cat, ...)
 
 Cat.updateOrWrite('matthew', { name: 'Matthew', eyes: 'green' }, (err, doc) => {
-    if (!err) console.log(doc.body.name + ' has ' + doc.body.eyes + ' eyes.');
+    if (!err)
+        console.log(doc.body.name + ' has ' + doc.body.eyes + ' eyes.');
 });
 ```
 ```
@@ -158,13 +157,14 @@ Matthew has green eyes.
 
 ### Head operations
 
-Head operations are a much faster version of `read` operations, you will not get the document body, only enough information to know whether or not the document exists and what it's `_rev` is.
+Head operations are a much faster version of `read`. You get only enough information to know whether or not the document exists and what the current revision is.
 
 ```javascript
 // Equivalent to: DocOperations.head(Cat, ...)
 
 Cat.head('matthew', (err, rev) => {
-    if (!err) console.log(rev);
+    if (!err)
+        console.log(rev);
 });
 ```
 ```
@@ -175,7 +175,8 @@ Cat.head('matthew', (err, rev) => {
 // Equivalent to: DocOperations.headFixed(doc, ...)
 
 doc.head((err, rev) => {
-    if (!err) console.log(rev);
+    if (!err)
+        console.log(rev);
 });
 ```
 ```
@@ -188,20 +189,20 @@ doc.head((err, rev) => {
 // Equivalent to: DocOperations.destroy(Cat, ...)
 
 Cat.destroy('matthew', (err) => {
-    if (!err) console.log('success!');
+    if (!err)
+        console.log('success!');
 });
 ```
 ```
 success!
 ```
 
-Also works inline.
-
 ```javascript
 // Equivalent to: DocOperations.destroyFixed(doc, ...)
 
 doc.destroy((err) => {
-    if (!err) console.log(doc.body);
+    if (!err)
+        console.log(doc.body);
 });
 ```
 ```
@@ -210,8 +211,7 @@ doc.destroy((err) => {
 
 ### Multipart requests
 
-It is possible to add/remove/modify attachments with your documents at the same time. To do this make changes to the `body._attachments` object. In it you'll see existing attachments listed in key value form, where key is the name of the attachment.
-
+It is possible to add/remove/modify attachments along with your documents. To do this make changes to the `_attachments` object. In it you'll see existing attachments listed in key value form, where key is the name of the attachment.
 
 ```javascript
 // Example of an existing attachment in a document body
@@ -227,18 +227,17 @@ It is possible to add/remove/modify attachments with your documents at the same 
 }
 ```
 
-If you remove this object, it will be deleted on the server. If you add something to it ensure it has a `content_type`, and a `body` property which can be either string or a Buffer.
-
+If you modify this object, attachments will be modified or even deleted on the server. If you are adding something to `_attachments` ensure it has a `content_type` and a `body`. Body can be either string or a Buffer.
 
 ```javascript
-const myAttachment = {
+const vet = {
     content_type: 'text/html',
     body: fs.readFileSync(path.join(__dirname, './Documents/vet-bill-03-05-2017.htm'))
 };
 ```
 
 ```javascript
-// Modify the document, leave the existing attachment add a new one
+// Modify the document, leave the existing attachment add the new one
 
 {
     name: 'Jacob the expensive cat',
@@ -248,49 +247,12 @@ const myAttachment = {
             content_type: 'text/html',
             length: 521
         },
-        'vet-bill-03-05-2017.htm': myAttachment
+        'vet-bill-03-05-2017.htm': vet
     }
 }
 ```
 
-As a tip, you generally do not need to care about existing attachments, if you are updating a document you will only extend the exisitng object. If you intend to remove an attachment in an update operation you will need to set the key `undefined` explicitly.
-
-### Writing attachments
-
-It is possible to write attachments directly without caring very much about the document.
-
-```javascript
-const { AttachmentOperations } = require('couch-recliner');
-
-AttachmentOperations.write(Cat, 'jacob', 'vet-bill-03-05-2017.htm', myAttachment, (err) => {
-    if (!err) console.log('success!');
-});
-```
-```
-success!
-```
-
-You can perform the same operation using the document instance.
-
-```javascript
-AttachmentOperations.writeFixed(doc, 'vet-bill-03-05-2017.htm', myAttachment, (err) => {
-    if (!err) console.log(doc.body._attachments);
-});
-```
-```
-{
-    'vet-bill-01-20-2017.htm': {
-        stub: true,
-        content_type: 'text/html',
-        length: 521
-    },
-    'vet-bill-03-05-2017.htm': {
-        stub: true,
-        content_type: 'text/html',
-        length: 470
-    }
-}
-```
+**As a tip:** You generally do not need to care about existing attachments, if you are updating a document it will only extend the ones that are already there. An attachment will only be removed in an update if you set it's value `undefined` explicitly.
 
 ### Reading attachments
 
@@ -300,7 +262,8 @@ Reading an attachment returns data in the form of a Buffer.
 // Equivalent to: AttachmentOperations.read(Cat, ...)
 
 Cat.attachment('jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
-    if (!err) console.log(buffer.length);
+    if (!err)
+        console.log(buffer.length);
 });
 ```
 ```
@@ -313,40 +276,57 @@ You may also use this operation inline.
 // Equivalent to: AttachmentOperations.readFixed(doc, ...)
 
 doc.attachment('vet-bill-03-05-2017.htm', (err, buffer) => {
-    if (!err) console.log(buffer.length);
+    if (!err)
+        console.log(buffer.length);
 });
 ```
 ```
 470
 ```
 
-### Destroying attachments
+### Finding documents
+
+You can use [FindOperations](./docs/find-operations.md) to search for a set of results, or look up a document with something other than it's id.
 
 ```javascript
-AttachmentOperations.destroy(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err) => {
-    if (!err) console.log('success!');
+// Equivalent to: FindOperations.find(Model, ...)
+
+Cat.find({ name: 'Sally' }, (err, docs) => {
+    if (!err && docs.length > 0)
+        docs[0].meow();
 });
 ```
 ```
-success!
+Sally meows
 ```
 
-Also works inline.
-
 ```javascript
-AttachmentOperations.destroyFixed(doc, 'vet-bill-03-05-2017.htm', (err) => {
-    if (!err) console.log(doc.body._attachments);
+// Equivalent to: FindOperations.findOne(Model, ...)
+
+Cat.findOne({ name: 'Sally' }, (err, doc) => {
+    if (!err)
+        doc.meow();
 });
 ```
 ```
-{
-    'vet-bill-01-20-2017.htm': {
-        stub: true,
-        content_type: 'text/html',
-        length: 521
-    }
-}
+Sally meows
 ```
+
+### View operations
+
+Coming soon.
+
+### Show operations
+
+Coming soon.
+
+### Bulk operations
+
+Coming soon hopefully.
+
+### More documentation
+
+Please see the **[./docs](./docs)** directory for more detailed information about available modules.
 
 ### Contribute
 

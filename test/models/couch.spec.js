@@ -55,7 +55,7 @@ describe('Models Couch', function() {
         it('can supply a default baseUrl', function() {
             const expected = couch.baseUrl + '-blah';
             couch.envs = {
-                default: expected,
+                any: expected,
                 fakeenv: 'http://notthisone.com'
             };
             expect(couch.baseUrl).to.equal(expected);
@@ -66,7 +66,7 @@ describe('Models Couch', function() {
             couch.envs = {
                 fakeenv: 'http://notthisone.com',
                 [env]: expected,
-                default: 'http://notthisoneeither.com'
+                any: 'http://notthisoneeither.com'
             };
             expect(couch.baseUrl).to.equal(expected);
         });
@@ -77,7 +77,7 @@ describe('Models Couch', function() {
         });
         it('recovers from trailing slash on baseUrl', function() {
             const baseUrl = 'http://testing.com/hello/';
-            couch.envs = { default: baseUrl };
+            couch.envs = { any: baseUrl };
             expect(couch.urlTo('hi', 'there', 55, '100')).to.equal(baseUrl + 'hi/there/55/100');
         });
         it('throws an error on invalid data', function() {

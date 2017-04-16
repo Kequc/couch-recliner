@@ -21,6 +21,8 @@
   "homepage": "http://www.kequc.com",
   "keywords": [
     "couchdb",
+    "cloudant",
+    "nosql",
     "nodejs"
   ],
   "devDependencies": {
