@@ -5,7 +5,7 @@ Couch
 const { Couch } = require('couch-recliner');
 
 const couch = new Couch({
-    production: 'https://somelocation.com',
+    production: 'https://some-location.com',
     any: 'http://localhost:1000'
 });
 ```
@@ -18,7 +18,7 @@ Environments mapped to their urls, `any` will override the default `http://local
 console.log(couch.baseUrl);
 ```
 ```
-http://localhost:5984
+http://localhost:1000
 ```
 
 ### .getNextId(callback)
@@ -49,7 +49,7 @@ Your instance caches `10` ids at a time by default.
 
 ```javascript
 couch.envs = {
-    production: 'https://a-different-url.com',
+    production: 'https://a-different-url.com/couch/',
     development: 'http://localhost:1001'
 };
 
@@ -59,13 +59,13 @@ console.log(couch.baseUrl);
 http://localhost:1001
 ```
 
-Envs are set when you create an instance but you can change them any time, if you want to.
+Envs are set when you create an instance but you can change them.
 
 ### .urlTo(...path)
 
 | parameter | description |
 | - | - |
-| ...path | Desired path for conversion. |
+| ...path | Desired path. |
 
 ```javascript
 const url = couch.urlTo('hello', 50, 'there');
@@ -73,5 +73,5 @@ const url = couch.urlTo('hello', 50, 'there');
 console.log(url);
 ```
 ```
-http://localhost:5984/hello/50/there
+http://localhost:1001/hello/50/there
 ```
