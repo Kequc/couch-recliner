@@ -1,20 +1,26 @@
 FindOperations
 ===
 
-Find operations will search your documents, these methods accept a [Finder](./finder.md) instance.
-
-### find
-
-Returns an array of model instances for the results of your search.
-
 ```javascript
 const { FindOperations } = require('couch-recliner');
+```
 
+Uses `Finder` instances or objects.
+
+### find(Model, Finder, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| Finder | [Finder](./finder.md) |
+| callback(err, docs) | Returns an array of model instances from the result of your search. |
+
+```javascript
 const finder = {
     selector: { age: { '$gt': 10 } }
 };
 
-FindOperations.find(Cat, finder, (err, docs) => {
+FindOperations.find(Account, finder, (err, docs) => {
     if (!err)
         console.log(docs.length);
 });
@@ -23,12 +29,20 @@ FindOperations.find(Cat, finder, (err, docs) => {
 2
 ```
 
-### findOne
+### findOne(Model, Finder, callback)
 
-Finds and returns only the first result, behaves the same way as `DocOperations.read` generally.
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| Finder | [Finder](./finder.md) |
+| callback(err, doc) | Returns the first model instance from the result of your search. |
 
 ```javascript
-FindOperations.findOne(Cat, finder, (err, doc) => {
+const finder = {
+    selector: { age: { '$gt': 10 } }
+};
+
+FindOperations.findOne(Account, finder, (err, doc) => {
     if (!err)
         console.log(doc.body.age);
 });

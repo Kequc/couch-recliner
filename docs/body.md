@@ -1,22 +1,24 @@
 Body
 ===
 
-Used internally to format and validate your document body. It also parses and validates any number of [Attachment](./attachment.md) instances which have been included.
-
-### create
-
-Builds and returns a `Body` instance based on provided data.
-
 ```javascript
 const { Body } = require('couch-recliner');
+```
 
+### #create(data)
+
+| parameter | description |
+| - | - |
+| data | Object representing the content a document. |
+
+```javascript
 const body = Body.create({
     name: 'Cat name',
     eyes: 'purple',
     _attachments: {
         'photo.png': {
             contentType: 'image/png',
-            body: Buffer
+            body: myBuffer
         }
     }
 });
@@ -34,11 +36,11 @@ console.log(body.attachments);
 }
 ```
 
-### extend
+### .extend(data)
 
-The instance acts as a source, overwriting any data contained in the target. This is a deep operation performed by the [json-artisan](https://github.com/Kequc/json-artisan) library. Attachments are extended as well, however separately.
-
-Operation is non-destructive and returns a new instance.
+| parameter | description |
+| - | - |
+| data | Object representing the content you want to overwrite. |
 
 ```javascript
 const extended = body.extend({
@@ -46,8 +48,9 @@ const extended = body.extend({
     isEvil: true,
     _attachments: {
         'cat-facts.txt': {
+            stub: true,
             contentType: 'text/html',
-            body: Buffer
+            length: 101
         }
     }
 });
@@ -67,9 +70,9 @@ console.log(extended.attachments);
 }
 ```
 
-### isValid
+Returns a new instance of `Body`. This is a deep operation performed internally by the [json-artisan](https://github.com/Kequc/json-artisan) library.
 
-Performs some rudimentary validation of your data, if this step fails your request making use of this instance will not be sent.
+### .isValid()
 
 ```javascript
 console.log(body.isValid());
@@ -80,9 +83,9 @@ true
 true
 ```
 
-### forDoc
+Returns whether the library thinks it's a valid body. If this test fails any request containing the body will not be sent.
 
-Formats the body for use in a model instance.
+### .forDoc()
 
 ```javascript
 console.log(body.forDoc());
@@ -101,13 +104,18 @@ console.log(body.forDoc());
 }
 ```
 
-### forHttp
+Returns your body formatted for insertion into a model instance.
 
-Formats your body for transport over http. If there are new attachments you will receive a `multipart` parameter, otherwise simply a `body`. A rev is expected to be provided, as that information is generally outside the scope of this class.
+### .forHttp(rev)
+
+| parameter | description |
+| - | - |
+| rev | Revision id you want sent with the request. |
 
 ```javascript
-const rev = '3-efa0539cc8d54024b95851082c074942';
-console.log(body.forHttp(rev));
+const payload = body.forHttp('3-efa0539cc8d54024b95851082c074942');
+
+console.log(payload);
 ```
 ```
 {
@@ -123,3 +131,5 @@ console.log(body.forHttp(rev));
     ]
 }
 ```
+
+Returns your body formatted for transport over http. If there are new attachments you will receive a `multipart` parameter, otherwise a `body`.

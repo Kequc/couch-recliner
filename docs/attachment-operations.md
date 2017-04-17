@@ -1,94 +1,138 @@
 AttachmentOperations
 ===
 
-It is possible to make changes to attachments directly without caring very much about the document at all by using the `AttachmentOperations` module.
-
-These tools depend on the existence of a document.
-
-### write
-
-This will overwrite an exisiting attachment with the same name, or create it if it doesn't exist. You are passing in the [Model](./model.md) being changed, the document id, the attachment name, and an [Attachment](./attachment.md).
-
 ```javascript
 const { AttachmentOperations } = require('couch-recliner');
+```
 
-const vet = {
-    contentType: 'text/html',
-    body: fs.readFileSync(path.join(__dirname, './Documents/vet-bill-03-05-2017.htm'))
+Uses `Attachment` instances or objects.
+
+### write(Model, id, attname, Attachment, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| attname | Name of your attachment. |
+| Attachment | [Attachment](./attachment.md) |
+| callback(err) | Returns an error if there was a problem. |
+
+```javascript
+const attachment = {
+    contentType: 'image/png',
+    body: myBuffer
 };
 
-AttachmentOperations.write(Cat, 'jacob', 'vet-bill-03-05-2017.htm', vet, (err) => {
-    if (!err) console.log('success!');
+AttachmentOperations.write(Account, myId, 'avatar.png', attachment, (err) => {
+    if (!err)
+        console.log('saved!');
 });
 ```
 ```
-success!
+saved!
 ```
 
+### writeFixed(doc, attname, Attachment, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| attname | Name of your attachment. |
+| Attachment | [Attachment](./attachment.md) |
+| callback(err) | Returns an error if there was a problem. |
+
 ```javascript
-AttachmentOperations.writeFixed(doc, 'vet-bill-03-05-2017.htm', vet, (err) => {
-    if (!err) console.log(doc.body._attachments);
+const attachment = {
+    contentType: 'image/png',
+    body: myBuffer
+};
+
+AttachmentOperations.writeFixed(myDoc, 'avatar.png', attachment, (err) => {
+    if (!err)
+        console.log(myDoc.body._attachments);
 });
 ```
 ```
 {
-    'vet-bill-01-20-2017.htm': {
+    'avatar.png': {
         stub: true,
-        content_type: 'text/html',
-        length: 521
-    },
-    'vet-bill-03-05-2017.htm': {
-        stub: true,
-        content_type: 'text/html',
-        length: 470
+        content_type: 'image/png',
+        length: 511
     }
 }
 ```
 
-### read
+### read(Model, id, attname, callback)
 
-Reading an attachment returns data in the form of a Buffer.
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| attname | Name of your attachment. |
+| Attachment | [Attachment](./attachment.md) |
+| callback(err, buffer) | Returns a Buffer object representing your attachment. |
 
 ```javascript
-AttachmentOperations.read(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err, buffer) => {
-    if (!err) console.log(buffer.length);
+AttachmentOperations.read(Account, myId, 'avatar.png', (err, buffer) => {
+    if (!err)
+        console.log(buffer.length);
 });
 ```
 ```
-470
+511
 ```
 
+### readFixed(doc, attname, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| attname | Name of your attachment. |
+| callback(err, buffer) | Returns a Buffer object representing your attachment. |
+
 ```javascript
-AttachmentOperations.readFixed(doc, 'vet-bill-03-05-2017.htm', (err, buffer) => {
-    if (!err) console.log(buffer.length);
+AttachmentOperations.readFixed(myDoc, 'avatar.png', (err, buffer) => {
+    if (!err)
+        console.log(buffer.length);
 });
 ```
 ```
-470
+511
 ```
 
-### destroy
+### destroy(Model, id, attname, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| attname | Name of your attachment. |
+| callback(err) | Returns an error if there was a problem. |
 
 ```javascript
-AttachmentOperations.destroy(Cat, 'jacob', 'vet-bill-03-05-2017.htm', (err) => {
-    if (!err) console.log('success!');
+AttachmentOperations.destroy(Account, myId, 'avatar.png', (err) => {
+    if (!err)
+        console.log('deleted!');
 });
 ```
 ```
-success!
+deleted!
 ```
 
+### destroyFixed(doc, attname, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| attname | Name of your attachment. |
+| callback(err) | Returns an error if there was a problem. |
+
 ```javascript
-AttachmentOperations.destroyFixed(doc, 'vet-bill-03-05-2017.htm', (err) => {
-    if (!err) console.log(doc.body._attachments);
+AttachmentOperations.destroyFixed(myDoc, 'avatar.png', (err) => {
+    if (!err)
+        console.log(myDoc.body._attachments);
 });
 ```
 ```
-{
-    'vet-bill-01-20-2017.htm': {
-        stub: true,
-        content_type: 'text/html',
-        length: 521
-    }
-}
+{}
 ```

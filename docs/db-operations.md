@@ -1,16 +1,19 @@
 DbOperations
 ===
 
-Performs operations on your database directly, for administrative tasks such as database `create` and `destroy`.
-
-### head
-
-Check the existence of a database.
-
 ```javascript
 const { DbOperations } = require('couch-recliner');
+```
 
-DbOperations.head(Cat, (err) => {
+### head(Model, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| callback(err) | Returns an error if the database does not exist. |
+
+```javascript
+DbOperations.head(Account, (err) => {
     if (!err)
         console.log('exists!');
 });
@@ -19,26 +22,36 @@ DbOperations.head(Cat, (err) => {
 exists!
 ```
 
-### reset
+### reset(Model, callback)
 
-Creates database after destroying it. Accepts a validation parameter which must always equal `_RESET_`.
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| callback(err) | Returns an error if there was a problem. |
+
+Accepts a validation parameter which must always equal `_RESET_`, destroys then creates the database.
 
 ```javascript
-DbOperations.reset(Cat, '_RESET_', (err) => {
+DbOperations.reset(Account, '_RESET_', (err) => {
     if (!err)
-        console.log('reset!');
+        console.log('fresh start!');
 });
 ```
 ```
-reset!
+fresh start!
 ```
 
-### destroy
+### destroy(Model, callback)
 
-Destroys a database. Accepts a validation parameter which must always equal `_DESTROY_`.
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| callback(err) | Returns an error if there was a problem. |
+
+Accepts a validation parameter which must always equal `_DESTROY_`.
 
 ```javascript
-DbOperations.destroy(Cat, '_DESTROY_', (err) => {
+DbOperations.destroy(Account, '_DESTROY_', (err) => {
     if (!err)
         console.log('success!');
 });
@@ -47,9 +60,12 @@ DbOperations.destroy(Cat, '_DESTROY_', (err) => {
 success!
 ```
 
-### create
+### create(Model, callback)
 
-Creates a database.
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| callback(err) | Returns an error if there was a problem. |
 
 ```javascript
 DbOperations.create(Cat, (err) => {

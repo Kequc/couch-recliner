@@ -1,113 +1,83 @@
 Model
 ===
 
-The model is the foundation of this library, you build one to describe characteristics and functionality of a given database. And instances of it represent documents. The simplest implementation of a model requires that you specify a `dbName`.
-
-Without a `dbName` specified you'll just receive db name not defined errors all the time.
-
 ```javascript
 const { Model } = require('couch-recliner');
 
-class Cat extends Model {
-    meow() {
-        console.log(this.body.name + ' meows.');
-    }
+class Account extends Model {
 }
 
-Cat.dbName = 'cats';
+Account.dbName = 'accounts';
 ```
 
-### couch =
-
-A [Couch](./couch.md) instance is for connectivity to the database, useful rather than always relying on the default.
+### #couch =
 
 ```javascript
-const couch = {
+Account.couch = {
     production: 'https://somelocation.com',
     any: 'http://localhost:5984'
 };
-
-Cat.couch = couch;
 ```
 
-### id, rev, body
+Accepts a [Couch](./couch.md) instance or object.
 
-On model instances, generally referred to as a `doc` throughout these pages, have `doc.id`, `doc.rev`, and `doc.body`. Referring to their database document id, revision, and content.
-
-### MAX_TRIES =
-
-You may change the default 5 max retries offered on your model. This library is optimistic, retries are often necessary in order to correct out of date revision ids. Sometimes a retry is used when the database does not exist. Congested updates to the same document can also cause quite a few conflicts and more retries might be necessary.
-
-But in those cases a better solution would be to use some sort of queueing system.
+### #MAX_TRIES =
 
 ```javascript
-Cat.MAX_TRIES = 10;
+Account.MAX_TRIES = 10;
+```
+
+How many retries Couch Recliner is allowed to perform on a given request 5 by default.
+
+### .id
+
+```javascript
+console.log(myDoc.id);
+```
+```
+b77509102b4dc0a1389ae3b6d248e619
+```
+
+### .rev
+
+```javascript
+console.log(myDoc.rev);
+```
+```
+3-efa0539cc8d54024b95851082c074942
+```
+
+### .body
+
+```javascript
+console.log(myDoc.body);
+```
+```
+{
+    name: 'Peter',
+    age: 22
+}
 ```
 
 ### Helpers
 
-Your models come with a default set of helper methods, which are actually just aliases. That list of bundled aliases follow.
+Your models come with a set of helper methods, which are actually just aliases.
 
-#### #create
-
-`DocOperations.create(this, ...);`
-
-#### #read
-
-`DocOperations.read(this, ...);`
-
-#### #write
-
-`DocOperations.write(this, ...);`
-
-#### #update
-
-`DocOperations.update(this, ...);`
-
-#### #updateofWrite
-
-`DocOperations.updateOrWrite(this, ...);`
-
-#### #destroy
-
-`DocOperations.destroy(this, ...);`
-
-#### #head
-
-`DocOperations.head(this, ...);`
-
-#### #findOne
-
-`FindOperations.findOne(this, ...);`
-
-#### #find
-
-`FindOperations.find(this, ...);`
-
-#### #attachment
-
-`AttachmentOperations.read(this, ...);`
-
-#### .read
-
-`DocOperations.readFixed(this, ...);`
-
-#### .write
-
-`DocOperations.writeFixed(this, ...);`
-
-#### .update
-
-`DocOperations.updateFixed(this, ...);`
-
-#### .destroy
-
-`DocOperations.destroyFixed(this, ...);`
-
-#### .head
-
-`DocOperations.headFixed(this, ...);`
-
-#### .attachment
-
-`AttachmentOperations.readFixed(this, ...);`
+| method | alias |
+| - | - |
+| #attachment | [AttachmentOperations](./attachment-operations.md)`.read(this, ...)` |
+| #create  | [DocOperations](./doc-operations.md)`.create(this, ...)` |
+| #destroy | [DocOperations](./doc-operations.md)`.destroy(this, ...)` |
+| #find | [FindOperations](./find-operations.md)`.find(this, ...)` |
+| #findOne | [FindOperations](./find-operations.md)`.findOne(this, ...)` |
+| #head    | [DocOperations](./doc-operations.md)`.head(this, ...)` |
+| #read    | [DocOperations](./doc-operations.md)`.read(this, ...)` |
+| #update  | [DocOperations](./doc-operations.md)`.update(this, ...)` |
+| #updateOrWrite | [DocOperations](./doc-operations.md)`.updateOrWrite(this, ...)` |
+| #write   | [DocOperations](./doc-operations.md)`.write(this, ...)` |
+| .attachment | [AttachmentOperations](./attachment-operations.md)`.readFixed(this, ...)` |
+| .destroy | [DocOperations](./doc-operations.md)`.destroyFixed(this, ...)` |
+| .head | [DocOperations](./doc-operations.md)`.headFixed(this, ...)` |
+| .read | [DocOperations](./doc-operations.md)`.readFixed(this, ...)` |
+| .update | [DocOperations](./doc-operations.md)`.updateFixed(this, ...)` |
+| .write | [DocOperations](./doc-operations.md)`.writeFixed(this, ...)` |

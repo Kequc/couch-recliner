@@ -1,54 +1,47 @@
 Attachment
 ===
 
-Attachment objects are used internally to both validate and format your attachments. In all cases they will simply be created for you in the background. Attachments are used in both the [AttachmentOperations](./attachment-operations.md) and [DocOperations](./doc-operations.md) modules.
-
-At a minimum to be valid must be given a `content_type` and a `body` property. Content type is a mime type describing the content of your attachment. You may use many variations on naming the `content_type` key, for example you may choose `Content-Type`, `contenttype`, or other variations therein.
-
-The body parameter is always a string or a Buffer.
-
 ```javascript
-const fs = require('fs');
 const { Attachment } = require('couch-recliner');
 
-const myAttachment = new Attachment({
+const attachment = new Attachment({
     contentType: 'application/pdf',
-    body: fs.readFileSync('./Documents/test.pdf'))
+    body: myBuffer
 });
 ```
 
-### isValid
+The body parameter is always a string or a Buffer.
 
-Checks whether the library thinks it's a valid attachment. If this test fails the request containing the attachment will not be sent.
+### .isValid()
 
 ```javascript
-console.log(myAttachment.isValid());
+console.log(attachment.isValid());
 ```
 ```
 true
 ```
 
-### getLength
+Returns whether the library thinks it's a valid attachment. If this test fails any request containing the attachment will not be sent.
 
-Finds the size of your attachment in bytes.
+### .getLength()
 
 ```javascript
-console.log(myAttachment.getLength());
+console.log(attachment.getLength());
 ```
 ```
 107
 ```
 
-### forHttp
+Returns the size of your attachment in bytes.
 
-Formats your attachment for delivery over http using either `toStub` or `toFollows` depedning on the status of the attachment.
+### .forHttp()
 
-### toStub
+Returns your attachment formatted for delivery over http using either `toStub` or `toFollows` depedning on the status of the attachment.
 
-Used for insertion into document instances.
+### .toStub()
 
 ```javascript
-console.log(myAttachment.toStub());
+console.log(attachment.toStub());
 ```
 ```
 {
@@ -58,12 +51,12 @@ console.log(myAttachment.toStub());
 }
 ```
 
-### toFollows
+Returns your attachment formatted for insertion into a model instance.
 
-Used in the json body of multipart requests.
+### .toFollows()
 
 ```javascript
-console.log(myAttachment.toFollows());
+console.log(attachment.toFollows());
 ```
 ```
 {
@@ -73,12 +66,12 @@ console.log(myAttachment.toFollows());
 }
 ```
 
-### forMultipart
+Returns your attachment formatted for use in conjunction with multipart requests.
 
-The actual multipart.
+### .forMultipart()
 
 ```javascript
-console.log(myAttachment.forMultipart());
+console.log(attachment.forMultipart());
 ```
 ```
 {
@@ -86,3 +79,5 @@ console.log(myAttachment.forMultipart());
     body: <Buffer ...>
 }
 ```
+
+Returns your attachment formatted for multipart.

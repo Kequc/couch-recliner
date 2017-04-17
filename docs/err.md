@@ -1,15 +1,21 @@
 Err
 ===
 
-Used internally to sanitise messages returned from the database.
-
-### make
-
-Build an error if applicable from a response message. Takes a `scope` to be identifiable as to what type of operation was being performed at the time of the error. The second parameter is a transmission error if available.
-
 ```javascript
 const { Err } = require('couch-recliner');
+```
 
+Used internally to sanitise messages returned from the database.
+
+### #make(scope, error, response)
+
+| parameter | description |
+| - | - |
+| scope | String repesentation of the source of the error. |
+| error | Error object returned from request. |
+| response | Response object received from request. |
+
+```javascript
 const response = {
     statusCode: 500,
     body: {
@@ -32,12 +38,15 @@ No additional information available.
 }
 ```
 
-### checkOpsFixed
+### #checkOpsFixed(doc, params)
 
-A helper for generating errors based on user input. Validates the provided Model and detects missing parameters.
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| params | Key value map of expected params. |
 
 ```javascript
-const err = Err.checkOpsFixed(doc, { body: undefined });
+const err = Err.checkOpsFixed(myDoc, { body: undefined });
 console.log(err.scope);
 console.log(err.name);
 console.log(err.description);
@@ -48,12 +57,15 @@ missing_param
 Body parameter required.
 ```
 
-### checkOps
+### #checkOps(Model, params)
 
-A helper similar to fixed.
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| params | Key value map of expected params. |
 
 ```javascript
-const err = Err.checkOps(Cat, { id: undefined });
+const err = Err.checkOps(Model, { body: undefined });
 console.log(err.scope);
 console.log(err.name);
 console.log(err.description);
@@ -61,15 +73,17 @@ console.log(err.description);
 ```
 ops
 missing_param
-Id parameter required.
+Body parameter required.
 ```
 
-### checkParams
+### #checkParams(params)
 
-Helper performed at the end of both `checkOpsFixed` and `checkOps` evaluations.
+| parameter | description |
+| - | - |
+| params | Key value map of expected params. |
 
 ```javascript
-const err = Err.checkParams({ canteen: undefined });
+const err = Err.checkParams({ body: undefined });
 console.log(err.scope);
 console.log(err.name);
 console.log(err.description);
@@ -77,22 +91,57 @@ console.log(err.description);
 ```
 ops
 missing_param
-Canteen parameter required.
+Body parameter required.
 ```
 
-### Common errors
+### #missing(scope)
 
-Some generators exist for shorthand error generation of common errors.
+| parameter | description |
+| - | - |
+| scope | String repesentation of the source of the error. |
 
 ```javascript
 console.log(Err.missing('doc').message);
-console.log(Err.missingParam('id').message);
-console.log(Err.invalidParam('id').message);
-console.log(Err.conflict('doc').message);
 ```
 ```
 Not found.
+```
+
+### #invalidParam(name)
+
+| parameter | description |
+| - | - |
+| name | String repesentation of invalid parameter. |
+
+```javascript
+console.log(Err.invalidParam('id').message);
+```
+```
 Id parameter required.
+```
+
+### #missingParam(name)
+
+| parameter | description |
+| - | - |
+| name | String repesentation of invalid parameter. |
+
+```javascript
+console.log(Err.missingParam('id').message);
+```
+```
 Invalid id parameter supplied.
+```
+
+### #conflict(scope)
+
+| parameter | description |
+| - | - |
+| scope | String repesentation of the source of the error. |
+
+```javascript
+console.log(Err.conflict('doc').message);
+```
+```
 There was a conflict.
 ```

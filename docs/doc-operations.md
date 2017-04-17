@@ -1,164 +1,260 @@
 DocOperations
 ===
 
-This module is powerful and contains most of the operations you will need to perform on your [Model](./model.md). In most cases the first parameter is the model, or in `<ops>Fixed` versions it's the model instance. Followed by a [Body](./body.md).
-
-The body can contain attachments, by making use of the `_attachments` parameter. This is outlined in some more detail on the [README](../README.md) and the [Body](./body.md) documentaion.
-
-### create
-
-If you don't care what the id of your document is, this operation will create one for you.
-
 ```javascript
 const { DocOperations } = require('couch-recliner');
+```
 
-DocOperations.create(Cat, { name: 'Tammy' }, (err, doc) => {
-    if (!err) {
-        console.log(doc.id);
-        console.log(doc.rev);
-        console.log(doc.body);
-    }
+Uses `Body` instances or objects.
+
+### create(Model, Body, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| Body | [Body](./body.md) |
+| callback(err, doc) | Returns a model instance representing your document. |
+
+```javascript
+const body = {
+    name: 'Peter'
+};
+
+DocOperations.create(Account, body, (err, doc) => {
+    if (!err)
+        console.log(doc.body.name);
 });
 ```
 ```
-b77509102b4dc0a1389ae3b6d248ef18
-1-75efcce1f083316d622d389f3f9813f7
+Peter
+```
+
+### read(Model, id, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| callback(err, doc) | Returns a model instance representing your document. |
+
+```javascript
+DocOperations.read(Account, myId, (err, doc) => {
+    if (!err)
+        console.log(doc.body.name);
+});
+```
+```
+Peter
+```
+
+### readFixed(doc, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| callback(err) | Returns an error if there was a problem. |
+
+```javascript
+DocOperations.readFixed(myDoc, (err) => {
+    if (!err)
+        console.log(myDoc.body.name);
+});
+```
+```
+Peter
+```
+
+### write(Model, id, Body, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| Body | [Body](./body.md) |
+| callback(err, doc) | Returns a model instance representing your document. |
+
+```javascript
+const body = {
+    name: 'Steve'
+};
+
+DocOperations.write(Account, myId, body, (err, doc) => {
+    if (!err)
+        console.log(doc.body);
+});
+```
+```
 {
-    _attachments: {},
-    name: 'Tammy'
+    name: 'Steve'
 }
 ```
 
-### read
+### writeFixed(doc, Body, callback)
 
-Read the latest version of the document from the database.
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| Body | [Body](./body.md) |
+| callback(err) | Returns an error if there was a problem. |
 
 ```javascript
-const id = 'b77509102b4dc0a1389ae3b6d248ef18';
+const body = {
+    name: 'Steve'
+};
 
-DocOperations.read(Cat, id, (err, doc) => {
+DocOperations.writeFixed(myDoc, body, (err) => {
     if (!err)
-        console.log(doc.body.name);
+        console.log(myDoc.body);
 });
 ```
 ```
-Tammy
+{
+    name: 'Steve'
+}
 ```
+
+### update(Model, id, Body, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| Body | [Body](./body.md) |
+| callback(err, doc) | Returns a model instance representing your document. |
 
 ```javascript
-DocOperations.readFixed(doc, (err, doc) => {
-    if (!err)
-        console.log(doc.body.name);
-});
-```
-```
-Tammy
-```
+const body = {
+    age: 22
+};
 
-### write
-
-Write a document overwriting if it already exists.
-
-```javascript
-DocOperations.write(Cat, id, { name: 'Foots' }, (err, doc) => {
-    if (!err)
-        console.log(doc.body.name);
-});
-```
-```
-Foots
-```
-
-```javascript
-DocOperations.writeFixed(doc, { name: 'Foots' }, (err, doc) => {
-    if (!err)
-        console.log(doc.body.name);
-});
-```
-```
-Foots
-```
-
-### update
-
-Updates an existing document in the database, this is a deep extend operation fulfilled by the [json-artisan](https://github.com/Kequc/json-artisan) library.
-
-```javascript
-DocOperations.update(Cat, id, { eyes: 'green' }, (err, doc) => {
-    if (!err)
-        console.log(doc.body.name + ' has ' + doc.body.eyes + ' eyes.');
-});
-```
-```
-Foots has green eyes.
-```
-
-```javascript
-DocOperations.updateFixed(doc, { name: 'Foots' }, (err, doc) => {
-    if (!err)
-        console.log(doc.body.name + ' has ' + doc.body.eyes + ' eyes.');
-});
-```
-```
-Foots has green eyes.
-```
-
-### updateOrWrite
-
-Will perform an `update` but if the document does not exist, will create it.
-
-```javascript
-DocOperations.updateOrWrite(Cat, id, { name: 'Stevie' }, (err, doc) => {
-    if (!err)
-        console.log(doc.body.name);
-});
-```
-```
-Stevie
-```
-
-### head
-
-Head will determine whether the document exists and if so what it's current revision is in the database.
-
-```javascript
-DocOperations.head(Cat, id, (err, rev) => {
-    if (!err)
-        console.log(rev);
-});
-```
-```
-3-efa0539cc8d54024b95851082c074942
-```
-
-```javascript
-DocOperations.writeFixed(doc, (err, rev) => {
-    if (!err)
-        console.log(rev);
-});
-```
-```
-3-efa0539cc8d54024b95851082c074942
-```
-
-### destroy
-
-This removes the document from the database. The fixed version of this operation will also empty your model instance of any data to prevent misuse.
-
-```javascript
-DocOperations.destroy(Cat, id, (err) => {
-    if (!err)
-        console.log('success!');
-});
-```
-```
-success!
-```
-
-```javascript
-DocOperations.destroyFixed(doc, (err, rev) => {
+DocOperations.update(Account, myId, body, (err, doc) => {
     if (!err)
         console.log(doc.body);
+});
+```
+```
+{
+    name: 'Steve',
+    age: 22
+}
+```
+
+### updateFixed(doc, Body, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| Body | [Body](./body.md) |
+| callback(err) | Returns an error if there was a problem. |
+
+```javascript
+const body = {
+    age: 22
+};
+
+DocOperations.updateFixed(myDoc, body, (err) => {
+    if (!err)
+        console.log(myDoc.body);
+});
+```
+```
+{
+    name: 'Steve',
+    age: 22
+}
+```
+
+### updateOrWrite(Model, id, Body, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| Body | [Body](./body.md) |
+| callback(err, doc) | Returns a model instance representing your document. |
+
+```javascript
+const body = {
+    name: 'Ruddiger',
+    age: 22
+};
+
+DocOperations.updateOrWrite(Account, myId, body, (err, doc) => {
+    if (!err)
+        console.log(doc.body);
+});
+```
+```
+{
+    name: 'Ruddiger',
+    age: 22
+}
+```
+
+### head(Model, id, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| callback(err, rev) | Returns the most up to date revision id of your document. |
+
+```javascript
+DocOperations.head(Account, myId, (err, rev) => {
+    if (!err)
+        console.log(rev);
+});
+```
+```
+3-efa0539cc8d54024b95851082c074942
+```
+
+### headFixed(doc, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| callback(err, rev) | Returns the most up to date revision id of your document. |
+
+```javascript
+DocOperations.headFixed(myDoc, (err, rev) => {
+    if (!err)
+        console.log(rev);
+});
+```
+```
+3-efa0539cc8d54024b95851082c074942
+```
+
+### destroy(Model, id, callback)
+
+| parameter | description |
+| - | - |
+| Model | [Model](./model.md) |
+| id | Id of your document. |
+| callback(err) | Returns an error if there was a problem. |
+
+```javascript
+DocOperations.destroy(Account, myId, (err) => {
+    if (!err)
+        console.log('deleted!');
+});
+```
+```
+deleted!
+```
+
+### destroyFixed(doc, callback)
+
+| parameter | description |
+| - | - |
+| doc | [Model](./model.md) |
+| callback(err) | Returns an error if there was a problem. |
+
+```javascript
+DocOperations.destroyFixed(myDoc, (err) => {
+    if (!err)
+        console.log(myDoc.body);
 });
 ```
 ```
