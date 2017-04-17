@@ -57,12 +57,19 @@ BODY.EXPECT = (doc, expected) => {
     }
 };
 
-BODY.EXPECT_LIST = (list, expected) => {
+BODY.EXPECT_LIST = (list, finder, expected) => {
     expect(Array.isArray(list)).to.be.true;
     expect(list.length).to.equal(expected.length);
+    const isPartial = finder.getFields() !== undefined;
     for (let i = 0; i < list.length; i++) {
-        BODY.EXPECT(list[i], expected[i]);
-        BODY.EXPECT_LATEST_REV(list[i], undefined);
+        if (isPartial) {
+            BODY.EXPECT(list[i], BODY.PLUCK(expected[i], finder));
+            BODY.EXPECT_LATEST_REV(list[i], undefined);
+        }
+        else {
+            BODY.EXPECT(list[i], expected[i]);
+            BODY.EXPECT_LATEST_REV(list[i], list[i].rev);
+        }
     }
 };
 
