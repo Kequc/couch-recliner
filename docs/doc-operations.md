@@ -13,14 +13,17 @@ If you don't care what the id of your document is, this operation will create on
 const { DocOperations } = require('couch-recliner');
 
 DocOperations.create(Cat, { name: 'Tammy' }, (err, doc) => {
-    if (!err)
+    if (!err) {
+        console.log(doc.id);
+        console.log(doc.rev);
         console.log(doc.body);
+    }
 });
 ```
 ```
+b77509102b4dc0a1389ae3b6d248ef18
+1-75efcce1f083316d622d389f3f9813f7
 {
-    _id: 'b77509102b4dc0a1389ae3b6d248ef18',
-    _rev: '1-75efcce1f083316d622d389f3f9813f7',
     _attachments: {},
     name: 'Tammy'
 }
