@@ -69,7 +69,6 @@ AttachmentOperations.writeFixed(myDoc, 'avatar.png', attachment, (err) => {
 | Model | [Model](./model.md) |
 | id | Id of your document. |
 | attname | Name of your attachment. |
-| Attachment | [Attachment](./attachment.md) |
 | callback(err, buffer) | Returns a Buffer object representing your attachment. |
 
 ```javascript

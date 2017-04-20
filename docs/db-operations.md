@@ -68,7 +68,7 @@ success!
 | callback(err) | Returns an error if there was a problem. |
 
 ```javascript
-DbOperations.create(Cat, (err) => {
+DbOperations.create(Account, (err) => {
     if (!err)
         console.log('success!');
 });

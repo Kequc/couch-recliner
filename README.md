@@ -140,7 +140,7 @@ For more uniform reuse of shared database instance information, create a [Couch]
 
 ### Shortcuts
 
-Your `Model` comes with a set of static and instance methods included by default.
+Your **[Model](./docs/model.md)** comes with a set of static and instance methods included by default.
 
 | method | additional params |
 | - | - |
@@ -177,6 +177,7 @@ const body = {
         }
     }
 };
+
 Account.update(myId, body, (err, doc) => {
     if (err) return;
     console.log(doc.body._attachments);
