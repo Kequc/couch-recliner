@@ -2,7 +2,7 @@
     "test": "data2",
     "hello": 222,
     "deep": {
-        "more2": "hii2",
+        "more": "hii2",
         "array2": [222, 332, 1452]
     },
     "array": ["some2", "text2", "here2"],

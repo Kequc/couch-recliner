@@ -22,7 +22,7 @@ describe('Library complex updates', function() {
                         more: value => value + ' hi there'
                     }
                 }));
-                expected = Object.assign({}, doc.body, DATA.update, {
+                expected = BODY.EXPECTED(doc.body, DATA.update, {
                     hello: doc.body.hello + 1,
                     deep: Object.assign({}, doc.body.deep, {
                         more: doc.body.deep.more + ' hi there'

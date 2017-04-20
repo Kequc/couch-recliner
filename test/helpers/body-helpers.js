@@ -1,9 +1,12 @@
 'use strict';
 const { expect } = require('chai');
+const artisan = require('json-artisan');
 
 const Finder = require('../../lib/models/finder');
 
 const BODY = {};
+
+BODY.EXPECTED = (...body) => artisan({}, ...body);
 
 BODY.PLUCK = (body, finder) => {
     if (!(finder instanceof Finder)) finder = new Finder(finder);

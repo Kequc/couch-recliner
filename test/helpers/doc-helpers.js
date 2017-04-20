@@ -57,7 +57,7 @@ DOC.CHANGE_IN_BACKGROUND = (doc, callback) => {
         BODY.EXPECT_ID(doc2, doc.id);
         BODY.EXPECT_NOT_REV(doc2, doc.rev);
         BODY.EXPECT_LATEST_REV(doc2, doc2.rev);
-        BODY.EXPECT(doc2, Object.assign({}, doc.body, DATA.update));
+        BODY.EXPECT(doc2, BODY.EXPECTED(doc.body, DATA.update));
         callback(doc2);
     });
 };

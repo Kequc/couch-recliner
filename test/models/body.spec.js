@@ -3,6 +3,7 @@ const { expect } = require('chai');
 
 const Attachment = require('../../lib/models/attachment');
 const Body = require('../../lib/models/body');
+const BODY = require('../helpers/body-helpers');
 const DATA = require('../helpers/data-helpers');
 
 describe('Models Body', function() {
@@ -67,12 +68,12 @@ describe('Models Body', function() {
     });
     describe('extend', function() {
         it('extends the existing body', function() {
-            const body = Body.create(DATA.doc);
             for (const data of [DATA.update, DATA.update2]) {
-                const result = body.extend(data);
+                const body = Body.create(data);
+                const result = body.extend(DATA.doc);
                 expect(result).to.be.instanceof(Body);
                 expect(result).to.not.equal(body);
-                expect(result.data).to.eql(Object.assign({}, DATA.doc, data));
+                expect(result.data).to.eql(BODY.EXPECTED(DATA.doc, data));
                 expect(result.attachments).to.eql({});
             }
         });
@@ -89,7 +90,7 @@ describe('Models Body', function() {
             expect(body.attachments).to.have.all.keys(DATA.attname, DATA.attname2);
             expect(result).to.be.instanceof(Body);
             expect(result).to.not.equal(body);
-            expect(result.data).to.eql(Object.assign({}, DATA.doc, DATA.update));
+            expect(result.data).to.eql(BODY.EXPECTED(DATA.doc, DATA.update));
             expect(result.attachments).to.have.all.keys(DATA.attname, DATA.attname2);
             expect(result.attachments[DATA.attname]).to.be.instanceof(Attachment);
             expect(result.attachments[DATA.attname].body).to.equal(DATA.file.body);
@@ -110,7 +111,7 @@ describe('Models Body', function() {
             expect(body.attachments).to.have.all.keys(DATA.attname2);
             expect(result).to.be.instanceof(Body);
             expect(result).to.not.equal(body);
-            expect(result.data).to.eql(Object.assign({}, DATA.doc, DATA.update));
+            expect(result.data).to.eql(BODY.EXPECTED(DATA.doc, DATA.update));
             expect(result.attachments).to.have.all.keys(DATA.attname, DATA.attname2);
             expect(result.attachments[DATA.attname]).to.be.instanceof(Attachment);
             expect(result.attachments[DATA.attname].body).to.equal(DATA.file.body);
@@ -132,7 +133,7 @@ describe('Models Body', function() {
             expect(body.attachments).to.have.all.keys(DATA.attname2);
             expect(result).to.be.instanceof(Body);
             expect(result).to.not.equal(body);
-            expect(result.data).to.eql(Object.assign({}, DATA.doc, DATA.update));
+            expect(result.data).to.eql(BODY.EXPECTED(DATA.doc, DATA.update));
             expect(result.attachments).to.have.all.keys(DATA.attname, DATA.attname2);
             expect(result.attachments[DATA.attname]).to.be.instanceof(Attachment);
             expect(result.attachments[DATA.attname].body).to.equal(DATA.file.body);
@@ -152,7 +153,7 @@ describe('Models Body', function() {
             expect(body.attachments).to.be.undefined;
             expect(result).to.be.instanceof(Body);
             expect(result).to.not.equal(body);
-            expect(result.data).to.eql(Object.assign({}, DATA.doc, DATA.update));
+            expect(result.data).to.eql(BODY.EXPECTED(DATA.doc, DATA.update));
             expect(result.attachments).to.be.undefined;
         });
     });

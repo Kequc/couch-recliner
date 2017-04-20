@@ -14,8 +14,8 @@ const DATA = {
     attname: 'fake-attachment.txt',
     attname2: 'fake-attachment-2.txt',
     attname3: 'fake-attachment-3.txt',
-    update: { race: 'cat' },
-    update2: { dog: 'ball' },
+    update: { race: 'cat', deep: { more: 'albatross' } },
+    update2: { dog: 'ball', deep: { more: 'holiday' } },
     file: {
         content_type: 'text/html',
         body: fs.readFileSync(path.join(__dirname, './data/attachment.txt'))

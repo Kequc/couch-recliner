@@ -180,7 +180,7 @@ describe('Library multipart', function() {
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -202,7 +202,7 @@ describe('Library multipart', function() {
                         [DATA.attname]: DATA.file2
                     }
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
@@ -222,7 +222,7 @@ describe('Library multipart', function() {
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
@@ -241,7 +241,7 @@ describe('Library multipart', function() {
                 const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: undefined
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: undefined
                 });
                 DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
@@ -260,7 +260,7 @@ describe('Library multipart', function() {
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -282,7 +282,7 @@ describe('Library multipart', function() {
                         [DATA.attname]: DATA.file2
                     }
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
@@ -302,7 +302,7 @@ describe('Library multipart', function() {
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
@@ -321,7 +321,7 @@ describe('Library multipart', function() {
                 const body = Body.create(Object.assign({}, DATA.update, {
                     _attachments: undefined
                 }));
-                const expected = Object.assign({}, doc.body, DATA.update, {
+                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
                     _attachments: undefined
                 });
                 DocMeta.updateFixed(doc, body, (err) => {
