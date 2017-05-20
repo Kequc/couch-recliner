@@ -22,11 +22,12 @@ DbOperations.head(Account, (err) => {
 exists!
 ```
 
-### reset(Model, callback)
+### reset(Model, verify, callback)
 
 | parameter | description |
 | - | - |
 | Model | [Model](./model.md) |
+| verify | A string `"_RESET_"`. |
 | callback(err) | Returns an error if there was a problem. |
 
 Accepts a validation parameter which must always equal `_RESET_`, destroys then creates the database.
@@ -41,11 +42,12 @@ DbOperations.reset(Account, '_RESET_', (err) => {
 fresh start!
 ```
 
-### destroy(Model, callback)
+### destroy(Model, verify, callback)
 
 | parameter | description |
 | - | - |
 | Model | [Model](./model.md) |
+| verify | A string `"_DESTROY_"`. |
 | callback(err) | Returns an error if there was a problem. |
 
 Accepts a validation parameter which must always equal `_DESTROY_`.

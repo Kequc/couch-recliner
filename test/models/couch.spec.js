@@ -3,19 +3,6 @@ const { expect } = require('chai');
 
 const Couch = require('../../lib/models/couch');
 
-const BODY = require('../helpers/body-helpers');
-const ERR = require('../helpers/err-helpers');
-
-function _POPULATE_IDS(couch, done) {
-    expect(couch._ids.length).to.equal(0);
-    couch.getNextId((err, id) => {
-        ERR.EXPECT_NONE(err);
-        BODY.EXPECT_GENERATED_ID(id);
-        expect(couch._ids.length).to.equal(couch.CACHE_IDS_COUNT - 1);
-        done();
-    });
-}
-
 describe('Models Couch', function() {
     let couch;
     beforeEach(function() {
@@ -75,24 +62,6 @@ describe('Models Couch', function() {
         });
         it('throws an error on invalid data', function() {
             expect(() => couch.urlTo('hi', undefined)).to.throw(Error);
-        });
-    });
-    describe('getNextId', function() {
-        it('populates cache', function(done) {
-            _POPULATE_IDS(couch, done);
-        });
-        it('returns ids from cache', function(done) {
-            _POPULATE_IDS(couch, () => {
-                while (couch._ids.length > 0) {
-                    const count = couch._ids.length;
-                    couch.getNextId((err, id) => {
-                        ERR.EXPECT_NONE(err);
-                        BODY.EXPECT_GENERATED_ID(id);
-                        expect(couch._ids.length).to.equal(count - 1);
-                    });
-                }
-                _POPULATE_IDS(couch, done);
-            });
         });
     });
 });

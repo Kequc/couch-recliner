@@ -136,7 +136,7 @@ For more uniform reuse of shared database instance information, create a [Couch]
 
 | method | first param | additional params |
 | - | - | - |
-| uuids  | Couch | count |
+| nextId  | Couch | |
 
 ### Shortcuts
 

@@ -9,23 +9,18 @@ const ERR = require('./helpers/err-helpers');
 
 describe('Prime CouchOperations', function() {
     beforeEach(DB.DESTROY);
-    describe('uuids', function() {
+    describe('nextId', function() {
         it('returns error on invalid params', function(done) {
-            const valid = [new Couch(), 50];
+            const valid = [new Couch()];
             const invalid = [
-                [{}, 'hi'],
-                [0, 'hi']
+                [{}, 'hi']
             ];
-            ERR.EXPECT_PARAM_ERRORS(CouchOperations.uuids, valid, invalid, done);
+            ERR.EXPECT_PARAM_ERRORS(CouchOperations.nextId, valid, invalid, done);
         });
         it('WORKS', function(done) {
-            const count = 50;
-            CouchOperations.uuids(new Couch(), count, (err, ids) => {
+            CouchOperations.nextId(new Couch(), (err, id) => {
                 ERR.EXPECT_NONE(err);
-                expect(ids.length).to.equal(count);
-                for (const id of ids) {
-                    BODY.EXPECT_GENERATED_ID(id);
-                }
+                BODY.EXPECT_GENERATED_ID(id);
                 done();
             });
         });
