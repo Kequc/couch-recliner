@@ -10,11 +10,11 @@ describe('Prime Model', function() {
     });
     it('can set couch', function() {
         class MyModel extends Model {}
-        const any = 'http://test.com';
+        const url = 'http://test.com';
         expect(MyModel).to.have.property('couch');
-        expect(MyModel.couch.baseUrl).to.not.equal(any);
-        MyModel.couch = { any };
-        expect(MyModel.couch.baseUrl).to.equal(any);
+        expect(MyModel.couch.baseUrl).to.not.equal(url);
+        MyModel.couch = url;
+        expect(MyModel.couch.baseUrl).to.equal(url);
     });
     it('has MAX_TRIES', function() {
         expect(Model).to.have.property('MAX_TRIES').is.a('number');

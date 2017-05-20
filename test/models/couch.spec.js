@@ -24,30 +24,22 @@ describe('Models Couch', function() {
     });
     describe('envs =', function() {
         it('throws an error on invalid data', function() {
-            expect(() => couch.envs = undefined).to.throw(Error);
             expect(() => couch.envs = 1).to.throw(Error);
-            expect(() => couch.envs = { development: undefined }).to.throw(Error);
-            expect(() => couch.envs = { development: 1 }).to.throw(Error);
+            expect(() => couch.envs = { url: 'ftp://google.com' }).to.throw(Error);
+            expect(() => couch.envs = { url: 'google.com' }).to.throw(Error);
+            expect(() => couch.envs = { url: 1 }).to.throw(Error);
         });
         it('has a default baseUrl', function() {
             expect(couch.baseUrl).to.not.be.undefined;
         });
-        it('can supply a default baseUrl', function() {
+        it('can supply a baseUrl from string', function() {
             const expected = couch.baseUrl + '-blah';
-            couch.envs = {
-                any: expected,
-                fakeenv: 'http://notthisone.com'
-            };
+            couch.envs = expected;
             expect(couch.baseUrl).to.equal(expected);
         });
-        it('sets the baseUrl', function() {
+        it('can supply a baseUrl from object', function() {
             const expected = couch.baseUrl + '-blah';
-            const env = process.env.NODE_ENV || 'development';
-            couch.envs = {
-                fakeenv: 'http://notthisone.com',
-                [env]: expected,
-                any: 'http://notthisoneeither.com'
-            };
+            couch.envs = { url: expected };
             expect(couch.baseUrl).to.equal(expected);
         });
     });
@@ -57,7 +49,7 @@ describe('Models Couch', function() {
         });
         it('recovers from trailing slash on baseUrl', function() {
             const baseUrl = 'http://testing.com/hello/';
-            couch.envs = { any: baseUrl };
+            couch.envs = baseUrl;
             expect(couch.urlTo('hi', 'there', 55, '100')).to.equal(baseUrl + 'hi/there/55/100');
         });
         it('throws an error on invalid data', function() {

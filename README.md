@@ -18,7 +18,7 @@ npm i couch-recliner --save
 Build a model that describes your database. You must set a `dbName` on it.
 
 ```javascript
-const { Model, DocOperations } = require('couch-recliner');
+const { Model } = require('couch-recliner');
 
 class Account extends Model {
 }
@@ -29,7 +29,7 @@ Account.dbName = 'accounts';
 Add a document.
 
 ```javascript
-DocOperations.create(Account, { name: 'Smith' }, (err, doc) => {
+Account.create({ name: 'Smith' }, (err, doc) => {
     if (err) return;
     console.log(doc.id);
     console.log(doc.body.name);
@@ -40,7 +40,7 @@ b77509102b4dc0a1389ae3b6d248ef18
 Smith
 ```
 
-A new account has been created in the database, and an instance of `Account` returned. There are quite a few similar modules like this one.
+A new account has been created in the database, and an instance of `Account` returned. In this case we are using a provided `Model` shortcut which internally runs `DocOperations.create`. There are quite a few similar modules.
 
 **[AttachmentOperations](./docs/attachment-operations.md)**
 
@@ -118,12 +118,11 @@ It is likely you want to maintain a few databases, for testing, or development a
 
 But what about database location?
 
-Set the `couch` attribute on your model. It should be a key value pair indicating where you want Couch Recliner to communicate with your database.
+Set the `couch` attribute on your model. It should be a url indicating where you want Couch Recliner to communicate with your database.
 
 ```javascript
 const couch = {
-    production: 'https://couch.my-database-location.com/api/',
-    any: 'http://localhost:1000'
+    url: 'http://localhost:1000'
 };
 
 Account.couch = couch;

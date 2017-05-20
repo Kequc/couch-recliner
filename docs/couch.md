@@ -5,12 +5,11 @@ Couch
 const { Couch } = require('couch-recliner');
 
 const couch = new Couch({
-    production: 'https://some-location.com',
-    any: 'http://localhost:1000'
+    url: 'http://localhost:1000'
 });
 ```
 
-Environments mapped to their urls, `any` will override the default `http://localhost:5984`.
+Any valid url will override the default `http://localhost:5984`. Accepts an object with `url` attribute or a string.
 
 ### .baseUrl
 
@@ -33,8 +32,7 @@ Your instance caches `10` ids at a time by default.
 
 ```javascript
 couch.envs = {
-    production: 'https://a-different-url.com/couch/',
-    development: 'http://localhost:1001'
+    url: 'http://localhost:1001'
 };
 
 console.log(couch.baseUrl);
