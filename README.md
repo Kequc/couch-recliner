@@ -40,7 +40,9 @@ b77509102b4dc0a1389ae3b6d248ef18
 Smith
 ```
 
-A new account has been created in the database, and an instance of `Account` returned. In this case we are using a provided `Model` shortcut which internally runs `DocOperations.create`. There are quite a few similar modules.
+A new account has been created in the database, and an instance of `Account` returned. In this case we are using a provided **[Model](./docs/model.md)** shortcut which runs `DocOperations.create`.
+
+### Modules
 
 **[AttachmentOperations](./docs/attachment-operations.md)**
 
@@ -121,9 +123,7 @@ But what about database location?
 Set the `couch` attribute on your model. It should be a url indicating where you want Couch Recliner to communicate with your database.
 
 ```javascript
-const couch = {
-    url: 'http://localhost:1000'
-};
+const couch = 'http://localhost:1000';
 
 Account.couch = couch;
 Message.couch = couch;
@@ -139,7 +139,7 @@ For more uniform reuse of shared database instance information, create a [Couch]
 
 ### Shortcuts
 
-Your **[Model](./docs/model.md)** comes with a set of static and instance methods included by default.
+Your **[Model](./docs/model.md)** comes with a set of static and instance shortcuts included by default.
 
 | method | additional params |
 | - | - |
@@ -160,7 +160,7 @@ Your **[Model](./docs/model.md)** comes with a set of static and instance method
 | .update | Body |
 | .write | Body |
 
-You can use these or always choose the longer version.
+You can use these, override them, or always choose the longer version.
 
 ### Attachments
 

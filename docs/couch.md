@@ -4,9 +4,7 @@ Couch
 ```javascript
 const { Couch } = require('couch-recliner');
 
-const couch = new Couch({
-    url: 'http://localhost:1000'
-});
+const couch = new Couch('http://localhost:1000');
 ```
 
 Any valid url will override the default `http://localhost:5984`. Accepts an object with `url` attribute or a string.
