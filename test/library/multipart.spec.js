@@ -14,7 +14,7 @@ describe('Library multipart', function() {
     describe('document does not exist', function() {
         describe('write', function() {
             it('should write a document with attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc, {
+                const body = new Body(Object.assign({}, DATA.doc, {
                     _attachments: {
                         [DATA.attname]: DATA.file
                     }
@@ -29,7 +29,7 @@ describe('Library multipart', function() {
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc, {
+                const body = new Body(Object.assign({}, DATA.doc, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -47,7 +47,7 @@ describe('Library multipart', function() {
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc, {
+                const body = new Body(Object.assign({}, DATA.doc, {
                     _attachments: {
                         [DATA.attname]: DATA.fileText
                     }
@@ -70,7 +70,7 @@ describe('Library multipart', function() {
         });
         describe('write', function() {
             it('should write a document with attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc2, {
+                const body = new Body(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
@@ -87,7 +87,7 @@ describe('Library multipart', function() {
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc2, {
+                const body = new Body(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -105,7 +105,7 @@ describe('Library multipart', function() {
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc2, {
+                const body = new Body(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.fileText
                     }
@@ -124,7 +124,7 @@ describe('Library multipart', function() {
         });
         describe('writeFixed', function() {
             it('should write a document with attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc2, {
+                const body = new Body(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
@@ -140,7 +140,7 @@ describe('Library multipart', function() {
                 });
             });
             it('should write a document with multiple attachments', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc2, {
+                const body = new Body(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -157,7 +157,7 @@ describe('Library multipart', function() {
                 });
             });
             it('should write a document with text encoded attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.doc2, {
+                const body = new Body(Object.assign({}, DATA.doc2, {
                     _attachments: {
                         [DATA.attname2]: DATA.fileText
                     }
@@ -175,12 +175,12 @@ describe('Library multipart', function() {
         });
         describe('update', function() {
             it('updates a document with new attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -197,12 +197,12 @@ describe('Library multipart', function() {
                 });
             });
             it('updates a document to overwrite an attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
@@ -216,13 +216,13 @@ describe('Library multipart', function() {
                 });
             });
             it('updates a document with new attachment deletes old attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: undefined,
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = Object.assign(BODY.DEEP_EXTEND(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
@@ -238,10 +238,10 @@ describe('Library multipart', function() {
                 });
             });
             it('updates a document removing all attachments', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: undefined
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     _attachments: undefined
                 });
                 DocMeta.update(DATA.Model, doc.id, body, (err, doc2) => {
@@ -255,12 +255,12 @@ describe('Library multipart', function() {
         });
         describe('updateFixed', function() {
             it('updates a document with new attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file,
                         [DATA.attname2]: DATA.file2
@@ -277,12 +277,12 @@ describe('Library multipart', function() {
                 });
             });
             it('updates a document to overwrite an attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     _attachments: {
                         [DATA.attname]: DATA.file2
                     }
@@ -296,13 +296,13 @@ describe('Library multipart', function() {
                 });
             });
             it('updates a document with new attachment deletes old attachment', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: {
                         [DATA.attname]: undefined,
                         [DATA.attname2]: DATA.file2
                     }
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = Object.assign(BODY.DEEP_EXTEND(doc.body, DATA.update), {
                     _attachments: {
                         [DATA.attname2]: DATA.file2
                     }
@@ -318,10 +318,10 @@ describe('Library multipart', function() {
                 });
             });
             it('updates a document removing all attachments', function(done) {
-                const body = Body.create(Object.assign({}, DATA.update, {
+                const body = new Body(Object.assign({}, DATA.update, {
                     _attachments: undefined
                 }));
-                const expected = Object.assign(BODY.EXPECTED(doc.body, DATA.update), {
+                const expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     _attachments: undefined
                 });
                 DocMeta.updateFixed(doc, body, (err) => {

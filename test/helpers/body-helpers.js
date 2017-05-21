@@ -6,7 +6,7 @@ const Finder = require('../../lib/models/finder');
 
 const BODY = {};
 
-BODY.EXPECTED = (...body) => artisan({}, ...body);
+BODY.DEEP_EXTEND = (...body) => artisan({}, ...body);
 
 BODY.PLUCK = (body, finder) => {
     if (!(finder instanceof Finder)) finder = new Finder(finder);

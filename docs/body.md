@@ -3,16 +3,8 @@ Body
 
 ```javascript
 const { Body } = require('couch-recliner');
-```
 
-### #create(data)
-
-| parameter | description |
-| - | - |
-| data | Object representing the content a document. |
-
-```javascript
-const body = Body.create({
+const body = new Body({
     name: 'Cat name',
     eyes: 'purple',
     _attachments: {
@@ -24,26 +16,24 @@ const body = Body.create({
 });
 
 console.log(body.data);
-console.log(body.attachments);
 ```
 ```
 {
     name: 'Cat name',
-    eyes: 'purple'
-}
-{
-    'photo.png': Attachment
+    eyes: 'purple',
+    _attachments: {
+        'photo.png': {
+            contentType: 'image/png',
+            body: myBuffer
+        }
+    }
 }
 ```
 
-### .extend(data)
-
-| parameter | description |
-| - | - |
-| data | Object representing the content you want to overwrite. |
+### .extends =
 
 ```javascript
-const extended = body.extend({
+body.extends = {
     name: 'Old cat name',
     isEvil: true,
     _attachments: {
@@ -53,37 +43,47 @@ const extended = body.extend({
             length: 101
         }
     }
-});
-
-console.log(extended.data);
-console.log(extended.attachments);
-```
-```
-{
-    name: 'Cat name',
-    eyes: 'purple',
-    isEvil: true
-}
-{
-    'photo.png': Attachment,
-    'cat-facts.txt': Attachment
-}
+};
 ```
 
-Returns a new instance of `Body`. This is a deep operation performed internally by the [json-artisan](https://github.com/Kequc/json-artisan) library.
+When the body is rendered it will extend this data. This is a deep operation performed internally by the [json-artisan](https://github.com/Kequc/json-artisan) library.
 
 ### .isValid()
 
 ```javascript
 console.log(body.isValid());
-console.log(extended.isValid());
 ```
 ```
-true
 true
 ```
 
 Returns whether the library thinks it's a valid body. If this test fails any request containing the body will not be sent.
+
+### .parsed()
+
+```javascript
+console.log(body.parsed());
+```
+```
+{
+    name: 'Cat name',
+    eyes: 'purple',
+    isEvil: true,
+    _attachments: {
+        'cat-facts.txt': {
+            stub: true,
+            contentType: 'text/html',
+            length: 101
+        },
+        'photo.png': {
+            contentType: 'image/png',
+            body: myBuffer
+        }
+    }
+}
+```
+
+Combines and parses your body, outputting a basic structure safe for further processing.
 
 ### .forDoc()
 
@@ -94,10 +94,16 @@ console.log(body.forDoc());
 {
     name: 'Cat name',
     eyes: 'purple',
+    isEvil: true,
     _attachments: {
+        'cat-facts.txt': {
+            stub: true,
+            content_type: 'text/html',
+            length: 101
+        },
         'photo.png': {
             stub: true,
-            contentType: 'image/png',
+            content_type: 'image/png',
             length: 422
         }
     }
@@ -122,7 +128,7 @@ console.log(payload);
     multipart: [
         {
             'content-type': 'application/json',
-            body: '{"_rev":"3-efa0539cc8d54024b95851082c074942","name":"Cat name","eyes":"purple","_attachments":{"photo.png":{"follows":true,"contentType":"image/png","length":422}}}'
+            body: '{"_rev":"3-efa0539cc8d54024b95851082c074942","name":"Cat name","eyes":"purple","isEvil":true,"_attachments":{"cat-facts.txt":{"stub":true,"content_type":"text/html","length":101},"photo.png":{"follows":true,"content_type":"image/png","length":422}}}'
         },
         {
             'content-type': 'image/png',

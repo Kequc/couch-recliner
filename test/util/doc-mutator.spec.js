@@ -27,7 +27,7 @@ describe('Util DocMutator', function() {
             BODY.EXPECT_LATEST_REV(result, undefined);
         });
         it('accepts body instance as property', function() {
-            const body = Body.create(DATA.doc);
+            const body = new Body(DATA.doc);
             const result = DocMutator.build(DATA.Model, body, DATA.id, DATA.rev, undefined);
             expect(result).to.be.instanceOf(DATA.Model);
             BODY.EXPECT_ID(result, DATA.id);
@@ -49,7 +49,7 @@ describe('Util DocMutator', function() {
         it('accepts body instance as property', function() {
             const doc = DATA.GENERATE_FAKE_DOC();
             const oldId = doc.id;
-            const body = Body.create(DATA.doc2);
+            const body = new Body(DATA.doc2);
             DocMutator.update(doc, body, DATA.rev2, DATA.rev3);
             BODY.EXPECT_ID(doc, oldId);
             BODY.EXPECT(doc, DATA.doc2);
@@ -84,7 +84,7 @@ describe('Util DocMutator', function() {
             BODY.EXPECT_LATEST_REV(doc, DATA.rev2);
         });
         it('updates existing attachment', function() {
-            const body = Body.create(Object.assign({}, DATA.doc, {
+            const body = new Body(Object.assign({}, DATA.doc, {
                 _attachments: {
                     [DATA.attname]: DATA.file,
                     [DATA.attname2]: DATA.file2
@@ -97,7 +97,7 @@ describe('Util DocMutator', function() {
             BODY.EXPECT(doc, Object.assign({}, DATA.doc, {
                 _attachments: {
                     [DATA.attname]: attachment.toStub(),
-                    [DATA.attname2]: body.attachments[DATA.attname2].toStub()
+                    [DATA.attname2]: new Attachment(body.data._attachments[DATA.attname2]).toStub()
                 }
             }));
             BODY.EXPECT_REV(doc, DATA.rev);
@@ -106,7 +106,7 @@ describe('Util DocMutator', function() {
     });
     describe('eraseAttachment', function() {
         it('removes existing attachment', function() {
-            const body = Body.create(Object.assign({}, DATA.doc, {
+            const body = new Body(Object.assign({}, DATA.doc, {
                 _attachments: {
                     [DATA.attname]: DATA.file,
                     [DATA.attname2]: DATA.file2
@@ -117,7 +117,7 @@ describe('Util DocMutator', function() {
             BODY.EXPECT_ID(doc, DATA.id);
             BODY.EXPECT(doc, Object.assign({}, DATA.doc, {
                 _attachments: {
-                    [DATA.attname2]: body.attachments[DATA.attname2].toStub()
+                    [DATA.attname2]: new Attachment(body.data._attachments[DATA.attname2]).toStub()
                 }
             }));
             BODY.EXPECT_REV(doc, DATA.rev);

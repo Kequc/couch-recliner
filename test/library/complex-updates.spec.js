@@ -16,13 +16,13 @@ describe('Library complex updates', function() {
         DB.RESET(() => {
             DOC.CREATE((model) => {
                 doc = model;
-                body = Body.create(Object.assign({}, DATA.update, {
+                body = new Body(Object.assign({}, DATA.update, {
                     hello: value => value + 1,
                     deep: {
                         more: value => value + ' hi there'
                     }
                 }));
-                expected = BODY.EXPECTED(doc.body, DATA.update, {
+                expected = BODY.DEEP_EXTEND(doc.body, DATA.update, {
                     hello: doc.body.hello + 1,
                     deep: Object.assign({}, doc.body.deep, {
                         more: doc.body.deep.more + ' hi there'

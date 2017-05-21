@@ -170,7 +170,7 @@ describe('Prime DocOperations', function() {
         it('WORKS', function(done) {
             const oldId = doc.id;
             const oldRev = doc.rev;
-            const expected = BODY.EXPECTED(doc.body, DATA.update);
+            const expected = BODY.DEEP_EXTEND(doc.body, DATA.update);
             DocOperations.updateFixed(doc, DATA.update, (err) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_ID(doc, oldId);
@@ -192,7 +192,7 @@ describe('Prime DocOperations', function() {
             ERR.EXPECT_PARAM_ERRORS(DocOperations.update, valid, invalid, done);
         });
         it('WORKS', function(done) {
-            const expected = BODY.EXPECTED(doc.body, DATA.update);
+            const expected = BODY.DEEP_EXTEND(doc.body, DATA.update);
             DocOperations.update(DATA.Model, doc.id, DATA.update, (err, doc2) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_ID(doc2, doc.id);
@@ -214,7 +214,7 @@ describe('Prime DocOperations', function() {
             ERR.EXPECT_PARAM_ERRORS(DocOperations.updateOrWrite, valid, invalid, done);
         });
         it('WORKS', function(done) {
-            const expected = BODY.EXPECTED(doc.body, DATA.update);
+            const expected = BODY.DEEP_EXTEND(doc.body, DATA.update);
             DocOperations.updateOrWrite(DATA.Model, doc.id, DATA.update, (err, doc2) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_ID(doc2, doc.id);

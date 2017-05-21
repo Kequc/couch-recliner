@@ -43,7 +43,7 @@ describe('Meta DocMeta', function() {
         it('writeFixed', function(done) {
             const doc = DATA.GENERATE_FAKE_DOC();
             const oldRev = doc.rev;
-            DocMeta.writeFixed(doc, Body.create(DATA.doc2), (err) => {
+            DocMeta.writeFixed(doc, new Body(DATA.doc2), (err) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_NOT_REV(doc, oldRev);
                 BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -52,7 +52,7 @@ describe('Meta DocMeta', function() {
             });
         });
         it('write', function(done) {
-            DocMeta.write(DATA.Model, DATA.id, Body.create(DATA.doc2), (err, doc) => {
+            DocMeta.write(DATA.Model, DATA.id, new Body(DATA.doc2), (err, doc) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_LATEST_REV(doc, doc.rev);
                 BODY.EXPECT(doc, DATA.doc2);
@@ -62,7 +62,7 @@ describe('Meta DocMeta', function() {
         it('updateFixed', function(done) {
             const doc = DATA.GENERATE_FAKE_DOC();
             const oldRev = doc.rev;
-            DocMeta.updateFixed(doc, Body.create(DATA.update2), (err) => {
+            DocMeta.updateFixed(doc, new Body(DATA.update2), (err) => {
                 ERR.EXPECT(err, 'not_found');
                 BODY.EXPECT_REV(doc, oldRev);
                 BODY.EXPECT_LATEST_REV(doc, undefined);
@@ -70,13 +70,13 @@ describe('Meta DocMeta', function() {
             });
         });
         it('update', function(done) {
-            DocMeta.update(DATA.Model, DATA.id, Body.create(DATA.update2), (err) => {
+            DocMeta.update(DATA.Model, DATA.id, new Body(DATA.update2), (err) => {
                 ERR.EXPECT(err, 'not_found');
                 DOC.EXPECT_DOES_NOT_EXIST(DATA.id, done);
             });
         });
         it('updateOrWrite', function(done) {
-            DocMeta.updateOrWrite(DATA.Model, DATA.id, Body.create(DATA.doc2), (err, doc) => {
+            DocMeta.updateOrWrite(DATA.Model, DATA.id, new Body(DATA.doc2), (err, doc) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_LATEST_REV(doc, doc.rev);
                 BODY.EXPECT(doc, DATA.doc2);
@@ -84,7 +84,7 @@ describe('Meta DocMeta', function() {
             });
         });
         it('create', function(done) {
-            DocMeta.create(DATA.Model, Body.create(DATA.doc2), (err, doc) => {
+            DocMeta.create(DATA.Model, new Body(DATA.doc2), (err, doc) => {
                 ERR.EXPECT_NONE(err);
                 BODY.EXPECT_LATEST_REV(doc, doc.rev);
                 BODY.EXPECT(doc, DATA.doc2);
@@ -137,7 +137,7 @@ describe('Meta DocMeta', function() {
             it('writeFixed', function(done) {
                 const doc = DATA.GENERATE_FAKE_DOC();
                 const oldRev = doc.rev;
-                DocMeta.writeFixed(doc, Body.create(DATA.doc2), (err) => {
+                DocMeta.writeFixed(doc, new Body(DATA.doc2), (err) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_NOT_REV(doc, oldRev);
                     BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -146,7 +146,7 @@ describe('Meta DocMeta', function() {
                 });
             });
             it('write', function(done) {
-                DocMeta.write(DATA.Model, DATA.id, Body.create(DATA.doc2), (err, doc) => {
+                DocMeta.write(DATA.Model, DATA.id, new Body(DATA.doc2), (err, doc) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_LATEST_REV(doc, doc.rev);
                     BODY.EXPECT(doc, DATA.doc2);
@@ -156,7 +156,7 @@ describe('Meta DocMeta', function() {
             it('updateFixed', function(done) {
                 const doc = DATA.GENERATE_FAKE_DOC();
                 const oldRev = doc.rev;
-                DocMeta.updateFixed(doc, Body.create(DATA.update2), (err) => {
+                DocMeta.updateFixed(doc, new Body(DATA.update2), (err) => {
                     ERR.EXPECT(err, 'not_found');
                     BODY.EXPECT_REV(doc, oldRev);
                     BODY.EXPECT_LATEST_REV(doc, undefined);
@@ -164,13 +164,13 @@ describe('Meta DocMeta', function() {
                 });
             });
             it('update', function(done) {
-                DocMeta.update(DATA.Model, DATA.id, Body.create(DATA.update2), (err) => {
+                DocMeta.update(DATA.Model, DATA.id, new Body(DATA.update2), (err) => {
                     ERR.EXPECT(err, 'not_found');
                     DOC.EXPECT_DOES_NOT_EXIST(DATA.id, done);
                 });
             });
             it('updateOrWrite', function(done) {
-                DocMeta.updateOrWrite(DATA.Model, DATA.id, Body.create(DATA.doc2), (err, doc) => {
+                DocMeta.updateOrWrite(DATA.Model, DATA.id, new Body(DATA.doc2), (err, doc) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_LATEST_REV(doc, doc.rev);
                     BODY.EXPECT(doc, DATA.doc2);
@@ -178,7 +178,7 @@ describe('Meta DocMeta', function() {
                 });
             });
             it('create', function(done) {
-                DocMeta.create(DATA.Model, Body.create(DATA.doc2), (err, doc) => {
+                DocMeta.create(DATA.Model, new Body(DATA.doc2), (err, doc) => {
                     ERR.EXPECT_NONE(err);
                     BODY.EXPECT_LATEST_REV(doc, doc.rev);
                     BODY.EXPECT(doc, DATA.doc2);
@@ -208,7 +208,7 @@ describe('Meta DocMeta', function() {
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
                     const oldRev = doc.rev;
-                    const expected = BODY.EXPECTED(doc.body);
+                    const expected = BODY.DEEP_EXTEND(doc.body);
                     DocMeta.readFixed(doc, (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_REV(doc, oldRev);
@@ -228,7 +228,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc.body);
+                    const expected = BODY.DEEP_EXTEND(doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_REV(doc, rev);
@@ -246,7 +246,7 @@ describe('Meta DocMeta', function() {
                 });
                 it('writeFixed', function(done) {
                     const oldRev = doc.rev;
-                    DocMeta.writeFixed(doc, Body.create(DATA.doc2), (err) => {
+                    DocMeta.writeFixed(doc, new Body(DATA.doc2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, oldRev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -255,7 +255,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('write', function(done) {
-                    DocMeta.write(DATA.Model, doc.id, Body.create(DATA.doc2), (err, doc2) => {
+                    DocMeta.write(DATA.Model, doc.id, new Body(DATA.doc2), (err, doc2) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc2, doc.id);
                         BODY.EXPECT_NOT_REV(doc2, doc.rev);
@@ -266,8 +266,8 @@ describe('Meta DocMeta', function() {
                 });
                 it('updateFixed', function(done) {
                     const oldRev = doc.rev;
-                    const expected = BODY.EXPECTED(doc.body, DATA.update2);
-                    DocMeta.updateFixed(doc, Body.create(DATA.update2), (err) => {
+                    const expected = BODY.DEEP_EXTEND(doc.body, DATA.update2);
+                    DocMeta.updateFixed(doc, new Body(DATA.update2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, oldRev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -276,8 +276,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('update', function(done) {
-                    const expected = BODY.EXPECTED(doc.body, DATA.update2);
-                    DocMeta.update(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc2) => {
+                    const expected = BODY.DEEP_EXTEND(doc.body, DATA.update2);
+                    DocMeta.update(DATA.Model, doc.id, new Body(DATA.update2), (err, doc2) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc2, doc.id);
                         BODY.EXPECT_NOT_REV(doc2, doc.rev);
@@ -287,8 +287,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    const expected = BODY.EXPECTED(doc.body, DATA.update2);
-                    DocMeta.updateOrWrite(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc2) => {
+                    const expected = BODY.DEEP_EXTEND(doc.body, DATA.update2);
+                    DocMeta.updateOrWrite(DATA.Model, doc.id, new Body(DATA.update2), (err, doc2) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc2, doc.id);
                         BODY.EXPECT_NOT_REV(doc2, doc.rev);
@@ -340,7 +340,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc.body);
+                    const expected = BODY.DEEP_EXTEND(doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_REV(doc2, rev);
@@ -359,7 +359,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('writeFixed', function(done) {
-                    DocMeta.writeFixed(doc, Body.create(DATA.doc2), (err) => {
+                    DocMeta.writeFixed(doc, new Body(DATA.doc2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, doc2.rev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -368,7 +368,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('write', function(done) {
-                    DocMeta.write(DATA.Model, doc.id, Body.create(DATA.doc2), (err, doc3) => {
+                    DocMeta.write(DATA.Model, doc.id, new Body(DATA.doc2), (err, doc3) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc3, doc2.id);
                         BODY.EXPECT_NOT_REV(doc3, doc2.rev);
@@ -378,8 +378,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc2.body, DATA.update2);
-                    DocMeta.updateFixed(doc, Body.create(DATA.update2), (err) => {
+                    const expected = BODY.DEEP_EXTEND(doc2.body, DATA.update2);
+                    DocMeta.updateFixed(doc, new Body(DATA.update2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, doc2.rev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -388,8 +388,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('update', function(done) {
-                    const expected = BODY.EXPECTED(doc2.body, DATA.update2);
-                    DocMeta.update(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc3) => {
+                    const expected = BODY.DEEP_EXTEND(doc2.body, DATA.update2);
+                    DocMeta.update(DATA.Model, doc.id, new Body(DATA.update2), (err, doc3) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc3, doc2.id);
                         BODY.EXPECT_NOT_REV(doc3, doc2.rev);
@@ -399,8 +399,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    const expected = BODY.EXPECTED(doc2.body, DATA.update2);
-                    DocMeta.updateOrWrite(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc3) => {
+                    const expected = BODY.DEEP_EXTEND(doc2.body, DATA.update2);
+                    DocMeta.updateOrWrite(DATA.Model, doc.id, new Body(DATA.update2), (err, doc3) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc3, doc2.id);
                         BODY.EXPECT_NOT_REV(doc3, doc2.rev);
@@ -434,7 +434,7 @@ describe('Meta DocMeta', function() {
             });
             describe('document has not been changed', function() {
                 it('readFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc.body);
+                    const expected = BODY.DEEP_EXTEND(doc.body);
                     const oldRev = doc.rev;
                     DocMeta.readFixed(doc, (err) => {
                         ERR.EXPECT_NONE(err);
@@ -455,7 +455,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc.body);
+                    const expected = BODY.DEEP_EXTEND(doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_REV(doc, rev);
@@ -473,7 +473,7 @@ describe('Meta DocMeta', function() {
                 });
                 it('writeFixed', function(done) {
                     const oldRev = doc.rev;
-                    DocMeta.writeFixed(doc, Body.create(DATA.doc2), (err) => {
+                    DocMeta.writeFixed(doc, new Body(DATA.doc2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, oldRev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -482,7 +482,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('write', function(done) {
-                    DocMeta.write(DATA.Model, doc.id, Body.create(DATA.doc2), (err, doc2) => {
+                    DocMeta.write(DATA.Model, doc.id, new Body(DATA.doc2), (err, doc2) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc2, doc.id);
                         BODY.EXPECT_NOT_REV(doc2, doc.rev);
@@ -493,8 +493,8 @@ describe('Meta DocMeta', function() {
                 });
                 it('updateFixed', function(done) {
                     const oldRev = doc.rev;
-                    const expected = BODY.EXPECTED(doc.body, DATA.update2);
-                    DocMeta.updateFixed(doc, Body.create(DATA.update2), (err) => {
+                    const expected = BODY.DEEP_EXTEND(doc.body, DATA.update2);
+                    DocMeta.updateFixed(doc, new Body(DATA.update2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, oldRev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -503,8 +503,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('update', function(done) {
-                    const expected = BODY.EXPECTED(doc.body, DATA.update2);
-                    DocMeta.update(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc2) => {
+                    const expected = BODY.DEEP_EXTEND(doc.body, DATA.update2);
+                    DocMeta.update(DATA.Model, doc.id, new Body(DATA.update2), (err, doc2) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc2, doc.id);
                         BODY.EXPECT_NOT_REV(doc2, doc.rev);
@@ -514,8 +514,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    const expected = BODY.EXPECTED(doc.body, DATA.update2);
-                    DocMeta.updateOrWrite(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc2) => {
+                    const expected = BODY.DEEP_EXTEND(doc.body, DATA.update2);
+                    DocMeta.updateOrWrite(DATA.Model, doc.id, new Body(DATA.update2), (err, doc2) => {
                         BODY.EXPECT_ID(doc2, doc.id);
                         BODY.EXPECT_NOT_REV(doc2, doc.rev);
                         BODY.EXPECT_LATEST_REV(doc2, doc2.rev);
@@ -566,7 +566,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('headFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc.body);
+                    const expected = BODY.DEEP_EXTEND(doc.body);
                     DocMeta.headFixed(doc, (err, rev) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_REV(doc2, rev);
@@ -584,7 +584,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('writeFixed', function(done) {
-                    DocMeta.writeFixed(doc, Body.create(DATA.doc2), (err) => {
+                    DocMeta.writeFixed(doc, new Body(DATA.doc2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, doc2.rev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -593,7 +593,7 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('write', function(done) {
-                    DocMeta.write(DATA.Model, doc.id, Body.create(DATA.doc2), (err, doc3) => {
+                    DocMeta.write(DATA.Model, doc.id, new Body(DATA.doc2), (err, doc3) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc3, doc2.id);
                         BODY.EXPECT_NOT_REV(doc3, doc2.rev);
@@ -603,8 +603,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('updateFixed', function(done) {
-                    const expected = BODY.EXPECTED(doc2.body, DATA.update2);
-                    DocMeta.updateFixed(doc, Body.create(DATA.update2), (err) => {
+                    const expected = BODY.DEEP_EXTEND(doc2.body, DATA.update2);
+                    DocMeta.updateFixed(doc, new Body(DATA.update2), (err) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_NOT_REV(doc, doc2.rev);
                         BODY.EXPECT_LATEST_REV(doc, doc.rev);
@@ -613,8 +613,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('update', function(done) {
-                    const expected = BODY.EXPECTED(doc2.body, DATA.update2);
-                    DocMeta.update(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc3) => {
+                    const expected = BODY.DEEP_EXTEND(doc2.body, DATA.update2);
+                    DocMeta.update(DATA.Model, doc.id, new Body(DATA.update2), (err, doc3) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc3, doc2.id);
                         BODY.EXPECT_NOT_REV(doc3, doc2.rev);
@@ -624,8 +624,8 @@ describe('Meta DocMeta', function() {
                     });
                 });
                 it('updateOrWrite', function(done) {
-                    const expected = BODY.EXPECTED(doc2.body, DATA.update2);
-                    DocMeta.updateOrWrite(DATA.Model, doc.id, Body.create(DATA.update2), (err, doc3) => {
+                    const expected = BODY.DEEP_EXTEND(doc2.body, DATA.update2);
+                    DocMeta.updateOrWrite(DATA.Model, doc.id, new Body(DATA.update2), (err, doc3) => {
                         ERR.EXPECT_NONE(err);
                         BODY.EXPECT_ID(doc3, doc2.id);
                         BODY.EXPECT_NOT_REV(doc3, doc2.rev);
